@@ -343,7 +343,7 @@ void a3demo_render(const a3_DemoState *demoState)
 		a3shaderUniformSendFloatMat(a3unif_mat4, 0,
 			currentDemoProgram->uMVP, 1, modelViewProjectionMat.mm);
 		a3vertexDrawableRenderActive();
-
+		//working now
 
 	}
 
