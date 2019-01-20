@@ -175,13 +175,13 @@ void a3demo_loadGeometry(a3_DemoState *demoState)
 		a3proceduralCreateDescriptorTorus(proceduralShapes + 3,
 			a3geomFlag_texcoords_normals, a3geomAxis_x, 1.0f, 0.25f, 32, 24);
 
-		for (int i = 0; i < proceduralShapesCount; ++i)
+		for (i = 0; i < proceduralShapesCount; ++i)
 		{
 			a3proceduralGenerateGeometryData(proceduralShapesData + i,
 				proceduralShapes + i, 0);
 			a3fileStreamWriteObject(fileStream, proceduralShapesData + i,
 				(a3_FileStreamWriteFunc)a3geometrySaveDataBinary);
-		}
+		}
 
 
 
@@ -192,14 +192,13 @@ void a3demo_loadGeometry(a3_DemoState *demoState)
 		//	-> for each object: 
 		//		-> load model
 		//		-> optional: for each object, write data to file for streaming
-		for (int i = 0; i < loadedModelsCount; ++i)
+		for (i = 0; i < loadedModelsCount; ++i)
 		{
 			a3modelLoadOBJ(loadedModelsData + i,
 				loadedShapesFile[i], loadedShapesFlag[i], loadedShapesTransform[i]);
 			a3fileStreamWriteObject(fileStream, loadedModelsData + i,
 				(a3_FileStreamWriteFunc)a3geometrySaveDataBinary);
-
-		}
+		}
 		
 
 		// done
@@ -278,7 +277,9 @@ void a3demo_loadGeometry(a3_DemoState *demoState)
 	//		-> create VAO for scene shapes; if all of the geometry has the same attributes 
 	//			(see descriptor creation above), you only need to make one VAO
 	//		-> generate drawable for each shape (see examples above)
-
+	a3geometryGenerateDrawableSelfContained(demoState->draw_plane,
+		demoState->vao_planeFormat, demoState->vbo_planeDrawBuffer,
+		proceduralShapesData + 0);
 
 	// release data when done
 	for (i = 0; i < sceneShapesCount; ++i)
