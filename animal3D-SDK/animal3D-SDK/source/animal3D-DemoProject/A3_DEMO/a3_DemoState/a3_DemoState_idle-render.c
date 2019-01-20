@@ -321,22 +321,29 @@ void a3demo_render(const a3_DemoState *demoState)
 			camera->viewProjectionMat.m, currentSceneObject->modelMat.m);
 		a3shaderUniformSendFloatMat(a3unif_mat4, 0,
 			currentDemoProgram->uMVP, 1, modelViewProjectionMat.mm);
-		a3vertexDrawableRenderActive();		//sphere		currentSceneObject = demoState->sphereObject;
+		a3vertexDrawableRenderActive();
+		//sphere
+		currentSceneObject = demoState->sphereObject;
 		a3real4x4Product(modelViewProjectionMat.m,
 			camera->viewProjectionMat.m, currentSceneObject->modelMat.m);
 		a3shaderUniformSendFloatMat(a3unif_mat4, 0,
 			currentDemoProgram->uMVP, 1, modelViewProjectionMat.mm);
-		a3vertexDrawableRenderActive();		//cylinder		currentSceneObject = demoState->cylinderObject;
+		a3vertexDrawableRenderActive();
+		//cylinder
+		currentSceneObject = demoState->cylinderObject;
 		a3real4x4Product(modelViewProjectionMat.m,
 			camera->viewProjectionMat.m, currentSceneObject->modelMat.m);
 		a3shaderUniformSendFloatMat(a3unif_mat4, 0,
 			currentDemoProgram->uMVP, 1, modelViewProjectionMat.mm);
-		a3vertexDrawableRenderActive();		//torus		currentSceneObject = demoState->torusObject;
+		a3vertexDrawableRenderActive();
+		//torus
+		currentSceneObject = demoState->torusObject;
 		a3real4x4Product(modelViewProjectionMat.m,
 			camera->viewProjectionMat.m, currentSceneObject->modelMat.m);
 		a3shaderUniformSendFloatMat(a3unif_mat4, 0,
 			currentDemoProgram->uMVP, 1, modelViewProjectionMat.mm);
-		a3vertexDrawableRenderActive();
+		a3vertexDrawableRenderActive();
+
 
 	}
 
