@@ -1,4 +1,6 @@
 /*
+	“This file was modified by Kelly Herstine with permission of the author.”
+
 	Copyright 2011-2019 Daniel S. Buckstein
 
 	Licensed under the Apache License, Version 2.0 (the "License");
