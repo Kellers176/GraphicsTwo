@@ -197,7 +197,8 @@ void a3demo_loadGeometry(a3_DemoState *demoState)
 			a3modelLoadOBJ(loadedModelsData + i,
 				loadedShapesFile[i], loadedShapesFlag[i], loadedShapesTransform[i]);
 			a3fileStreamWriteObject(fileStream, loadedModelsData + i,
-				(a3_FileStreamWriteFunc)a3geometrySaveDataBinary);
+				(a3_FileStreamWriteFunc)a3geometrySaveDataBinary);
+
 		}
 		
 
