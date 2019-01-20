@@ -181,7 +181,8 @@ void a3demo_loadGeometry(a3_DemoState *demoState)
 				proceduralShapes + i, 0);
 			a3fileStreamWriteObject(fileStream, proceduralShapesData + i,
 				(a3_FileStreamWriteFunc)a3geometrySaveDataBinary);
-		}
+		}
+
 
 
 
@@ -198,7 +199,8 @@ void a3demo_loadGeometry(a3_DemoState *demoState)
 				loadedShapesFile[i], loadedShapesFlag[i], loadedShapesTransform[i]);
 			a3fileStreamWriteObject(fileStream, loadedModelsData + i,
 				(a3_FileStreamWriteFunc)a3geometrySaveDataBinary);
-		}
+		}
+
 		
 
 		// done
@@ -279,7 +281,19 @@ void a3demo_loadGeometry(a3_DemoState *demoState)
 	//		-> generate drawable for each shape (see examples above)
 	a3geometryGenerateDrawableSelfContained(demoState->draw_plane,
 		demoState->vao_planeFormat, demoState->vbo_planeDrawBuffer,
-		proceduralShapesData + 0);
+		proceduralShapesData + 0);
+	a3geometryGenerateDrawableSelfContained(demoState->draw_sphere,
+		demoState->vao_sphereFormat, demoState->vbo_sphereDrawBuffer,
+		proceduralShapesData + 1);
+	a3geometryGenerateDrawableSelfContained(demoState->draw_cylinder,
+		demoState->vao_cylinderFormat, demoState->vbo_cylinderDrawBuffer,
+		proceduralShapesData + 2);
+	a3geometryGenerateDrawableSelfContained(demoState->draw_torus,
+		demoState->vao_torusFormat, demoState->vbo_torusDrawBuffer,
+		proceduralShapesData + 3);
+	
+
+
 
 	// release data when done
 	for (i = 0; i < sceneShapesCount; ++i)
