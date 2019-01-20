@@ -166,16 +166,20 @@ void a3demo_loadGeometry(a3_DemoState *demoState)
 		//	-> for each object: 
 		//		-> generate geometry data
 		//		-> optional: for each object, write data to file for streaming
+		//plane creation
 		a3proceduralCreateDescriptorPlane(proceduralShapes + 0,
 			a3geomFlag_texcoords_normals, a3geomAxis_default, 24.0f, 24.0f, 12, 12);
+		//sphere creation
 		a3proceduralCreateDescriptorSphere(proceduralShapes + 1,
 			a3geomFlag_texcoords_normals, a3geomAxis_default, 1.0f, 32, 24);
+		//cylinder creation
 		a3proceduralCreateDescriptorCylinder(proceduralShapes + 2,
 			a3geomFlag_texcoords_normals, a3geomAxis_x, 1.0f, 2.0f, 32, 1, 1);
+		//torus creation
 		a3proceduralCreateDescriptorTorus(proceduralShapes + 3,
 			a3geomFlag_texcoords_normals, a3geomAxis_x, 1.0f, 0.25f, 32, 24);
 		
-
+		//write and loads all of the procedural shapes
 		for (i = 0; i < proceduralShapesCount; ++i)
 		{
 			a3proceduralGenerateGeometryData(proceduralShapesData + i,
@@ -195,6 +199,7 @@ void a3demo_loadGeometry(a3_DemoState *demoState)
 		//		-> load model
 		//		-> optional: for each object, write data to file for streaming
 		
+		//writes and loads all of the loaded models
 		for (i = 0; i < loadedModelsCount; ++i)
 		{
 			a3modelLoadOBJ(loadedModelsData + i,
@@ -202,8 +207,6 @@ void a3demo_loadGeometry(a3_DemoState *demoState)
 			a3fileStreamWriteObject(fileStream, loadedModelsData + i,
 				(a3_FileStreamWriteFunc)a3geometrySaveDataBinary);
 		}
-
-		
 
 		// done
 		a3fileStreamClose(fileStream);
@@ -281,21 +284,26 @@ void a3demo_loadGeometry(a3_DemoState *demoState)
 	//		-> create VAO for scene shapes; if all of the geometry has the same attributes 
 	//			(see descriptor creation above), you only need to make one VAO
 	//		-> generate drawable for each shape (see examples above)
+	//create the plane for the project
 	a3geometryGenerateDrawableSelfContained(demoState->draw_plane,
 		demoState->vao_planeFormat, demoState->vbo_planeDrawBuffer,
-		proceduralShapesData + 0);
+		proceduralShapesData + 0); //added 0 for the location
+	//create the sphere for the project
 	a3geometryGenerateDrawableSelfContained(demoState->draw_sphere,
 		demoState->vao_sphereFormat, demoState->vbo_sphereDrawBuffer,
-		proceduralShapesData + 1);
+		proceduralShapesData + 1); //added 1 for the next location
+	//create the cylider for the project
 	a3geometryGenerateDrawableSelfContained(demoState->draw_cylinder,
 		demoState->vao_cylinderFormat, demoState->vbo_cylinderDrawBuffer,
-		proceduralShapesData + 2);
+		proceduralShapesData + 2); //added 2 for the next location
+	//create the torus for the project
 	a3geometryGenerateDrawableSelfContained(demoState->draw_torus,
 		demoState->vao_torusFormat, demoState->vbo_torusDrawBuffer,
-		proceduralShapesData + 3);
+		proceduralShapesData + 3); //added 3 for the next location
+	//create the teapot for the project
 	a3geometryGenerateDrawableSelfContained(demoState->draw_teapot,
 		demoState->vao_teapotFormat, demoState->vbo_teapotDrawBuffer,
-		loadedModelsData + 0);
+		loadedModelsData + 0); //loaded model and added 0 for the location
 
 
 

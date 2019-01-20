@@ -228,75 +228,90 @@ void a3demo_render(const a3_DemoState *demoState)
 	//		-> calculate and send MVP uniform (must match shaders)
 	//		-> send other uniforms (e.g. color, must match shaders)
 	//		-> activate and render correct drawable
+	//create the demo program
 	currentDemoProgram = demoState->prog_drawColorUnif;
 	a3shaderProgramActivate(currentDemoProgram->program);
 
+	//plane---------------------------------------------------------------
+	//load object
 	currentSceneObject = demoState->planeObject;
+	//set the view projections
 	a3real4x4Product(modelViewMat.m,
 		cameraObject->modelMatInv.m, currentSceneObject->modelMat.m);
 	a3real4x4Product(modelViewProjectionMat.m,
 		camera->projectionMat.m, modelViewMat.m);
+	//set the colors
 	a3shaderUniformSendFloatMat(a3unif_mat4, 0,
 		currentDemoProgram->uMVP, 1, modelViewProjectionMat.mm);
 	a3shaderUniformSendFloat(a3unif_vec4,
 		currentDemoProgram->uColor, 1, cyan);
 
+	//draw the object
 	currentDrawable = demoState->draw_plane;
 	a3vertexDrawableActivateAndRender(currentDrawable);
 
-	//sphere
+	//sphere--------------------------------------------------------------
+	//load object
 	currentSceneObject = demoState->sphereObject;
+	//set the view projections
 	a3real4x4Product(modelViewMat.m,
 		cameraObject->modelMatInv.m, currentSceneObject->modelMat.m);
 	a3real4x4Product(modelViewProjectionMat.m,
 		camera->projectionMat.m, modelViewMat.m);
+	//set the colors
 	a3shaderUniformSendFloatMat(a3unif_mat4, 0,
 		currentDemoProgram->uMVP, 1, modelViewProjectionMat.mm);
 	a3shaderUniformSendFloat(a3unif_vec4,
 		currentDemoProgram->uColor, 1, red);
-
+	//draw
 	currentDrawable = demoState->draw_sphere;
 	a3vertexDrawableActivateAndRender(currentDrawable);
 
-	//cylinder
+	//cylinder------------------------------------------------------------
 	currentSceneObject = demoState->cylinderObject;
+	//set the view projections
 	a3real4x4Product(modelViewMat.m,
 		cameraObject->modelMatInv.m, currentSceneObject->modelMat.m);
 	a3real4x4Product(modelViewProjectionMat.m,
 		camera->projectionMat.m, modelViewMat.m);
+	//set the color
 	a3shaderUniformSendFloatMat(a3unif_mat4, 0,
 		currentDemoProgram->uMVP, 1, modelViewProjectionMat.mm);
 	a3shaderUniformSendFloat(a3unif_vec4,
 		currentDemoProgram->uColor, 1, green);
-
+	//draw
 	currentDrawable = demoState->draw_cylinder;
 	a3vertexDrawableActivateAndRender(currentDrawable);
 
-	//torus
+	//torus---------------------------------------------------------------
 	currentSceneObject = demoState->torusObject;
+	//set the view projections
 	a3real4x4Product(modelViewMat.m,
 		cameraObject->modelMatInv.m, currentSceneObject->modelMat.m);
 	a3real4x4Product(modelViewProjectionMat.m,
 		camera->projectionMat.m, modelViewMat.m);
+	//set the color
 	a3shaderUniformSendFloatMat(a3unif_mat4, 0,
 		currentDemoProgram->uMVP, 1, modelViewProjectionMat.mm);
 	a3shaderUniformSendFloat(a3unif_vec4,
 		currentDemoProgram->uColor, 1, orange);
-
+	//draw
 	currentDrawable = demoState->draw_torus;
 	a3vertexDrawableActivateAndRender(currentDrawable);
 
-	//teapot
+	//teapot--------------------------------------------------------
 	currentSceneObject = demoState->teapotObject;
+	//set the view projections
 	a3real4x4Product(modelViewMat.m,
 		cameraObject->modelMatInv.m, currentSceneObject->modelMat.m);
 	a3real4x4Product(modelViewProjectionMat.m,
 		camera->projectionMat.m, modelViewMat.m);
+	//set the color
 	a3shaderUniformSendFloatMat(a3unif_mat4, 0,
 		currentDemoProgram->uMVP, 1, modelViewProjectionMat.mm);
 	a3shaderUniformSendFloat(a3unif_vec4,
 		currentDemoProgram->uColor, 1, blue);
-
+	//draw
 	currentDrawable = demoState->draw_teapot;
 	a3vertexDrawableActivateAndRender(currentDrawable);
 
@@ -336,28 +351,28 @@ void a3demo_render(const a3_DemoState *demoState)
 		a3shaderUniformSendFloatMat(a3unif_mat4, 0,
 			currentDemoProgram->uMVP, 1, modelViewProjectionMat.mm);
 		a3vertexDrawableRenderActive();
-		//sphere
+		//sphere (create axis and draw)
 		currentSceneObject = demoState->sphereObject;
 		a3real4x4Product(modelViewProjectionMat.m,
 			camera->viewProjectionMat.m, currentSceneObject->modelMat.m);
 		a3shaderUniformSendFloatMat(a3unif_mat4, 0,
 			currentDemoProgram->uMVP, 1, modelViewProjectionMat.mm);
 		a3vertexDrawableRenderActive();
-		//cylinder
+		//cylinder (create axis and draw)
 		currentSceneObject = demoState->cylinderObject;
 		a3real4x4Product(modelViewProjectionMat.m,
 			camera->viewProjectionMat.m, currentSceneObject->modelMat.m);
 		a3shaderUniformSendFloatMat(a3unif_mat4, 0,
 			currentDemoProgram->uMVP, 1, modelViewProjectionMat.mm);
 		a3vertexDrawableRenderActive();
-		//torus
+		//torus (create axis and draw)
 		currentSceneObject = demoState->torusObject;
 		a3real4x4Product(modelViewProjectionMat.m,
 			camera->viewProjectionMat.m, currentSceneObject->modelMat.m);
 		a3shaderUniformSendFloatMat(a3unif_mat4, 0,
 			currentDemoProgram->uMVP, 1, modelViewProjectionMat.mm);
 		a3vertexDrawableRenderActive();
-		//teapot
+		//teapot (create axis and draw)
 		currentSceneObject = demoState->teapotObject;
 		a3real4x4Product(modelViewProjectionMat.m,
 			camera->viewProjectionMat.m, currentSceneObject->modelMat.m);
