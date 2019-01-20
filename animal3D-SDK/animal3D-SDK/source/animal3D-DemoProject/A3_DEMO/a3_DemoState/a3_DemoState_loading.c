@@ -174,6 +174,7 @@ void a3demo_loadGeometry(a3_DemoState *demoState)
 			a3geomFlag_texcoords_normals, a3geomAxis_x, 1.0f, 2.0f, 32, 1, 1);
 		a3proceduralCreateDescriptorTorus(proceduralShapes + 3,
 			a3geomFlag_texcoords_normals, a3geomAxis_x, 1.0f, 0.25f, 32, 24);
+		
 
 		for (i = 0; i < proceduralShapesCount; ++i)
 		{
@@ -193,6 +194,7 @@ void a3demo_loadGeometry(a3_DemoState *demoState)
 		//	-> for each object: 
 		//		-> load model
 		//		-> optional: for each object, write data to file for streaming
+		
 		for (i = 0; i < loadedModelsCount; ++i)
 		{
 			a3modelLoadOBJ(loadedModelsData + i,
@@ -291,7 +293,10 @@ void a3demo_loadGeometry(a3_DemoState *demoState)
 	a3geometryGenerateDrawableSelfContained(demoState->draw_torus,
 		demoState->vao_torusFormat, demoState->vbo_torusDrawBuffer,
 		proceduralShapesData + 3);
-	
+	a3geometryGenerateDrawableSelfContained(demoState->draw_teapot,
+		demoState->vao_teapotFormat, demoState->vbo_teapotDrawBuffer,
+		loadedModelsData + 0);
+
 
 
 
