@@ -39,6 +39,18 @@
 
 layout (location = 0) in vec4 aPosition;
 
+//example
+out vec2 vPassTexCoord;
+
+//varying block
+out vPassDataBlock
+{
+	vec4 vExample;
+	vec2 vTextCorrd;
+	vec2 vOther;
+} vPassData;
+//vPassData.(member)
+
 void main()
 {
 	// DUMMY OUTPUT: directly assign input position to output position
