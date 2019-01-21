@@ -1,6 +1,4 @@
 /*
-	“This file was modified by Kelly Herstine with permission of the author.”
-
 	Copyright 2011-2019 Daniel S. Buckstein
 
 	Licensed under the Apache License, Version 2.0 (the "License");
@@ -37,7 +35,7 @@
 
 // **WARNING: FOR TESTING/COMPARISON ONLY, DO NOT USE IN DELIVERABLE BUILDS**
 // uncomment this to allow shader decoding (if available)
-//   #define A3_USER_ENABLE_SHADER_DECODING
+//#define A3_USER_ENABLE_SHADER_DECODING
 
 
 //-----------------------------------------------------------------------------
@@ -160,7 +158,7 @@ void a3demo_loadGeometry(a3_DemoState *demoState)
 		}
 
 		// other procedurally-generated objects
-		// ****TO-DO: SETUP PROCEDURALLY-GENERATED GEOMETRY
+		// **TO-DO (lab 1): SETUP PROCEDURALLY-GENERATED GEOMETRY
 		//	-> locate and read documentation for pertinent code in the framework
 		//	-> use hints around this area to help
 		//	-> initialize descriptors: plane, sphere, cylinder, torus
@@ -168,47 +166,16 @@ void a3demo_loadGeometry(a3_DemoState *demoState)
 		//	-> for each object: 
 		//		-> generate geometry data
 		//		-> optional: for each object, write data to file for streaming
-		//plane creation
-		a3proceduralCreateDescriptorPlane(proceduralShapes + 0,
-			a3geomFlag_texcoords_normals, a3geomAxis_default, 24.0f, 24.0f, 12, 12);
-		//sphere creation
-		a3proceduralCreateDescriptorSphere(proceduralShapes + 1,
-			a3geomFlag_texcoords_normals, a3geomAxis_default, 1.0f, 32, 24);
-		//cylinder creation
-		a3proceduralCreateDescriptorCylinder(proceduralShapes + 2,
-			a3geomFlag_texcoords_normals, a3geomAxis_x, 1.0f, 2.0f, 32, 1, 1);
-		//torus creation
-		a3proceduralCreateDescriptorTorus(proceduralShapes + 3,
-			a3geomFlag_texcoords_normals, a3geomAxis_x, 1.0f, 0.25f, 32, 24);
-		
-		//write and loads all of the procedural shapes
-		for (i = 0; i < proceduralShapesCount; ++i)
-		{
-			a3proceduralGenerateGeometryData(proceduralShapesData + i,
-				proceduralShapes + i, 0);
-			a3fileStreamWriteObject(fileStream, proceduralShapesData + i,
-				(a3_FileStreamWriteFunc)a3geometrySaveDataBinary);
-		}
-
-
 
 
 		// objects loaded from mesh files
-		// ****TO-DO: SETUP LOADED MODEL GEOMETRY
+		// **TO-DO (lab 1): SETUP LOADED MODEL GEOMETRY
 		//	-> locate and read documentation for pertinent code in the framework
 		//	-> use hints around this area to help
 		//	-> for each object: 
 		//		-> load model
 		//		-> optional: for each object, write data to file for streaming
 		
-		//writes and loads all of the loaded models
-		for (i = 0; i < loadedModelsCount; ++i)
-		{
-			a3modelLoadOBJ(loadedModelsData + i,
-				loadedShapesFile[i], loadedShapesFlag[i], loadedShapesTransform[i]);
-			a3fileStreamWriteObject(fileStream, loadedModelsData + i,
-				(a3_FileStreamWriteFunc)a3geometrySaveDataBinary);
-		}
 
 		// done
 		a3fileStreamClose(fileStream);
@@ -277,7 +244,7 @@ void a3demo_loadGeometry(a3_DemoState *demoState)
 	currentDrawable = demoState->draw_skybox;
 	sharedVertexStorage += a3geometryGenerateDrawable(currentDrawable, sceneShapesData + 2, vao, vbo_ibo, sceneCommonIndexFormat, 0, 0);
 
-	// ****TO-DO: CREATE VERTEX FORMATS AND DRAWABLES FOR NEW GEOMETRY
+	// **TO-DO (lab 1): CREATE VERTEX FORMATS AND DRAWABLES FOR NEW GEOMETRY
 	// TWO WAYS TO DO THIS: 
 	//	EASIER: self-contained drawable for each shape
 	//		-> allocate enough VAOs and VBOs in demo header
@@ -286,28 +253,6 @@ void a3demo_loadGeometry(a3_DemoState *demoState)
 	//		-> create VAO for scene shapes; if all of the geometry has the same attributes 
 	//			(see descriptor creation above), you only need to make one VAO
 	//		-> generate drawable for each shape (see examples above)
-	//create the plane for the project
-	a3geometryGenerateDrawableSelfContained(demoState->draw_plane,
-		demoState->vao_planeFormat, demoState->vbo_planeDrawBuffer,
-		proceduralShapesData + 0); //added 0 for the location
-	//create the sphere for the project
-	a3geometryGenerateDrawableSelfContained(demoState->draw_sphere,
-		demoState->vao_sphereFormat, demoState->vbo_sphereDrawBuffer,
-		proceduralShapesData + 1); //added 1 for the next location
-	//create the cylider for the project
-	a3geometryGenerateDrawableSelfContained(demoState->draw_cylinder,
-		demoState->vao_cylinderFormat, demoState->vbo_cylinderDrawBuffer,
-		proceduralShapesData + 2); //added 2 for the next location
-	//create the torus for the project
-	a3geometryGenerateDrawableSelfContained(demoState->draw_torus,
-		demoState->vao_torusFormat, demoState->vbo_torusDrawBuffer,
-		proceduralShapesData + 3); //added 3 for the next location
-	//create the teapot for the project
-	a3geometryGenerateDrawableSelfContained(demoState->draw_teapot,
-		demoState->vao_teapotFormat, demoState->vbo_teapotDrawBuffer,
-		loadedModelsData + 0); //loaded model and added 0 for the location
-
-
 
 
 	// release data when done
@@ -346,8 +291,17 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 		"uMV",
 		"uP",
 		"uMV_nrm",
+		"uAtlas",
 
 		// common fragment
+		"uLightCt",
+		"uLightPos",
+		"uLightCol",
+		"uLightSz",
+		"uTex_dm",
+		"uTex_sm",
+		"uTex_dm_ramp",
+		"uTex_sm_ramp",
 		"uColor",
 	};
 
@@ -370,10 +324,18 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 			a3_DemoStateShader passColor_transform_vs[1];
 			a3_DemoStateShader passthru_transform_instanced_vs[1];
 			a3_DemoStateShader passColor_transform_instanced_vs[1];
+			// 02-shading
+			a3_DemoStateShader passTexcoord_transform_vs[1];
+			a3_DemoStateShader passPhongAttribs_transform_vs[1];
 
 			// fragment shaders
+			// base
 			a3_DemoStateShader drawColorUnif_fs[1];
 			a3_DemoStateShader drawColorAttrib_fs[1];
+			// 02-shading
+			a3_DemoStateShader drawTexture_fs[1];
+			a3_DemoStateShader drawPhongMulti_fs[1];
+			a3_DemoStateShader drawNonPhotoMulti_fs[1];
 		};
 	} shaderList = {
 		{
@@ -387,11 +349,18 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 			{ { { 0 },	"shdr-vs:pass-col",				a3shader_vertex  ,	1,{ "../../../../resource/glsl/4x/vs/passColor_transform_vs4x.glsl" } } },
 			{ { { 0 },	"shdr-vs:passthru-inst",		a3shader_vertex  ,	1,{ "../../../../resource/glsl/4x/vs/passthru_transform_instanced_vs4x.glsl" } } },
 			{ { { 0 },	"shdr-vs:pass-col-inst",		a3shader_vertex  ,	1,{ "../../../../resource/glsl/4x/vs/passColor_transform_instanced_vs4x.glsl" } } },
+			// 02-shading
+			{ { { 0 },	"shdr-vs:pass-tex",				a3shader_vertex  ,	1,{ "../../../../resource/glsl/4x/vs/02-shading/passTexcoord_transform_vs4x.glsl" } } },
+			{ { { 0 },	"shdr-vs:pass-Phong",			a3shader_vertex  ,	1,{ "../../../../resource/glsl/4x/vs/02-shading/passPhongAttribs_transform_vs4x.glsl" } } },
 
 			// fs
 			// base
 			{ { { 0 },	"shdr-fs:draw-col-unif",		a3shader_fragment,	1,{ "../../../../resource/glsl/4x/fs/drawColorUnif_fs4x.glsl" } } },
 			{ { { 0 },	"shdr-fs:draw-col-attr",		a3shader_fragment,	1,{ "../../../../resource/glsl/4x/fs/drawColorAttrib_fs4x.glsl" } } },
+			// 02-shading
+			{ { { 0 },	"shdr-fs:draw-tex",				a3shader_fragment,	1,{ "../../../../resource/glsl/4x/fs/02-shading/drawTexture_fs4x.glsl" } } },
+			{ { { 0 },	"shdr-fs:draw-Phong-multi",		a3shader_fragment,	1,{ "../../../../resource/glsl/4x/fs/02-shading/drawPhongMulti_fs4x.glsl" } } },
+			{ { { 0 },	"shdr-fs:draw-nonphoto-multi",	a3shader_fragment,	1,{ "../../../../resource/glsl/4x/fs/02-shading/drawNonPhotoMulti_fs4x.glsl" } } },
 		}
 	};
 	a3_DemoStateShader *const shaderListPtr = (a3_DemoStateShader *)(&shaderList), *shaderPtr;
@@ -408,7 +377,7 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 	for (i = 0; i < numUniqueShaders; ++i)
 	{
 		shaderPtr = shaderListPtr + i;
-		flag = a3shaderCreateFromFileList(shaderPtr->shader, 
+		flag = a3shaderCreateFromFileList(shaderPtr->shader,
 			shaderPtr->shaderName, shaderPtr->shaderType,
 			shaderPtr->filePath, shaderPtr->srcCount);
 		if (flag == 0)
@@ -423,26 +392,28 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 	// base programs
 
 	// uniform color program
-	// ****TO-DO: SETUP THIS PROGRAM
-	currentDemoProg = demoState->prog_drawColorUnif;
-	a3shaderProgramCreate(currentDemoProg->program, "prog:draw-col-unif");
-	a3shaderProgramAttachShader(currentDemoProg->program, 
-		shaderList.passthru_transform_vs->shader);
-	a3shaderProgramAttachShader(currentDemoProg->program, 
-		shaderList.drawColorUnif_fs->shader);
+	// **TO-DO (lab 1): SETUP THIS PROGRAM
 	
 	// color attrib program
-	// ****TO-DO: SETUP THIS PROGRAM
-	currentDemoProg = demoState->prog_drawColorAttrib;
-	a3shaderProgramCreate(currentDemoProg->program, "prog:draw-col-attr");
-	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.passColor_transform_vs->shader);
-	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawColorAttrib_fs->shader);
+	// **TO-DO (lab 1): SETUP THIS PROGRAM
 
 	// uniform color program with instancing
 	// (optional)
 
 	// color attrib program with instancing
 	// (optional)
+
+
+	// 02-shading programs
+
+	// texturing
+	// ****TO-DO: SETUP THIS PROGRAM
+
+	// Phong shading
+	// ****TO-DO: SETUP THIS PROGRAM
+
+	// non-photorealistic shading
+	// ****TO-DO: SETUP THIS PROGRAM (bonus)
 
 
 	// activate a primitive for validation
@@ -497,8 +468,26 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 			a3shaderUniformSendFloatMat(a3unif_mat4, 0, uLocation, 1, a3identityMat4.mm);
 		if ((uLocation = currentDemoProg->uMV_nrm) >= 0)
 			a3shaderUniformSendFloatMat(a3unif_mat4, 0, uLocation, 1, a3identityMat4.mm);
+		if ((uLocation = currentDemoProg->uAtlas) >= 0)
+			a3shaderUniformSendFloatMat(a3unif_mat4, 0, uLocation, 1, a3identityMat4.mm);
 
 		// common FS
+		if ((uLocation = currentDemoProg->uLightCt) >= 0)
+			a3shaderUniformSendInt(a3unif_single, uLocation, 1, defaultInt);
+		if ((uLocation = currentDemoProg->uLightPos) >= 0)
+			a3shaderUniformSendFloat(a3unif_vec4, uLocation, 1, a3wVec4.v);
+		if ((uLocation = currentDemoProg->uLightCol) >= 0)
+			a3shaderUniformSendFloat(a3unif_vec4, uLocation, 1, defaultColor);
+		if ((uLocation = currentDemoProg->uLightSz) >= 0)
+			a3shaderUniformSendFloat(a3unif_single, uLocation, 1, defaultFloat);
+		if ((uLocation = currentDemoProg->uTex_dm) >= 0)
+			a3shaderUniformSendInt(a3unif_single, uLocation, 1, defaultTexUnits + 0);
+		if ((uLocation = currentDemoProg->uTex_sm) >= 0)
+			a3shaderUniformSendInt(a3unif_single, uLocation, 1, defaultTexUnits + 1);
+		if ((uLocation = currentDemoProg->uTex_dm_ramp) >= 0)
+			a3shaderUniformSendInt(a3unif_single, uLocation, 1, defaultTexUnits + 4);
+		if ((uLocation = currentDemoProg->uTex_sm_ramp) >= 0)
+			a3shaderUniformSendInt(a3unif_single, uLocation, 1, defaultTexUnits + 5);
 		if ((uLocation = currentDemoProg->uColor) >= 0)
 			a3shaderUniformSendFloat(a3unif_vec4, uLocation, 1, defaultColor);
 	}
@@ -509,6 +498,89 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 	//done
 	a3shaderProgramDeactivate();
 	a3vertexDrawableDeactivate();
+}
+
+
+// utility to load textures
+void a3demo_loadTextures(a3_DemoState *demoState)
+{
+	// utilities
+	const a3ui16 atlasSceneWidth = 2048, atlasSceneHeight = 2048, atlasSceneBorderPad = 8, atlasSceneAdditionalPad = 8;
+
+	// indexing
+	a3_Texture *tex;
+	a3ui32 i;
+
+	// structure for texture loading
+	typedef struct a3_TAG_DEMOSTATETEXTURE {
+		a3_Texture *texture;
+		a3byte textureName[32];
+		const a3byte *filePath;
+	} a3_DemoStateTexture;
+
+	// texture objects
+	union {
+		struct {
+			a3_DemoStateTexture texSkyClouds[1];
+			a3_DemoStateTexture texSkyWater[1];
+			a3_DemoStateTexture texStoneDM[1];
+			a3_DemoStateTexture texEarthDM[1];
+			a3_DemoStateTexture texEarthSM[1];
+			a3_DemoStateTexture texMarsDM[1];
+			a3_DemoStateTexture texMarsSM[1];
+			a3_DemoStateTexture texRampDM[1];
+			a3_DemoStateTexture texRampSM[1];
+			a3_DemoStateTexture texChecker[1];
+		};
+	} textureList = {
+		{
+			{ demoState->tex_skybox_clouds,	"tex:sky-clouds",	"../../../../resource/tex/bg/sky_clouds.png" },
+			{ demoState->tex_skybox_water,	"tex:sky-water",	"../../../../resource/tex/bg/sky_water.png" },
+			{ demoState->tex_stone_dm,		"tex:stone-dm",		"../../../../resource/tex/stone/stone_dm.png" },
+			{ demoState->tex_earth_dm,		"tex:earth-dm",		"../../../../resource/tex/earth/2k/earth_dm_2k.png" },
+			{ demoState->tex_earth_sm,		"tex:earth-sm",		"../../../../resource/tex/earth/2k/earth_sm_2k.png" },
+			{ demoState->tex_mars_dm,		"tex:mars-dm",		"../../../../resource/tex/mars/1k/mars_1k_dm.png" },
+			{ demoState->tex_mars_sm,		"tex:mars-sm",		"../../../../resource/tex/mars/1k/mars_1k_sm.png" },
+			{ demoState->tex_ramp_dm,		"tex:ramp-dm",		"../../../../resource/tex/sprite/celRamp_dm.png" },
+			{ demoState->tex_ramp_sm,		"tex:ramp-sm",		"../../../../resource/tex/sprite/celRamp_sm.png" },
+			{ demoState->tex_checker,		"tex:checker",		"../../../../resource/tex/sprite/checker.png" },
+		}
+	};
+	const a3ui32 numTextures = sizeof(textureList) / sizeof(a3_DemoStateTexture);
+	a3_DemoStateTexture *const textureListPtr = (a3_DemoStateTexture *)(&textureList), *texturePtr;
+
+	// load all textures
+	for (i = 0; i < numTextures; ++i)
+	{
+		texturePtr = textureListPtr + i;
+		a3textureCreateFromFile(texturePtr->texture, texturePtr->textureName, texturePtr->filePath);
+		a3textureActivate(texturePtr->texture, a3tex_unit00);
+		a3textureDefaultSettings();
+	}
+
+	// change settings on a per-texture or per-type basis
+	tex = demoState->texture;
+	// skyboxes and stone
+	for (i = 0; i < 3; ++i, ++tex)
+	{
+		a3textureActivate(tex, a3tex_unit00);
+		a3textureChangeFilterMode(a3tex_filterLinear);	// linear pixel blending
+	}
+	// planets
+	for (i = 0; i < 4; ++i, ++tex)
+	{
+		a3textureActivate(tex, a3tex_unit00);
+		a3textureChangeFilterMode(a3tex_filterLinear);
+	}
+	// ramps
+	for (i = 0; i < 2; ++i, ++tex)
+	{
+		a3textureActivate(tex, a3tex_unit00);
+		a3textureChangeRepeatMode(a3tex_repeatClamp, a3tex_repeatClamp);	// clamp both axes
+	}
+
+	// done
+	a3textureDeactivate(a3tex_unit00);
 }
 
 
@@ -526,6 +598,8 @@ void a3demo_refresh(a3_DemoState *demoState)
 		*const endVAO = currentVAO + demoStateMaxCount_vertexArray;
 	a3_DemoStateShaderProgram *currentProg = demoState->shaderProgram,
 		*const endProg = currentProg + demoStateMaxCount_shaderProgram;
+	a3_Texture *currentTex = demoState->texture,
+		*const endTex = currentTex + demoStateMaxCount_texture;
 
 	while (currentBuff < endBuff)
 		a3bufferHandleUpdateReleaseCallback(currentBuff++);
@@ -533,6 +607,8 @@ void a3demo_refresh(a3_DemoState *demoState)
 		a3vertexArrayHandleUpdateReleaseCallback(currentVAO++);
 	while (currentProg < endProg)
 		a3shaderProgramHandleUpdateReleaseCallback((currentProg++)->program);
+	while (currentTex < endTex)
+		a3textureHandleUpdateReleaseCallback(currentTex++);
 }
 
 
