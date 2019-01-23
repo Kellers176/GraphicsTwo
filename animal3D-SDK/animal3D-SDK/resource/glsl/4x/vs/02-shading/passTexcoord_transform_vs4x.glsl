@@ -35,10 +35,14 @@
 layout (location = 0) in vec4 aPosition;
 layout (location = 8) in vec2 aTexcoord; // (3) in a3_VertexDescriptor.h
 
+uniform mat4 uMVP;
+
 out vec2 vPassTexCoord; //(4)
 
 void main()
 {
 	// DUMMY OUTPUT: directly assign input position to output position
-	gl_Position = aPosition;
+	gl_Position = uMVP * aPosition;
+
+	vpassTexCoord = aTexcoord;
 }

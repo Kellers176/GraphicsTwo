@@ -465,9 +465,17 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 
 	// texturing
 	// ****TO-DO: SETUP THIS PROGRAM
+	currentDemoProg = demoState->prog_drawTexture;
+	a3shaderProgramCreate(currentDemoProg->program, "prog:draw-tex");
+	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.passTexcoord_transform_vs->shader);
+	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawTexture_fs->shader);
 
 	// Phong shading
 	// ****TO-DO: SETUP THIS PROGRAM
+	currentDemoProg = demoState->prog_drawPhongMulti;
+	a3shaderProgramCreate(currentDemoProg->program, "prog:draw-Phong-multi");
+	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.passPhongAttribs_transform_vs->shader);
+	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawPhongMulti_fs->shader);
 
 	// non-photorealistic shading
 	// ****TO-DO: SETUP THIS PROGRAM (bonus)
