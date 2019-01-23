@@ -38,7 +38,7 @@
 //	9) copy lighting data to varyings
 
 layout (location = 0) in vec4 aPosition;
-layout (location = 2) in vec4 aNormal; //(4)
+layout (location = 2) in vec3 aNormal; //(4)
 layout (location = 8) in vec2 aTexcoord; // (7) in a3_VertexDescriptor.h
 
 
@@ -56,7 +56,9 @@ mat4 MV; //(...5?)
 out vPassDataBlock
 {
 	vec4 vPassPosition;
-	vec4 vPassNormal;
+	vec3 vPassNormal;
+
+	vec2 vPassTexcoord;
 
 	float vPassLightCt; //(9)
 	vec4  vPassLightPos;
@@ -73,12 +75,14 @@ void main()
 	//vPassData.vPassPosition =  aPosition; // eye space //(2)
 	//vPassData.vPassPosition = uP * vPassData.vPassPosition; //clip space //(3)
 
-	vPassData.vPassNormal = uMV * aNormal;
+	vPassData.vPassNormal = mat3(uMV) * aNormal;
 
 	vPassData.vPassLightCt  =  uLightCt; //(9)
 	vPassData.vPassLightPos =  uLightPos;
 	vPassData.vPassLightCol =  uLightCol;
 	vPassData.vPassLightSz  =  uLightSz;
+	
+	vPassData.vPassTexcoord = aTexcoord;
 
 	gl_Position = uP * uMV * aPosition;
 }

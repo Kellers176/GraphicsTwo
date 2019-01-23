@@ -46,24 +46,60 @@
 //	9) calculate final Phong model (with textures) and copy to output
 //		-> *test the individual shading totals
 //		-> use alpha channel from diffuse sample for final alpha
+const int MAXLIGHTS = 10;
+
 
 out vec4 rtFragColor;
+
+uniform sampler2D uTex_dm; //(2)
+uniform sampler2D uTex_sm;
+
+//temp
+vec4 DiffuseTex;
+vec4 SpecularTex;
 
 in vPassDataBlock //(1)
 {
 	vec4 vPassPosition;
-	vec4 vPassNormal;
+	vec3 vPassNormal;
 
-	float vPassLightCt; //(9)
+	vec2 vPassTexcoord;
+
+	float vPassLightCt; 
 	vec4  vPassLightPos;
 	vec4  vPassLightCol;
 	float vPassLightSz;
 
 } vPassData;
 
+vec4 LightPos[MAXLIGHTS];
+vec4 LightCol[MAXLIGHTS];
+float LightSz[MAXLIGHTS];
+
+
 void main()
 {
+	DiffuseTex = texture2D(uTex_dm, vPassData.vPassTexcoord);
+	SpecularTex = texture2D(uTex_sm, vPassData.vPassTexcoord);
+
+	vec3 N = normalize(vPassData.vPassNormal);
+	vec3 L = normalize(vPassData.vPassLightPos.xyz- vPassData.vPassPosition.xyz);
+	vec3 V = normalize(-vPassData.vPassPosition.xyz);
+	vec3 R = reflect(-L, N);
+
+	vec3 diffuse = max(dot(N, L), 0.0f) * DiffuseTex.xyz;
+	vec3 specular = max(dot(R,V), 0.0f) *SpecularTex.xyz;
+
+	specular *= specular;
+	specular *= specular;
+	specular *= specular;
+	specular *= specular;
+
+	//specular *= SpecularTex.xyz;
+
 	// DUMMY OUTPUT: all fragments are FADED CYAN
-	rtFragColor = vec4(0.5, 1.0, 1.0, 1.0);
-	rtFragColor = vPassData.vPassLightPos;
+	//rtFragColor = vec4(0.5, 1.0, 1.0, 1.0);
+	//rtFragColor = vPassData.vPassLightPos;
+	rtFragColor = vec4(diffuse+specular, 1.0f);
 }
+
