@@ -258,6 +258,9 @@ void a3demo_render(const a3_DemoState *demoState)
 	//	- send uniforms
 	//	- draw
 
+
+
+
 	// support multiple geometry passes
 	for (i = 0, j = 1; i < j; ++i)
 	{
