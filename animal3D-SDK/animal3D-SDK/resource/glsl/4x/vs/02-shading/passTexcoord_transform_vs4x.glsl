@@ -44,5 +44,5 @@ void main()
 	// DUMMY OUTPUT: directly assign input position to output position
 	gl_Position = uMVP * aPosition;
 
-	vpassTexCoord = aTexcoord;
+	vPassTexCoord = aTexcoord;
 }

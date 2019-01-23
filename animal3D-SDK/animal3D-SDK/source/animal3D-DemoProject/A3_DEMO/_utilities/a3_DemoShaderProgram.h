@@ -83,7 +83,7 @@ extern "C"
 					
 					// common fragment shader uniforms
 					uLightCt,					// number of lights
-					uLightPos,				// array of light positions in eye-space
+					uLightPos,					// array of light positions in eye-space
 					uLightCol,					// array of light colors
 					uLightSz,					// array of light sizes
 					uTex_dm,					// named texture handle for diffuse map

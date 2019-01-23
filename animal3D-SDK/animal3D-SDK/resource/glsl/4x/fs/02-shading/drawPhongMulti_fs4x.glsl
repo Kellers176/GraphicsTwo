@@ -49,8 +49,21 @@
 
 out vec4 rtFragColor;
 
+in vPassDataBlock //(1)
+{
+	vec4 vPassPosition;
+	vec4 vPassNormal;
+
+	float vPassLightCt; //(9)
+	vec4  vPassLightPos;
+	vec4  vPassLightCol;
+	float vPassLightSz;
+
+} vPassData;
+
 void main()
 {
 	// DUMMY OUTPUT: all fragments are FADED CYAN
 	rtFragColor = vec4(0.5, 1.0, 1.0, 1.0);
+	rtFragColor = vPassData.vPassLightPos;
 }

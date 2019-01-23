@@ -208,7 +208,8 @@ void a3demo_render(const a3_DemoState *demoState)
 		//	-> send correct MVP matrix as uniform (1 line)
 		//	-> activate skybox texture (1 line)
 		//		(pro tip: sampler uniform already sent, only activate texture)
-		currentDemoProgram = demoState->prog_drawColorUnif;
+		//currentDemoProgram = demoState->prog_drawColorUnif;
+		currentDemoProgram = demoState->prog_drawTexture;
 		a3shaderProgramActivate(currentDemoProgram->program);
 		a3shaderUniformSendFloatMat(a3unif_mat4, 0, currentDemoProgram->uMVP, 1, a3identityMat4.mm);
 		a3shaderUniformSendFloat(a3unif_vec4, currentDemoProgram->uColor, 1, grey);
@@ -278,6 +279,9 @@ void a3demo_render(const a3_DemoState *demoState)
 			case 0:
 				currentDemoProgram = demoState->prog_drawColorUnif;
 				break;
+			case 1:
+				currentDemoProgram = demoState->prog_drawPhongMulti;
+				break;
 			}
 			a3shaderProgramActivate(currentDemoProgram->program);
 
@@ -286,9 +290,9 @@ void a3demo_render(const a3_DemoState *demoState)
 			//	- light data
 			//	- activate texture atlases
 			a3shaderUniformSendFloatMat(a3unif_mat4, 0, currentDemoProgram->uP, 1, camera->projectionMat.mm);
-			a3shaderUniformSendInt(a3unif_single, currentDemoProgram->uLightCt, 1, &demoState->lightCount);
-			a3shaderUniformSendFloat(a3unif_vec4, currentDemoProgram->uLightPos, demoState->lightCount, lightPos_eye->v);
-			a3shaderUniformSendFloat(a3unif_vec4, currentDemoProgram->uLightCol, demoState->lightCount, lightCol->v);
+			  a3shaderUniformSendInt(a3unif_single, currentDemoProgram->uLightCt, 1, &demoState->lightCount);
+			  a3shaderUniformSendFloat(a3unif_vec4, currentDemoProgram->uLightPos, demoState->lightCount, lightPos_eye->v);
+			  a3shaderUniformSendFloat(a3unif_vec4, currentDemoProgram->uLightCol, demoState->lightCount, lightCol->v);
 			a3shaderUniformSendFloat(a3unif_single, currentDemoProgram->uLightSz, demoState->lightCount, lightSz);
 			a3textureActivate(demoState->tex_ramp_dm, a3tex_unit04);
 			a3textureActivate(demoState->tex_ramp_sm, a3tex_unit05);
