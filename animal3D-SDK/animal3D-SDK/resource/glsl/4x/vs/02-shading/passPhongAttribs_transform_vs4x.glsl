@@ -45,7 +45,7 @@ layout (location = 8) in vec2 aTexcoord; // (7) in a3_VertexDescriptor.h
 uniform mat4 uMV; //(1)
 uniform mat4 uP;
 
-uniform float uLightCt; //(8)
+uniform int uLightCt; //(8)
 uniform vec4  uLightPos;
 uniform vec4  uLightCol;
 uniform float uLightSz;
@@ -60,7 +60,7 @@ out vPassDataBlock
 
 	vec2 vPassTexcoord;
 
-	float vPassLightCt; //(9)
+	flat int vPassLightCt; //(9)
 	vec4  vPassLightPos;
 	vec4  vPassLightCol;
 	float vPassLightSz;

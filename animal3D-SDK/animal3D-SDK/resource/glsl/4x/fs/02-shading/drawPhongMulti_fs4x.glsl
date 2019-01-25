@@ -65,7 +65,7 @@ in vPassDataBlock //(1)
 
 	vec2 vPassTexcoord;
 
-	float vPassLightCt; 
+	flat int vPassLightCt; 
 	vec4  vPassLightPos;
 	vec4  vPassLightCol;
 	float vPassLightSz;
@@ -97,9 +97,33 @@ void main()
 
 	//specular *= SpecularTex.xyz;
 
+	//LOOP
+	for(int i = 0; i < vPassData.vPassLightCt; i++)
+	{
+		//vec3 N = normalize(vPassData.vPassNormal);
+		//vec3 L = normalize(vPassData.vPassLightPos[i].xyz- vPassData.vPassPosition.xyz);
+		//vec3 V = normalize(-vPassData.vPassPosition.xyz);
+		//vec3 R = reflect(-L, N);
+		//
+		//vec3 diffuse = max(dot(N, L), 0.0f) * DiffuseTex.xyz;
+		//vec3 specular = max(dot(R,V), 0.0f) * SpecularTex.xyz;
+		//
+		//specular *= specular;
+		//specular *= specular;
+		//specular *= specular;
+		//specular *= specular;
+		//
+		//Final col += diffuse+specular * vPassData.vPassLightCol[i];
+
+	}
+
+	//Dummy ambient light
+	//vec4 col = vec4(1.0f, 0.5f, 0.0f, 1.0f);
+
 	// DUMMY OUTPUT: all fragments are FADED CYAN
 	//rtFragColor = vec4(0.5, 1.0, 1.0, 1.0);
 	//rtFragColor = vPassData.vPassLightPos;
-	rtFragColor = vec4(diffuse+specular, 1.0f);
+	rtFragColor = vec4(diffuse+specular, 1.0f) * vPassData.vPassLightCol;
+	//rtFragColor = vec4(diffuse+specular, 1.0f) * col;
 }
 
