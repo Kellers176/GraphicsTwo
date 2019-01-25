@@ -50,7 +50,7 @@ uniform vec4  uLightPos;
 uniform vec4  uLightCol;
 uniform float uLightSz;
 
-mat4 MV; //(...5?)
+mat3 normalMV; //(...5?)
 
 //varying block
 out vPassDataBlock
@@ -75,7 +75,9 @@ void main()
 	//vPassData.vPassPosition =  aPosition; // eye space //(2)
 	//vPassData.vPassPosition = uP * vPassData.vPassPosition; //clip space //(3)
 
-	vPassData.vPassNormal = mat3(uMV) * aNormal;
+	normalMV = mat3(uMV);
+
+	vPassData.vPassNormal = normalMV * aNormal;
 
 	vPassData.vPassLightCt  =  uLightCt; //(9)
 	vPassData.vPassLightPos =  uLightPos;
