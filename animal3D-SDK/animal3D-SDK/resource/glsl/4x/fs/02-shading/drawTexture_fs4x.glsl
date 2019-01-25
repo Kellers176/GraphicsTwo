@@ -31,7 +31,7 @@
 //	3) sample texture in main
 //	4) copy texture sample to output
 
-out vec2 vPassTexCoord; //(1)
+in vec2 vPassTexCoord; //(1)
 
 uniform sampler2D uTex_dm;
 
@@ -42,6 +42,7 @@ void main()
 	// DUMMY OUTPUT: all fragments are FADED YELLOW
 	
 	//rtFragColor = vec4(1.0, 1.0, 0.5, 1.0);
-	rtFragColor = texture2D(uTex_dm, vPassTexCoord);
+	//rtFragColor = vec4(vPassTexCoord, 0.0, 1.0);
+	rtFragColor = texture(uTex_dm, vPassTexCoord);
 
 }
