@@ -211,8 +211,8 @@ void a3demo_render(const a3_DemoState *demoState)
 		//currentDemoProgram = demoState->prog_drawColorUnif;
 		currentDemoProgram = demoState->prog_drawTexture;
 		a3shaderProgramActivate(currentDemoProgram->program);
-		a3shaderUniformSendFloatMat(a3unif_mat4, 0, currentDemoProgram->uMVP, 1, a3identityMat4.mm);
-		a3shaderUniformSendFloat(a3unif_vec4, currentDemoProgram->uColor, 1, grey);
+		a3shaderUniformSendFloatMat(a3unif_mat4, 0, currentDemoProgram->uMVP, 1, modelViewProjectionMat.mm);
+		a3textureActivate(demoState->tex_skybox_clouds, a3tex_unit00);
 
 		glDepthFunc(GL_ALWAYS);
 		glCullFace(GL_FRONT);
