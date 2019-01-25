@@ -45,10 +45,7 @@ layout (location = 8) in vec2 aTexcoord; // (7) in a3_VertexDescriptor.h
 uniform mat4 uMV; //(1)
 uniform mat4 uP;
 
-uniform int uLightCt; //(8)
-uniform vec4  uLightPos;
-uniform vec4  uLightCol;
-uniform float uLightSz;
+
 
 mat3 normalMV; //(...5?)
 
@@ -59,11 +56,6 @@ out vPassDataBlock
 	vec3 vPassNormal;
 
 	vec2 vPassTexcoord;
-
-	flat int vPassLightCt; //(9)
-	vec4  vPassLightPos;
-	vec4  vPassLightCol;
-	float vPassLightSz;
 
 } vPassData;
 //vPassData.(member)
@@ -79,11 +71,6 @@ void main()
 
 	vPassData.vPassNormal = normalMV * aNormal;
 
-	vPassData.vPassLightCt  =  uLightCt; //(9)
-	vPassData.vPassLightPos =  uLightPos;
-	vPassData.vPassLightCol =  uLightCol;
-	vPassData.vPassLightSz  =  uLightSz;
-	
 	vPassData.vPassTexcoord = aTexcoord;
 
 	gl_Position = uP * uMV * aPosition;

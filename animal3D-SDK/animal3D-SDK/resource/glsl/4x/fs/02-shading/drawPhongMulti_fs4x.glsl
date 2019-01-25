@@ -46,7 +46,7 @@
 //	9) calculate final Phong model (with textures) and copy to output
 //		-> *test the individual shading totals
 //		-> use alpha channel from diffuse sample for final alpha
-const int MAXLIGHTS = 10;
+const int MAX_LIGHTS = 10;
 
 
 out vec4 rtFragColor;
@@ -57,6 +57,12 @@ uniform sampler2D uTex_sm;
 //temp
 vec4 DiffuseTex;
 vec4 SpecularTex;
+vec3 col;
+
+uniform int uLightCt; //(8)
+uniform vec4  uLightPos[MAX_LIGHTS];
+uniform vec4  uLightCol[MAX_LIGHTS];
+uniform float uLightSz[MAX_LIGHTS];
 
 in vPassDataBlock //(1)
 {
@@ -65,65 +71,39 @@ in vPassDataBlock //(1)
 
 	vec2 vPassTexcoord;
 
-	flat int vPassLightCt; 
-	vec4  vPassLightPos;
-	vec4  vPassLightCol;
-	float vPassLightSz;
-
 } vPassData;
 
-vec4 LightPos[MAXLIGHTS];
-vec4 LightCol[MAXLIGHTS];
-float LightSz[MAXLIGHTS];
 
 
 void main()
 {
-	DiffuseTex = texture2D(uTex_dm, vPassData.vPassTexcoord);
-	SpecularTex = texture2D(uTex_sm, vPassData.vPassTexcoord);
+	DiffuseTex = texture(uTex_dm, vPassData.vPassTexcoord);
+	SpecularTex = texture(uTex_sm, vPassData.vPassTexcoord);
 
-	vec3 N = normalize(vPassData.vPassNormal);
-	vec3 L = normalize(vPassData.vPassLightPos.xyz- vPassData.vPassPosition.xyz);
-	vec3 V = normalize(-vPassData.vPassPosition.xyz);
-	vec3 R = reflect(-L, N);
-
-	vec3 diffuse = max(dot(N, L), 0.0f) * DiffuseTex.xyz;
-	vec3 specular = max(dot(R,V), 0.0f) *SpecularTex.xyz;
-
-	specular *= specular;
-	specular *= specular;
-	specular *= specular;
-	specular *= specular;
-
-	//specular *= SpecularTex.xyz;
-
-	//LOOP
-	for(int i = 0; i < vPassData.vPassLightCt; i++)
+	for(int i = 0; i < uLightCt; i++)
 	{
-		//vec3 N = normalize(vPassData.vPassNormal);
-		//vec3 L = normalize(vPassData.vPassLightPos[i].xyz- vPassData.vPassPosition.xyz);
-		//vec3 V = normalize(-vPassData.vPassPosition.xyz);
-		//vec3 R = reflect(-L, N);
-		//
-		//vec3 diffuse = max(dot(N, L), 0.0f) * DiffuseTex.xyz;
-		//vec3 specular = max(dot(R,V), 0.0f) * SpecularTex.xyz;
-		//
-		//specular *= specular;
-		//specular *= specular;
-		//specular *= specular;
-		//specular *= specular;
-		//
-		//Final col += diffuse+specular * vPassData.vPassLightCol[i];
+		vec3 N = normalize(vPassData.vPassNormal);
+		vec3 L = normalize(uLightPos[i].xyz - vPassData.vPassPosition.xyz);
+		vec3 V = normalize(-vPassData.vPassPosition.xyz);
+		vec3 R = reflect(-L, N);
+		
+		vec3 diffuse = max(dot(N, L), 0.0f) * DiffuseTex.xyz;
+		vec3 specular = max(dot(R,V), 0.0f) * SpecularTex.xyz;
+
+		float distance = length(uLightPos[i] - vPassData.vPassPosition);
+
+		//float attenuation = 1.0 / (1.0 + uLightSz[i] /*Need * pow(uLightPos[i].z, 2)*/ );
+		float attenuation = 1.0 / (1.0 + uLightSz[i]  * pow(distance, 2));
+		vec3 ambient = vec3(0.03) * attenuation;
+
+		col += uLightCol[i].xyz * attenuation * (diffuse + specular);
+		//col += diffuse + specular * uLightCol[i].xyz;
+		
 
 	}
 
-	//Dummy ambient light
-	//vec4 col = vec4(1.0f, 0.5f, 0.0f, 1.0f);
-
-	// DUMMY OUTPUT: all fragments are FADED CYAN
-	//rtFragColor = vec4(0.5, 1.0, 1.0, 1.0);
-	//rtFragColor = vPassData.vPassLightPos;
-	rtFragColor = vec4(diffuse+specular, 1.0f) * vPassData.vPassLightCol;
+	
+	rtFragColor =  vec4(col, 1.0f);
 	//rtFragColor = vec4(diffuse+specular, 1.0f) * col;
 }
 
