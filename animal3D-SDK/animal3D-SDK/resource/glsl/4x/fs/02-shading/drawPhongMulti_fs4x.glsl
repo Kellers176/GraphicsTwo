@@ -60,9 +60,9 @@ vec4 SpecularTex;
 vec3 col;
 
 uniform int uLightCt; //(8)
-uniform vec4  uLightPos[MAX_LIGHTS];
-uniform vec4  uLightCol[MAX_LIGHTS];
-uniform float uLightSz[MAX_LIGHTS];
+uniform vec4  uLightPos[MAX_LIGHTS]; //position
+uniform vec4  uLightCol[MAX_LIGHTS]; //intensity aka color
+uniform float uLightSz[MAX_LIGHTS]; //attenuation
 
 in vPassDataBlock //(1)
 {
@@ -87,15 +87,21 @@ void main()
 		vec3 V = normalize(-vPassData.vPassPosition.xyz);
 		vec3 R = reflect(-L, N);
 		
+		//float diffuseCoefficient = max(0.0, dot(normal, surfaceToLight));
+		//vec3 diffuse = diffuseCoefficient * surfaceColor.rgb * light.intensities;
 		vec3 diffuse = max(dot(N, L), 0.0f) * DiffuseTex.xyz;
+		//vec3 specular = specularCoefficient * materialSpecularColor * light.intensities;
 		vec3 specular = max(dot(R,V), 0.0f) * SpecularTex.xyz;
 
+		//float distanceToLight = length(light.position - surfacePos);
 		float distance = length(uLightPos[i] - vPassData.vPassPosition);
 
-		//float attenuation = 1.0 / (1.0 + uLightSz[i] /*Need * pow(uLightPos[i].z, 2)*/ );
+		//float attenuation = 1.0 / (1.0 + light.attenuation * pow(distanceToLight, 2));
 		float attenuation = 1.0 / (1.0 + uLightSz[i]  * pow(distance, 2));
+		//vec3 ambient = light.ambientCoefficient * surfaceColor.rgb * light.intensities;
 		vec3 ambient = vec3(0.03) * attenuation;
 
+		//vec3 linearColor = ambient + attenuation*(diffuse + specular);
 		col += uLightCol[i].xyz * attenuation * (diffuse + specular);
 		//col += diffuse + specular * uLightCol[i].xyz;
 		

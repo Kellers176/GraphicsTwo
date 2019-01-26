@@ -45,7 +45,7 @@ layout (location = 8) in vec2 aTexcoord; // (7) in a3_VertexDescriptor.h
 uniform mat4 uMV; //(1)
 uniform mat4 uP;
 
-
+uniform mat4 uMV_nrm;
 
 mat3 normalMV; //(...5?)
 
@@ -67,11 +67,12 @@ void main()
 	//vPassData.vPassPosition =  aPosition; // eye space //(2)
 	//vPassData.vPassPosition = uP * vPassData.vPassPosition; //clip space //(3)
 
-	normalMV = mat3(uMV);
+	//normalMV = mat3(uMV);
+	normalMV = mat3(uMV_nrm);
 
 	vPassData.vPassNormal = normalMV * aNormal;
 
 	vPassData.vPassTexcoord = aTexcoord;
 
-	gl_Position = uP * uMV * aPosition;
+	gl_Position = uP * uMV * aPosition; //clip space
 }
