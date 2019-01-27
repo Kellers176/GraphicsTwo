@@ -1,4 +1,6 @@
 /*
+“This file was modified by Kelly and Zac with permission of the author.”
+
 	Copyright 2011-2019 Daniel S. Buckstein
 
 	Licensed under the Apache License, Version 2.0 (the "License");
@@ -465,6 +467,9 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 
 	// texturing
 	// ****TO-DO: SETUP THIS PROGRAM
+	//Kelly and Zac
+	/*Zac and Kelly worked together to the linking between programs. This is used so that we can acces the information here
+	from the shaders. We do this in order to use the uniforms in the shader data.*/
 	currentDemoProg = demoState->prog_drawTexture;
 	a3shaderProgramCreate(currentDemoProg->program, "prog:draw-tex");
 	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.passTexcoord_transform_vs->shader);

@@ -1,4 +1,6 @@
 /*
+	“This file was modified by Kelly and Zac with permission of the author.”
+
 	Copyright 2011-2019 Daniel S. Buckstein
 
 	Licensed under the Apache License, Version 2.0 (the "License");
@@ -193,6 +195,9 @@ void a3demo_render(const a3_DemoState *demoState)
 	//	- render shapes using appropriate shaders
 	//	- capture color and depth
 
+	//Kelly and Zac
+	/*Zac and Kelly worked together to change the skybox. This is used to change the texture of the skybox
+	this draws it ot the correct matrix and allows it to be shown*/
 	// display skybox or clear
 	if (demoState->displaySkybox)
 	{
@@ -274,6 +279,7 @@ void a3demo_render(const a3_DemoState *demoState)
 			// ****TO-DO: activate program for current mode
 			//	-> complete the switch cases
 			//		(all draw code below is set up correctly for all cases)
+			//Kelly and Zac
 			switch (demoMode)
 			{
 			case 0:

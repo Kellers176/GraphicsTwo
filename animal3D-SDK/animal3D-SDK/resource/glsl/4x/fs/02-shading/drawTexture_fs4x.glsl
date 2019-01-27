@@ -1,4 +1,6 @@
 /*
+“This file was modified by Kelly and Zac with permission of the author.”
+
 	Copyright 2011-2019 Daniel S. Buckstein
 
 	Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,6 +26,10 @@
 
 #version 410
 
+//kelly and zac
+/*Kelly and Zac worked on trying to get this to work. We both worked together to try and 
+make the shader responsible for sampling a texture that it is given. */
+
 // ****TO-DO: 
 //	1) declare varying to read texture coordinate
 //		-> *test varying by outputting it as color; shows red-green gradient
@@ -39,10 +45,6 @@ out vec4 rtFragColor;
 
 void main()
 {
-	// DUMMY OUTPUT: all fragments are FADED YELLOW
-	
-	//rtFragColor = vec4(1.0, 1.0, 0.5, 1.0);
-	//rtFragColor = vec4(vPassTexCoord, 0.0, 1.0);
 	rtFragColor = texture(uTex_dm, vPassTexCoord);
 
 }

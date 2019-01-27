@@ -1,4 +1,5 @@
 /*
+“This file was modified by Kelly and Zac with permission of the author.”
 	Copyright 2011-2019 Daniel S. Buckstein
 
 	Licensed under the Apache License, Version 2.0 (the "License");
@@ -32,6 +33,10 @@
 //	4) declare varying for texture coordinate
 //	5) copy texture coordinate attribute to varying
 
+//Kelly and Zac
+/*We both worked together in order to create the attributes for the shader as well as copying 
+the texture coordinate attribute to the varying varuable. This will help to pass the info to the 
+fragment shader*/
 layout (location = 0) in vec4 aPosition;
 layout (location = 8) in vec2 aTexcoord; // (3) in a3_VertexDescriptor.h
 
@@ -41,7 +46,6 @@ out vec2 vPassTexCoord; //(4)
 
 void main()
 {
-	// DUMMY OUTPUT: directly assign input position to output position
 	gl_Position = uMVP * aPosition;
 
 	vPassTexCoord = aTexcoord;
