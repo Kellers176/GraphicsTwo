@@ -29,10 +29,31 @@
 //	1) declare eight render targets
 //	2) output appropriate data to render targets
 
-out vec4 rtFragColor;
+//out vec4 rtFragColor;
+//out vec4 rtFragColor1;
+//out vec4 rtFragColor2;
+//out vec4 rtFragColor3;
+
+layout(location = 0) out vec4 rtFragColor;
+layout(location = 1) out vec4 rtFragColor1;
+layout(location = 2) out vec4 rtFragColor2;
+layout(location = 3) out vec4 rtFragColor3;
+
+//layout (location = 0) out vec4 rtPosition;
+//layout (location = 1) out vec4 rtNormal;
+//layout (location = 2) out vec4 rtTexCoord;
+//layout (location = 3) out vec4 rtDiffuseMap;
 
 void main()
 {
-	// DUMMY OUTPUT: all fragments are FADED CYAN
-	rtFragColor = vec4(0.5, 1.0, 1.0, 1.0);
+	rtFragColor = vec4(0.5, 0.0, 0.5, 1.0);;
+
+	//Depth doesnt count
+	//How many shaders do we need? No, one fragment shader does everything you need
+
+	//testing
+	rtFragColor1 = vec4(1.0, 0.5, 0.0, 1.0);	//orange
+	rtFragColor2 = vec4(1.0, 0.0, 1.0, 1.0);	//magenta
+	rtFragColor3 = vec4(0.5, 0.0, 0.5, 1.0);	//purple
+
 }
