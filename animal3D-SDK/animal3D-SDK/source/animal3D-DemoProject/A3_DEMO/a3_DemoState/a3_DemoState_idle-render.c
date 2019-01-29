@@ -249,7 +249,7 @@ void a3demo_render(const a3_DemoState *demoState)
 	//		- render shapes using appropriate shaders
 	//		- capture color and depth
 
-	// ****TO-DO: framebuffer
+	// ****TO-DO (lab 3): framebuffer
 	//	- activate framebuffer for offscreen rendering
 	currentFBO = demoState->fbo_scene;
 	a3framebufferActivate(currentFBO);
@@ -365,8 +365,18 @@ void a3demo_render(const a3_DemoState *demoState)
 	//		- if your clear color has zero alpha, scene will overlay correctly
 	//	- activate render texture(s)
 	//	- draw FSQ with appropriate program
+	
+	// deactivate framebuffer
+	a3framebufferDeactivate();
 
 	// ****TO-DO: draw to back buffer with depth disabled
+	//currentFBO = demoState->fbo_scene;
+	//
+	//
+	//a3framebufferCreate(currentFBO, "fbo:scene", 8, a3fbo_colorRGBA8, a3fbo_depthDisable, demoState->frameWidth, demoState->frameHeight);
+	//a3framebufferActivate(currentFBO);
+	glDrawBuffer(GL_BACK);
+
 
 	// ****TO-DO: display skybox or clear
 	//	- do this last, it's slightly different from your previous skybox code
@@ -380,6 +390,7 @@ void a3demo_render(const a3_DemoState *demoState)
 	}
 
 	// ****TO-DO: use unit quad as FSQ drawable
+	currentDrawable = demoState->draw_unitquad;
 
 	// select texture(s) to use for display
 	currentFBO = demoState->fbo_scene;
@@ -389,7 +400,13 @@ void a3demo_render(const a3_DemoState *demoState)
 		a3framebufferBindDepthTexture(currentFBO, a3tex_unit00);
 
 	// ****TO-DO: draw FSQ with texturing
+	currentDemoProgram = demoState->prog_drawTexture;
+	a3shaderProgramActivate(currentDemoProgram->program);
+	a3textureActivate(tex_dm[0], a3tex_unit00);
+	a3shaderUniformSendFloatMat(a3unif_mat4, 0, currentDemoProgram->uMVP, 1, modelViewProjectionMat.mm);
 
+
+	a3vertexDrawableActivateAndRender(currentDrawable);
 
 	//-------------------------------------------------------------------------
 	// 3) OVERLAYS: done after FSQ so they appear over everything else

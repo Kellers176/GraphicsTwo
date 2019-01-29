@@ -402,11 +402,18 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 
 	// base programs
 
-	// uniform color program
 	// **TO-DO (lab 1): SETUP THIS PROGRAM
-	
+	currentDemoProg = demoState->prog_drawColorUnif;
+	a3shaderProgramCreate(currentDemoProg->program, "prog:draw-col-unif");
+	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.passthru_transform_vs->shader);
+	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawColorUnif_fs->shader);
+
 	// color attrib program
 	// **TO-DO (lab 1): SETUP THIS PROGRAM
+	currentDemoProg = demoState->prog_drawColorAttrib;
+	a3shaderProgramCreate(currentDemoProg->program, "prog:draw-col-attr");
+	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.passColor_transform_vs->shader);
+	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawColorAttrib_fs->shader);
 
 	// uniform color program with instancing
 	// (optional)
@@ -418,14 +425,21 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 	// 02-shading programs
 
 	// texturing
-	// **TO-DO (lab 2): SETUP THIS PROGRAM
+	// ****TO-DO (lab 2): SETUP THIS PROGRAM
+	//Kelly and Zac
+	/*Zac and Kelly worked together to the linking between programs. This is used so that we can acces the information here
+	from the shaders. We do this in order to use the uniforms in the shader data.*/
 	currentDemoProg = demoState->prog_drawTexture;
-	a3shaderProgramCreate(currentDemoProg->program, "prog:draw-texture");
+	a3shaderProgramCreate(currentDemoProg->program, "prog:draw-tex");
 	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.passTexcoord_transform_vs->shader);
 	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawTexture_fs->shader);
 
 	// Phong shading
-	// **TO-DO (lab 2): SETUP THIS PROGRAM
+	// ****TO-DO (lab 2): SETUP THIS PROGRAM
+	currentDemoProg = demoState->prog_drawPhongMulti;
+	a3shaderProgramCreate(currentDemoProg->program, "prog:draw-Phong-multi");
+	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.passPhongAttribs_transform_vs->shader);
+	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawPhongMulti_fs->shader);
 
 	// non-photorealistic shading
 	// **TO-DO (lab 2): SETUP THIS PROGRAM (bonus)
@@ -434,7 +448,8 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 	// 03-framebuffer programs
 
 	// Phong shading MRT
-	// ****TO-DO: SETUP THIS PROGRAM
+	// ****TO-DO (lab 3): SETUP THIS PROGRAM
+	//Zac and Kelly linked the shaders following the instructor in class
 	currentDemoProg = demoState->prog_drawPhongMulti_mrt;
 	a3shaderProgramCreate(currentDemoProg->program, "prog:draw-Phong-multi-mrt");
 	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.passPhongAttribs_transform_vs->shader);
@@ -442,8 +457,12 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 
 
 	// custom effects MRT
-	// ****TO-DO: SETUP THIS PROGRAM
-
+	// ****TO-DO (lab 3): SETUP THIS PROGRAM
+	//Zac Linked the custom mrt shaders
+	currentDemoProg = demoState->prog_drawCustom_mrt;
+	a3shaderProgramCreate(currentDemoProg->program, "prog:draw-Custom-mrt");
+	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.passPhongAttribs_transform_vs->shader);
+	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawCustom_mrt_fs->shader);
 
 	// activate a primitive for validation
 	// makes sure the specified geometry can draw using programs
