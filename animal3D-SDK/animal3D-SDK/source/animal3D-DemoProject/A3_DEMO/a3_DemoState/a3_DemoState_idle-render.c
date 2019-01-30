@@ -371,8 +371,8 @@ void a3demo_render(const a3_DemoState *demoState)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	// ****TO-DO: draw to back buffer with depth disabled
-	glDisable(GL_DEPTH_BUFFER_BIT);
-	glDrawBuffer(GL_BACK);
+	//x and y are prob off
+	a3framebufferDeactivateSetViewport(a3fbo_depthDisable, 0, 0, demoState->frameWidth, demoState->frameHeight);
 
 
 	// ****TO-DO: display skybox or clear
@@ -402,7 +402,9 @@ void a3demo_render(const a3_DemoState *demoState)
 	a3shaderProgramActivate(currentDemoProgram->program);
 	//activate the first texture
 	a3textureActivate(tex_dm[0], a3tex_unit00);
+	//need to use a3identityMat4
 	a3shaderUniformSendFloatMat(a3unif_mat4, 0, currentDemoProgram->uMVP, 1, modelViewProjectionMat.mm);
+	//a3textureAtlasSendToShaderProgram
 
 	//draw the FSQ
 	a3vertexDrawableActivateAndRender(currentDrawable);
