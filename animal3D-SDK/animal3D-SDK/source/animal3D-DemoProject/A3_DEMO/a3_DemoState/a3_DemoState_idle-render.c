@@ -368,13 +368,10 @@ void a3demo_render(const a3_DemoState *demoState)
 	
 	// deactivate framebuffer
 	a3framebufferDeactivate();
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	// ****TO-DO: draw to back buffer with depth disabled
-	//currentFBO = demoState->fbo_scene;
-	//
-	//
-	//a3framebufferCreate(currentFBO, "fbo:scene", 8, a3fbo_colorRGBA8, a3fbo_depthDisable, demoState->frameWidth, demoState->frameHeight);
-	//a3framebufferActivate(currentFBO);
+	glDisable(GL_DEPTH_BUFFER_BIT);
 	glDrawBuffer(GL_BACK);
 
 
@@ -400,12 +397,14 @@ void a3demo_render(const a3_DemoState *demoState)
 		a3framebufferBindDepthTexture(currentFBO, a3tex_unit00);
 
 	// ****TO-DO: draw FSQ with texturing
+	//Get the current program we want to use
 	currentDemoProgram = demoState->prog_drawTexture;
 	a3shaderProgramActivate(currentDemoProgram->program);
+	//activate the first texture
 	a3textureActivate(tex_dm[0], a3tex_unit00);
 	a3shaderUniformSendFloatMat(a3unif_mat4, 0, currentDemoProgram->uMVP, 1, modelViewProjectionMat.mm);
 
-
+	//draw the FSQ
 	a3vertexDrawableActivateAndRender(currentDrawable);
 
 	//-------------------------------------------------------------------------
