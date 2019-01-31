@@ -86,7 +86,7 @@ void main()
 		//float diffuseCoefficient = max(0.0, dot(normal, surfaceToLight));
 		//vec3 diffuse = diffuseCoefficient * surfaceColor.rgb * light.intensities;
 		vec3 diffuseIndiv = max(dot(N, L), 0.0f) *  uLightCol[i].xyz * DiffuseTex.xyz;
-		diffuse += diffuseIndiv;
+		diffuse += max(dot(N, L), 0.0f) *  uLightCol[i].xyz;
 		//vec3 specular = specularCoefficient * materialSpecularColor * light.intensities;
 		vec3 specularIndiv =  pow(max(dot(R,V), 0.0f), 32.0) * SpecularTex.xyz *  uLightCol[i].xyz;
 		specular += specularIndiv;
