@@ -367,13 +367,12 @@ void a3demo_render(const a3_DemoState *demoState)
 	//	- draw FSQ with appropriate program
 	
 	// deactivate framebuffer
-	a3framebufferDeactivate();
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//a3framebufferDeactivate();
 
 	// ****TO-DO: draw to back buffer with depth disabled
 	//x and y are prob off
 	a3framebufferDeactivateSetViewport(a3fbo_depthDisable, 0, 0, demoState->frameWidth, demoState->frameHeight);
-
+	glClear(GL_COLOR_BUFFER_BIT);
 
 	// ****TO-DO: display skybox or clear
 	//	- do this last, it's slightly different from your previous skybox code
