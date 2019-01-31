@@ -31,7 +31,20 @@
 //	1) declare at least four render targets
 //	2) implement four custom effects, outputting each one to a render target
 
-out vec4 rtFragColor;
+layout(location = 0) out vec4 rtFragColor;  
+layout(location = 1) out vec4 rtFragColor1;	
+layout(location = 2) out vec4 rtFragColor2;	
+layout(location = 3) out vec4 rtFragColor3;	
+
+
+in vPassDataBlock //(1)
+{
+	vec4 vPassPosition;
+	vec3 vPassNormal;
+
+	vec2 vPassTexcoord;
+
+} vPassData;
 
 void main()
 {

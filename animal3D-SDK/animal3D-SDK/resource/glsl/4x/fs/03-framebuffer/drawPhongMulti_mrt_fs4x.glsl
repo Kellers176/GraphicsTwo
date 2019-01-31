@@ -28,6 +28,11 @@
 //	0) copy entirety of Phong fragment shader
 //	1) declare eight render targets
 //	2) output appropriate data to render targets
+const int MAX_LIGHTS = 10;
+
+uniform sampler2D uTex_dm; //(2)
+uniform sampler2D uTex_sm;
+
 
 layout(location = 0) out vec4 rtFragColor;  // Position attribute data
 layout(location = 1) out vec4 rtFragColor1;	// Normal attribute data
@@ -69,6 +74,8 @@ void main()
 	the normal of the scene, the light positions in teh scene, the position of the objects and then the reflection.
 	This then calculates the diffuse and the specular lights with their algorithm. At tge end, we add all of these variables
 	up into the final color (col) and we set it equal to the frag color.*/
+	vec3 diffuse;
+	vec3 specular;
 	for(int i = 0; i < uLightCt; i++)
 	{
 		vec3 N = normalize(vPassData.vPassNormal);
@@ -78,9 +85,11 @@ void main()
 		
 		//float diffuseCoefficient = max(0.0, dot(normal, surfaceToLight));
 		//vec3 diffuse = diffuseCoefficient * surfaceColor.rgb * light.intensities;
-		vec3 diffuse = max(dot(N, L), 0.0f) *  uLightCol[i].xyz * DiffuseTex.xyz;
+		vec3 diffuseIndiv = max(dot(N, L), 0.0f) *  uLightCol[i].xyz * DiffuseTex.xyz;
+		diffuse += diffuseIndiv;
 		//vec3 specular = specularCoefficient * materialSpecularColor * light.intensities;
-		vec3 specular =  pow(max(dot(R,V), 0.0f), 32.0) * SpecularTex.xyz *  uLightCol[i].xyz;
+		vec3 specularIndiv =  pow(max(dot(R,V), 0.0f), 32.0) * SpecularTex.xyz *  uLightCol[i].xyz;
+		specular += specularIndiv;
 
 		//float distanceToLight = length(light.position - surfacePos);
 		float distanceToLight = length(uLightPos[i] - vPassData.vPassPosition); //vec4(vPassData.vPassNormal, 1.0f));
@@ -89,17 +98,18 @@ void main()
 		float attenuation = 1.0 / (1.0 + uLightSz[i]  * pow(distanceToLight, 2));
 
 		//vec3 linearColor = ambient + attenuation*(diffuse + specular);
-		col += attenuation * (diffuse + specular);
+		col += attenuation * (diffuseIndiv + specularIndiv);
 		
 
 	}
-	rtFragColor =  vec4(col, 1.0f);
 
-	//rtFragColor1 = 
-	//rtFragColor2 = 
-	//rtFragColor3 = 
-	//rtFragColor4 = 
-	//rtFragColor5 = 
-	//rtFragColor6 = 
-	//rtFragColor7 = 
-}
+	//rtFragColor =  vec4(col, 1.0f); // Position attribute data
+	rtFragColor =  vPassData.vPassPosition; // Position attribute data						
+	rtFragColor1 = vec4(normalize(vPassData.vPassNormal), 1.0f);	// Normal attribute data
+	rtFragColor2 = vec4(vPassData.vPassTexcoord, 0.0, 1.0);			// Texcoord attribute data
+	rtFragColor3 = DiffuseTex;										// Diffuse map sample
+	rtFragColor4 = SpecularTex;										// Specular map sample
+	rtFragColor5 = vec4(diffuse, 1.0);								// Diffuse shading total
+	rtFragColor6 = vec4(specular, 1.0);								// Specular shading total
+	rtFragColor7 = vec4(col, 1.0f);									// Phong shading total
+}					 
