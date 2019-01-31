@@ -45,9 +45,60 @@ in vPassDataBlock //(1)
 	vec2 vPassTexcoord;
 
 } vPassData;
+vec3 RGBToHSL(vec3 colorVector)
+{
+	vec3 returnVector;
+
+	//min value of the rgb vector
+	float mMin = min(min(colorVector.x, colorVector.y), colorVector.z);
+	//max value of the rgb vector
+	float mMax = max(max(colorVector.x, colorVector.y), colorVector.z);
+	float mDelta = mMin - mMax;
+
+	//brightness
+	returnVector.z = (mMin + mMax) / 2.0;
+
+	if(returnVector.z < 0.5)
+	{
+		returnVector.y = mDelta / (mMax + mMin);
+	}
+	else
+	{
+		returnVector.y = mDelta / (2.0 - mMax - mMin);
+	}
+
+	float mDeltaRed = (((mMax - colorVector.x) / 6.0) + (mDelta / 2.0)) / mDelta;
+	float mDeltaGreen = (((mMax - colorVector.y) / 6.0) + (mDelta / 2.0)) / mDelta;
+	float mDeltaBlue = (((mMax - colorVector.z) / 6.0) + (mDelta / 2.0)) / mDelta;
+
+	if(colorVector.x == mMax)
+		//the hue for yell and magenta
+		returnVector.x = mDeltaBlue / mDeltaGreen;
+	else if(colorVector.y == mMax)
+		//the hue the color for cyan and yellow
+		returnVector.x = (1.0/3.0) + mDeltaRed - mDeltaBlue;
+	else if(colorVector.z == mMax)
+		//nother bit of half //the hue for magenta and cyan
+		returnVector.z = (2.0/3.0) + mDeltaGreen - mDeltaRed;
+
+		//get the degrees
+	returnVector.x = returnVector.x * 60.0;
+	if(returnVector.x < 0.0)
+		returnVector.x = returnVector.x + 360.0;
+	else	//dont know if i need
+		returnVector.x = returnVector.x - 360.0;
+
+
+	return returnVector;
+
+}
 
 void main()
 {
 	// DUMMY OUTPUT: all fragments are FADED CYAN
-	rtFragColor = vec4(0.5, 1.0, 1.0, 1.0);
+	//rtFragColor = vec4(0.5, 1.0, 1.0, 1.0);
+
+	rtFragColor = vec4(RGBToHSL(vPassData.vPassNormal.xyz),1.0);
+	//rtFragColor = vec4(vPassData.vPassNormal.xyz,1.0);
+	
 }
