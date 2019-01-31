@@ -253,6 +253,12 @@ void a3demo_render(const a3_DemoState *demoState)
 	//	- activate framebuffer for offscreen rendering
 	currentFBO = demoState->fbo_scene;
 	a3framebufferActivate(currentFBO);
+
+
+
+
+	
+	
 	// clear buffers
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -263,6 +269,8 @@ void a3demo_render(const a3_DemoState *demoState)
 	else
 		glDisable(GL_STENCIL_TEST);
 
+
+	
 
 	// draw grid aligned to world
 	if (demoState->displayGrid)
@@ -376,15 +384,44 @@ void a3demo_render(const a3_DemoState *demoState)
 
 	// ****TO-DO: display skybox or clear
 	//	- do this last, it's slightly different from your previous skybox code
-	glDisable(GL_BLEND);
+	//glDisable(GL_BLEND);
 
+	//Zac 
 	if (demoState->displaySkybox)
 	{
 		//do stuff here
+		a3demo_enableCompositeBlending();
+
+		// draw solid color box, inverted
+		currentDrawable = demoState->draw_skybox;
+		currentSceneObject = demoState->skyboxObject;
+		a3real4x4Product(modelViewProjectionMat.m, camera->viewProjectionMat.m, currentSceneObject->modelMat.m);
+
+		// dummy draw code: render with solid color
+		// ****TO-DO: activate texturing program
+		//	-> select and activate program (2 lines)
+		//	-> send correct MVP matrix as uniform (1 line)
+		//	-> activate skybox texture (1 line)
+		//		(pro tip: sampler uniform already sent, only activate texture)
+		//currentDemoProgram = demoState->prog_drawColorUnif;
+		currentDemoProgram = demoState->prog_drawTexture;
+		a3shaderProgramActivate(currentDemoProgram->program);
+		a3shaderUniformSendFloatMat(a3unif_mat4, 0, currentDemoProgram->uMVP, 1, modelViewProjectionMat.mm);
+		a3textureActivate(demoState->tex_skybox_clouds, a3tex_unit00);
+
+		
+		//glDepthFunc(GL_ALWAYS);
+		glCullFace(GL_FRONT);
+		a3vertexDrawableActivateAndRender(currentDrawable);
+		glCullFace(GL_BACK);
+		//glDepthFunc(GL_LEQUAL);
+		
 	}
 	else
 	{
 		//empty... why?
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 	}
 
 	// ****TO-DO: use unit quad as FSQ drawable
