@@ -58,9 +58,26 @@ in vPassDataBlock //(1)
 } vPassData;
 
 //kelly
+vec3 rimShading()
+{
+	vec3 returnVec;
+	vec3 N = normalize(vPassData.vPassNormal);
+	vec3 V = normalize(-vPassData.vPassPosition.xyz);
+
+	//this is the rim shading
+	float vdn = 1.0 - max(dot(V, N), 0.0);
+
+	returnVec += vec3(0.6, 0.0, 0.0);
+	//return the rim shader
+	return returnVec.xyz = vec3(smoothstep(0.1, 1.0, vdn));
+
+}
+
+//kelly
 vec4 ToonShading()
 {
-	vec4 color;
+	//http://www.lighthouse3d.com/tutorials/glsl-12-tutorial/toon-shader-version-ii/
+	vec4 returnColor;
 	vec4 lightDiffuse;
 	for (int i = 0; i < uLightCt; i++)
 	{
@@ -69,28 +86,45 @@ vec4 ToonShading()
 		if (intense > 0.95)
 		{
 			//clamp, lerp, mix?
-			color = vec4(1.0, 0.5, 0.5, 1.0);
+			returnColor = vec4(1.0, 0.5, 0.5, 1.0);
 		}
 		else if (intense > 0.5)
 		{
-			color = vec4(0.2, 0.6, 0.6, 1.0);
+			returnColor = vec4(0.2, 0.6, 0.6, 1.0);
 		}
 		else if (intense > 0.25)
 		{
-			color = vec4(0.1, 0.1, 0.1, 1.0);
+			returnColor = vec4(0.1, 0.1, 0.1, 1.0);
 		}
 		else
 		{
-			color = vec4(0.0, 0.0, 0.0, 1.0);
+			returnColor = vec4(0.0, 0.0, 0.0, 1.0);
 		}
-		lightDiffuse += color;
+		lightDiffuse += returnColor;
 	}
 	return lightDiffuse;
 	
 }
 
 //kelly
+vec4 StripesGalore()
+{
+	//http://www.lighthouse3d.com/tutorials/glsl-tutorial/texture-coordinates/
+	vec4 returnColor;
+	vec4 color1 = vec4(1.0, 0.5, 0.5, 1.0);
+	vec4 color2 = vec4(0.4, 0.8, 0.9, 1.0);
 
+	vec2 modifiedTexcoord = vPassData.vPassTexcoord * 8.0;
+
+	float fraction = fract(modifiedTexcoord.x);
+
+	if (fraction < 0.5)
+		returnColor = color1;
+	else
+		returnColor = color2;
+
+	return returnColor;
+}
 
 //kelly
 vec3 RGBToHSL(vec3 colorVector)
@@ -152,6 +186,8 @@ void main()
 	//rtFragColor = vec4(0.5, 1.0, 1.0, 1.0);
 	rtFragColor = vec4(RGBToHSL(vPassData.vPassNormal.xyz),1.0);
 	rtFragColor1 = ToonShading();
+	rtFragColor2 = StripesGalore();
+	rtFragColor3 = vec4(rimShading(),1.0);
 	//rtFragColor = vec4(vPassData.vPassNormal.xyz,1.0);
 	
 }
