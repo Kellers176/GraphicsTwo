@@ -30,11 +30,22 @@
 //		-> *test all varyings by outputting them as color
 //	1) declare at least four render targets
 //	2) implement four custom effects, outputting each one to a render target
+const int MAX_LIGHTS = 10;
 
 layout(location = 0) out vec4 rtFragColor;  
 layout(location = 1) out vec4 rtFragColor1;	
 layout(location = 2) out vec4 rtFragColor2;	
 layout(location = 3) out vec4 rtFragColor3;	
+
+uniform int uLightCt; //(8)
+uniform vec4  uLightPos[MAX_LIGHTS]; //position
+uniform vec4  uLightCol[MAX_LIGHTS]; //intensity aka color
+uniform float uLightSz[MAX_LIGHTS]; //attenuation
+
+
+uniform sampler1D uColor; //(2)
+uniform sampler1D uTex_dm; //(2)
+uniform sampler1D uTex_sm;
 
 
 in vPassDataBlock //(1)
@@ -45,9 +56,48 @@ in vPassDataBlock //(1)
 	vec2 vPassTexcoord;
 
 } vPassData;
+
+//kelly
+vec4 ToonShading()
+{
+	vec4 color;
+	vec4 lightDiffuse;
+	for (int i = 0; i < uLightCt; i++)
+	{
+		vec3 lightDirection = normalize(uLightPos[i].xyz - vPassData.vPassPosition.xyz);
+		float intense = dot(lightDirection, normalize(vPassData.vPassNormal));
+		if (intense > 0.95)
+		{
+			//clamp, lerp, mix?
+			color = vec4(1.0, 0.5, 0.5, 1.0);
+		}
+		else if (intense > 0.5)
+		{
+			color = vec4(0.2, 0.6, 0.6, 1.0);
+		}
+		else if (intense > 0.25)
+		{
+			color = vec4(0.1, 0.1, 0.1, 1.0);
+		}
+		else
+		{
+			color = vec4(0.0, 0.0, 0.0, 1.0);
+		}
+		lightDiffuse += color;
+	}
+	return lightDiffuse;
+	
+}
+
+//kelly
+
+
+//kelly
 vec3 RGBToHSL(vec3 colorVector)
 {
+	//http://www.niwa.nu/2013/05/math-behind-colorspace-conversions-rgb-hsl/
 	vec3 returnVector;
+
 
 	//min value of the rgb vector
 	float mMin = min(min(colorVector.x, colorVector.y), colorVector.z);
@@ -55,9 +105,10 @@ vec3 RGBToHSL(vec3 colorVector)
 	float mMax = max(max(colorVector.x, colorVector.y), colorVector.z);
 	float mDelta = mMin - mMax;
 
-	//brightness
+	//brightness/Luminance
 	returnVector.z = (mMin + mMax) / 2.0;
 
+	//need to check the luminance in order to make sure it is the right formula
 	if(returnVector.z < 0.5)
 	{
 		returnVector.y = mDelta / (mMax + mMin);
@@ -67,10 +118,12 @@ vec3 RGBToHSL(vec3 colorVector)
 		returnVector.y = mDelta / (2.0 - mMax - mMin);
 	}
 
+	//calculates the hue by checking creating the hue formula now so that we can use it later
 	float mDeltaRed = (((mMax - colorVector.x) / 6.0) + (mDelta / 2.0)) / mDelta;
 	float mDeltaGreen = (((mMax - colorVector.y) / 6.0) + (mDelta / 2.0)) / mDelta;
 	float mDeltaBlue = (((mMax - colorVector.z) / 6.0) + (mDelta / 2.0)) / mDelta;
 
+	//if the color is equal to the max, we want to use it
 	if(colorVector.x == mMax)
 		//the hue for yell and magenta
 		returnVector.x = mDeltaBlue / mDeltaGreen;
@@ -97,8 +150,8 @@ void main()
 {
 	// DUMMY OUTPUT: all fragments are FADED CYAN
 	//rtFragColor = vec4(0.5, 1.0, 1.0, 1.0);
-
 	rtFragColor = vec4(RGBToHSL(vPassData.vPassNormal.xyz),1.0);
+	rtFragColor1 = ToonShading();
 	//rtFragColor = vec4(vPassData.vPassNormal.xyz,1.0);
 	
 }
