@@ -15,6 +15,8 @@
 */
 
 /*
+	This file was modified by Kelly Herstine and Zachary Taylor with permission of the author
+
 	animal3D SDK: Minimal 3D Animation Framework
 	By Daniel S. Buckstein
 	
@@ -251,13 +253,9 @@ void a3demo_render(const a3_DemoState *demoState)
 
 	// ****TO-DO (lab 3): framebuffer
 	//	- activate framebuffer for offscreen rendering
+	//In class, we set the currentFBO to the fbo_scene then activated it
 	currentFBO = demoState->fbo_scene;
-	a3framebufferActivate(currentFBO);
-
-
-
-
-	
+	a3framebufferActivate(currentFBO);	
 	
 	// clear buffers
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -268,9 +266,7 @@ void a3demo_render(const a3_DemoState *demoState)
 		a3demo_stencilTest(demoState);
 	else
 		glDisable(GL_STENCIL_TEST);
-
-
-	
+	   	
 
 	// draw grid aligned to world
 	if (demoState->displayGrid)
@@ -378,9 +374,9 @@ void a3demo_render(const a3_DemoState *demoState)
 	//a3framebufferDeactivate();
 
 	// ****TO-DO: draw to back buffer with depth disabled
-	//x and y are prob off
+	//Kelly
+	//Deactivated the frame buffer and set the view port, this alows us to draw directly on screen (the back buffer) and turn off depth
 	a3framebufferDeactivateSetViewport(a3fbo_depthDisable, -demoState->frameBorder, -demoState->frameBorder, demoState->frameWidth, demoState->frameHeight);
-	//glClear(GL_COLOR_BUFFER_BIT);
 
 	// ****TO-DO: display skybox or clear
 	//	- do this last, it's slightly different from your previous skybox code
@@ -389,7 +385,8 @@ void a3demo_render(const a3_DemoState *demoState)
 	//Zac 
 	if (demoState->displaySkybox)
 	{
-		//do stuff here
+		//Enable blending, basically draws to the parts of the screen where the alpha is very low
+		//Otherwise the formula is mostly the same 
 		a3demo_enableCompositeBlending();
 
 		// draw solid color box, inverted
@@ -410,11 +407,9 @@ void a3demo_render(const a3_DemoState *demoState)
 		a3textureActivate(demoState->tex_skybox_clouds, a3tex_unit00);
 
 		
-		//glDepthFunc(GL_ALWAYS);
 		glCullFace(GL_FRONT);
 		a3vertexDrawableActivateAndRender(currentDrawable);
 		glCullFace(GL_BACK);
-		//glDepthFunc(GL_LEQUAL);
 		
 	}
 	else
@@ -425,6 +420,8 @@ void a3demo_render(const a3_DemoState *demoState)
 	}
 
 	// ****TO-DO: use unit quad as FSQ drawable
+	//Kelly and Zac, in class 
+	//Set and activated the current drawable to the unitquad
 	currentDrawable = demoState->draw_unitquad;
 	a3vertexDrawableActivate(currentDrawable);
 
@@ -437,13 +434,14 @@ void a3demo_render(const a3_DemoState *demoState)
 
 	// ****TO-DO: draw FSQ with texturing
 	//Get the current program we want to use
+	//Get the draw texture program so that we can draw the fbo as a texture to the unit quad
 	currentDemoProgram = demoState->prog_drawTexture;
 	a3shaderProgramActivate(currentDemoProgram->program);
-	//activate the first texture
-	//a3textureActivate(tex_dm[0], a3tex_unit00);
+
+	//Send in uniform MVP (Using the identity matrix)
 	a3shaderUniformSendFloatMat(a3unif_mat4, 0, currentDemoProgram->uMVP, 1, a3identityMat4.mm);
 
-	//draw the FSQ
+	//activate the current drawable
 	a3vertexDrawableRenderActive();
 
 	//-------------------------------------------------------------------------

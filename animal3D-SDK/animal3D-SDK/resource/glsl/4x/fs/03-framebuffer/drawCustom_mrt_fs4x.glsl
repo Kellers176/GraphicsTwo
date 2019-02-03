@@ -15,6 +15,8 @@
 */
 
 /*
+	This file was modified by Kelly Herstine and Zachary Taylor with permission of the author
+
 	animal3D SDK: Minimal 3D Animation Framework
 	By Daniel S. Buckstein
 	

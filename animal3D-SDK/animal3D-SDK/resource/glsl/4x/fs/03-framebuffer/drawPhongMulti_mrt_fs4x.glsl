@@ -15,6 +15,8 @@
 */
 
 /*
+	This file was modified by Kelly Herstine and Zachary Taylor with permission of the author
+
 	animal3D SDK: Minimal 3D Animation Framework
 	By Daniel S. Buckstein
 	
@@ -72,9 +74,10 @@ void main()
 	//Kelly worked on the for loop while zac and kelly worked on getting the algorithm working
 	/*This for loop works through each light that is passed by the uniforms. This then calculates the and normalizes
 	the normal of the scene, the light positions in teh scene, the position of the objects and then the reflection.
-	This then calculates the diffuse and the specular lights with their algorithm. At tge end, we add all of these variables
+	This then calculates the diffuse and the specular lights with their algorithm. At the end, we add all of these variables
 	up into the final color (col) and we set it equal to the frag color.*/
 
+	//Diffuse and Specular totals are added up so that they can be output later
 	vec3 diffuseTotal;
 	vec3 specularTotal;
 
@@ -88,10 +91,12 @@ void main()
 		//float diffuseCoefficient = max(0.0, dot(normal, surfaceToLight));
 		//vec3 diffuse = diffuseCoefficient * surfaceColor.rgb * light.intensities;
 		vec3 diffuseIndiv = max(dot(N, L), 0.0f) *  uLightCol[i].xyz * DiffuseTex.xyz;
+		//Add diffuse total without the texteruing
 		diffuseTotal += max(dot(N, L), 0.0f) *  uLightCol[i].xyz;
 
 		//vec3 specular = specularCoefficient * materialSpecularColor * light.intensities;
 		vec3 specularIndiv =  pow(max(dot(R,V), 0.0f), 32.0) * SpecularTex.xyz *  uLightCol[i].xyz;
+		//Add specular total using the specular value
 		specularTotal += specularIndiv;
 
 		//float distanceToLight = length(light.position - surfacePos);

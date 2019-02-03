@@ -15,6 +15,8 @@
 */
 
 /*
+	This file was modified by Kelly Herstine and Zachary Taylor with permission of the author
+
 	animal3D SDK: Minimal 3D Animation Framework
 	By Daniel S. Buckstein
 	
@@ -637,12 +639,17 @@ void a3demo_loadFramebuffers(a3_DemoState *demoState)
 {
 	// create framebuffers and change their texture settings if need be
 	// ****TO-DO: uncomment these as needed
+	//Kelly and Zac, in class
+
+	//created a framebuffer pointer
 	a3_Framebuffer *fbo;
 //	a3ui32 i, j;
 
 
 	// ****TO-DO: initialize framebuffers: 
 	//	- scene, with MRT and depth
+	//Set the framebuffer pointer to the framebuffer scene, create the framebuffer with 8 color ports, depth and scencil testing on, 
+	//and the same width and height as the scene
 	fbo = demoState->fbo_scene;
 	a3framebufferCreate(fbo, "fbo:scene", 8, a3fbo_colorRGBA8, a3fbo_depth24_stencil8, demoState->frameWidth, demoState->frameHeight);
 
