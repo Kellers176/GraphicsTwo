@@ -36,10 +36,36 @@
 //		-> *try outputting result (boolean)
 //	6) apply shadow to shading model
 
+uniform sampler2D uTex_shadow; //(1)
+
+in vec4 vPassShadowCoord; //(2)
+
 layout (location = 0) out vec4 rtFragColor;
 
 void main()
 {
 	// DUMMY OUTPUT: all fragments are LIME
 	rtFragColor = vec4(0.0, 1.0, 0.5, 1.0);
+
+	//PHONG
+
+
+	//shadowMapping
+	vec4 screen_Proj = vPassShadowCoord / vPassShadowCoord.w; // (3)
+
+	vec4 sample_shadow = texture(uTex_shadow, screen_Proj.xy); //(4)
+
+	float shadowValue = sample_shadow.x; //(5)
+	//if current distance is greater than the recorded distance in the depth map, then we are in shadow, otherwise we are not in shadow
+	float shadowTest = screen_Proj.z > shadowValue + 0.0001 ? 0.2 : 1.0; //(5)
+	rtFragColor.rgb *= shadowTest;
+
+	//proj tex = 3 lines
+	//inter 5 lines
+	//combo 7-10 lines of code
+
+
+	//rtFragColor = screen_Proj; //(3*)
+	//rtFragColor = sample_shadow; // (4*)
+	//tFragColor = vec4(shadowTest, shadowTest, shadowTest, 1.0);
 }

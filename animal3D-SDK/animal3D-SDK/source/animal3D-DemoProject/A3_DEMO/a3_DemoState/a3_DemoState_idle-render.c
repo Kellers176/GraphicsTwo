@@ -256,7 +256,7 @@ void a3demo_render(const a3_DemoState *demoState)
 
 	// clear buffers
 	glClear(GL_DEPTH_BUFFER_BIT);
-
+	//look at please -dan
 	// shadow mapping: render shadow-casters (inverted helps)
 	currentDemoProgram = demoState->prog_transform;
 	a3shaderProgramActivate(currentDemoProgram->program);
@@ -404,6 +404,7 @@ void a3demo_render(const a3_DemoState *demoState)
 
 	// ****TO-DO: for post-processing, uncomment above line 
 	//	and prepare to continue drawing off-screen
+	//go of screen, different notebook
 
 
 	// display skybox or clear
@@ -485,6 +486,7 @@ void a3demo_render(const a3_DemoState *demoState)
 	else
 	{
 	}
+	//uncomment when ready
 //	a3shaderUniformSendFloatMat(a3unif_mat4, 0, currentDemoProgram->uMVP, 1, a3identityMat4.mm);
 //	a3vertexDrawableRenderActive();
 

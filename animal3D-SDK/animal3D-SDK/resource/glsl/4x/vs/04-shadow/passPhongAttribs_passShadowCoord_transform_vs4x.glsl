@@ -35,8 +35,11 @@ layout (location = 0) in vec4 aPosition;
 layout (location = 2) in vec4 aNormal;
 layout (location = 8) in vec2 aTexcoord;
 
+uniform mat4 uMVPB_proj; //(1)
 uniform mat4 uMV, uP;
 uniform mat4 uMV_nrm;
+
+out vec4 vPassShadowCoord; // (2)
 
 void main()
 {
@@ -44,4 +47,6 @@ void main()
 	gl_Position = uP * pos_eye;
 
 	vec4 nrm_eye = uMV_nrm * aNormal;
+
+	vPassShadowCoord = uMVPB_proj * aPosition; // (3)
 }
