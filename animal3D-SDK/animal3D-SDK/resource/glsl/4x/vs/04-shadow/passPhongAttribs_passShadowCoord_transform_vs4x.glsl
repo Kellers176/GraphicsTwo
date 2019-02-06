@@ -39,10 +39,31 @@ uniform mat4 uMVPB_proj; //(1)
 uniform mat4 uMV, uP;
 uniform mat4 uMV_nrm;
 
+mat3 normalMV; //(...5?)
+
+//varying block
+out vPassDataBlock
+{
+	vec4 vPassPosition;
+	vec3 vPassNormal;
+
+
+	vec2 vPassTexcoord;
+
+} vPassData;
+
 out vec4 vPassShadowCoord; // (2)
 
 void main()
 {
+	vPassData.vPassPosition = uMV * aPosition; // eye space //(2)
+	//normalMV = mat3(uMV);
+	normalMV = mat3(uMV_nrm);
+
+	vPassData.vPassNormal = normalMV * aNormal.xyz;
+
+	vPassData.vPassTexcoord = aTexcoord;
+
 	vec4 pos_eye = uMV * aPosition;
 	gl_Position = uP * pos_eye;
 
