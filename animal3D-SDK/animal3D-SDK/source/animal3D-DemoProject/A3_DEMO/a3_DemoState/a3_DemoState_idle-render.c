@@ -399,13 +399,14 @@ void a3demo_render(const a3_DemoState *demoState)
 	//	- draw FSQ with appropriate program
 
 	// draw to back buffer with depth disabled
-	a3framebufferDeactivateSetViewport(a3fbo_depthDisable, 
-		-demoState->frameBorder, -demoState->frameBorder, demoState->frameWidth, demoState->frameHeight);
+	//a3framebufferDeactivateSetViewport(a3fbo_depthDisable, 
+	//	-demoState->frameBorder, -demoState->frameBorder, demoState->frameWidth, demoState->frameHeight);
 
-	// ****TO-DO: for post-processing, uncomment above line 
+	// ****TO-DO: for post-processing, comment above line 
 	//	and prepare to continue drawing off-screen
 	//go of screen, different notebook
 
+	a3framebufferActivate(demoState->fbo_composite);
 
 	// display skybox or clear
 	// - disable blending whether or not skybox is drawn
@@ -475,20 +476,29 @@ void a3demo_render(const a3_DemoState *demoState)
 
 	// ****TO-DO: this
 	// draw to back buffer with depth disabled
-
+	a3framebufferDeactivateSetViewport(a3fbo_depthDisable,
+		-demoState->frameBorder, -demoState->frameBorder, demoState->frameWidth, demoState->frameHeight);
 
 	// ****TO-DO: this
 	// draw FSQ (still active) with post-processing or texturing
+	a3framebufferBindColorTexture(demoState->fbo_composite, 0, 0);
 	glDisable(GL_BLEND);
 	if (demoState->enablePostProcessing && demoSubMode == 0)
-	{
+	{		
+		currentDemoProgram = demoState->prog_drawCustom_post;
+		a3shaderProgramActivate(currentDemoProgram->program);
+		
 	}
 	else
 	{
+		currentDemoProgram = demoState->prog_drawTexture;
+		a3shaderProgramActivate(currentDemoProgram->program);
 	}
 	//uncomment when ready
-//	a3shaderUniformSendFloatMat(a3unif_mat4, 0, currentDemoProgram->uMVP, 1, a3identityMat4.mm);
-//	a3vertexDrawableRenderActive();
+	//currentDemoProgram = demoState->prog_drawTexture;
+	//a3shaderProgramActivate(currentDemoProgram->program);
+	a3shaderUniformSendFloatMat(a3unif_mat4, 0, currentDemoProgram->uMVP, 1, a3identityMat4.mm);
+	a3vertexDrawableRenderActive();
 
 
 	//-------------------------------------------------------------------------
