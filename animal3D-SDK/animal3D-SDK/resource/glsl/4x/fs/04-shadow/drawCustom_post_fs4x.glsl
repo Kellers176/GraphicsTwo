@@ -30,10 +30,22 @@
 //		appropriate for some post-processing effect
 //	2) implement some simple post-processing algorithm (e.g. outlines)
 
+in vec2 vPassTexCoord; //(0)
+
+uniform sampler2D uTex_dm; //(0)
+
 layout (location = 0) out vec4 rtFragColor;
 
 void main()
 {
+	vec4 fbo_tex = texture(uTex_dm, vPassTexCoord);
+
+	fbo_tex *= vec4(0.5, 0.5, 1.0, 1.0);
+
 	// DUMMY OUTPUT: all fragments are NORMAL MAP BLUE
-	rtFragColor = vec4(0.5, 0.5, 1.0, 1.0);
+	//rtFragColor = vec4(0.5, 0.5, 1.0, 1.0);
+	//rtFragColor = vec4(vPassTexCoord, 0.0, 1.0);
+	//rtFragColor = texture(uTex_dm, vPassTexCoord);
+	rtFragColor = fbo_tex;
+
 }
