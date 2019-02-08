@@ -46,5 +46,7 @@ out vec4 rtFragColor;
 void main()
 {
 	rtFragColor = texture(uTex_dm, vPassTexCoord);
+	//rtFragColor = vec4(vPassTexCoord, 0.0, 1.0);
+
 
 }
