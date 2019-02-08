@@ -492,6 +492,7 @@ void a3demo_render(const a3_DemoState *demoState)
 		a3shaderProgramActivate(currentDemoProgram->program);
 	}
 	//uncomment when ready
+	//a3shaderUniformSendDouble(a3unif_single, currentDemoProgram->uTime, 1,  &demoState->renderTimer->q);	
 	a3shaderUniformSendFloatMat(a3unif_mat4, 0, currentDemoProgram->uMVP, 1, a3identityMat4.mm);
 	a3vertexDrawableRenderActive();
 
