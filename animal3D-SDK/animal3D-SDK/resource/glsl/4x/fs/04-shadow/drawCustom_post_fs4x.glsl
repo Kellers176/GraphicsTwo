@@ -42,35 +42,52 @@ uniform vec4  uLightPos[MAX_LIGHTS]; //position
 uniform vec4  uLightCol[MAX_LIGHTS]; //intensity aka color
 uniform float uLightSz[MAX_LIGHTS]; //attenuation
 
-uniform float uTime;
+uniform double uTime;
 
 void main()
 {
 	vec4 fbo_tex_move = texture(uTex_dm, vec2(vPassTexCoord.x, vPassTexCoord.y));
 	vec4 fbo_tex;// = texture(uTex_dm, vPassTexCoord);
 	rtFragColor = fbo_tex_move;
+	float newTime = float(uTime);
 	if (vPassTexCoord.x < 0.7 && vPassTexCoord.x >= 0.3 && vPassTexCoord.y< 0.7 && vPassTexCoord.y >= 0.3)
 	{
-		//rtFragColor = vec4(0.5, 0.5, 1.0, 1.0);
-		fbo_tex = texture(uTex_dm, vec2(vPassTexCoord.x*10, vPassTexCoord.y*10));
+		//kelly
+		if(vPassTexCoord.x < 0.5 && vPassTexCoord.x >= 0.3 && vPassTexCoord.y< 0.5 && vPassTexCoord.y >= 0.3) //bottom left
+		{
+			fbo_tex = texture(uTex_dm, vec2(vPassTexCoord.x*4, vPassTexCoord.y*4));
+			fbo_tex *= vec4(sin(newTime) + 0.7, 0.3, 0.5, 1.0);
+		}
+		else if(vPassTexCoord.x < 0.7 && vPassTexCoord.x >= 0.5 && vPassTexCoord.y< 0.7 && vPassTexCoord.y >= 0.5)// top right  //ZAC DO THINGS WITH TIME HERE
+		{
+			fbo_tex = texture(uTex_dm, vec2(vPassTexCoord.x*4, vPassTexCoord.y*4));
+		}
+		else if(vPassTexCoord.x < 0.5 && vPassTexCoord.x >= 0.3 && vPassTexCoord.y< 0.7 && vPassTexCoord.y >= 0.3) //top left    //ZAC DO THINGS WITH TIME HERE
+		{
+			fbo_tex = texture(uTex_dm, vec2(vPassTexCoord.x*4, vPassTexCoord.y*4));
+		}
+		else //bottom right
+		{
+			fbo_tex = texture(uTex_dm, vec2(vPassTexCoord.x*4, vPassTexCoord.y*4)) * fract(sin(dot(vPassTexCoord.xy, vec2(12,78))) * 43758 * sin(newTime));
+		}
 	}
 	else
 	{
 		fbo_tex = texture(uTex_dm, vPassTexCoord);
 	}
+	
 
 	//fbo_tex *= vec4(0.5, 0.5, 1.0, 1.0);
-	float newTime = uTime * 10.0f;
 
 	// DUMMY OUTPUT: all fragments are NORMAL MAP BLUE
 	//rtFragColor = vec4(0.5, 0.5, 1.0, 1.0);
 	//rtFragColor = vec4(vPassTexCoord, 0.0, 1.0);
 	//rtFragColor = vec4(vec2(vPassTexCoord.x, vPassTexCoord.y + 10), 0.0, 1.0);
 	//rtFragColor = texture(uTex_dm, vPassTexCoord);
-	//rtFragColor = fbo_tex;
+	rtFragColor = fbo_tex;
 	//rtFragColor = vec4(0.5f+0.5f*sin(uTime * 10.0), 0.5f + 0.5f*sin(uTime * 10.0), 0.5f + 0.5f*sin(uTime * 10.0), 1.0);
-	//rtFragColor = vec4(0.5f + 0.5f*sin(newTime), 0.0, 0.0, 1.0);//), 0.5f + 0.5f*sin(uTime * 10.0), 0.5f + 0.5f*sin(uTime * 10.0), 1.0);
-	rtFragColor = vec4(max(uTime, 0.0), 0.0, 0.0, 1.0);
+	//rtFragColor = vec4(0.5f + 0.5f*sin(newTime), 0.0, 0.0, 1.0);//), 0.5f + 0.5f*sin(newTime * 10.0), 0.5f + 0.5f*sin(newTime * 10.0), 1.0);P
+	//rtFragColor = vec4(max(uTime, 0.0), 0.0, 0.0, 1.0);
 	
 
 
