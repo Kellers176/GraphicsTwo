@@ -58,11 +58,13 @@ void main()
 			fbo_tex = texture(uTex_dm, vec2(vPassTexCoord.x*4, vPassTexCoord.y*4));
 			fbo_tex *= vec4(sin(newTime) + 0.7, 0.3, 0.5, 1.0);
 		}
-		else if(vPassTexCoord.x < 0.7 && vPassTexCoord.x >= 0.5 && vPassTexCoord.y< 0.7 && vPassTexCoord.y >= 0.5)// top right  //ZAC DO THINGS WITH TIME HERE
+		//else if(vPassTexCoord.x < 0.7 && vPassTexCoord.x >= 0.5 && vPassTexCoord.y< 0.7 && vPassTexCoord.y >= 0.5)// top right  
+		else if(vPassTexCoord.x < 0.7 + 0.3 * sin(newTime) && vPassTexCoord.x >= 0.5 + 0.3 * sin(newTime) && vPassTexCoord.y< 0.7 + 0.4 * sin(newTime) && vPassTexCoord.y >= 0.5 + 0.5 * sin(newTime))// top right  
 		{
 			fbo_tex = texture(uTex_dm, vec2(vPassTexCoord.x*4, vPassTexCoord.y*4));
+			fbo_tex *= vec4(1.0 + cos(newTime), 1.0 + sin(newTime), 0.5 + 0.5 *sin(newTime), 1.0); 
 		}
-		else if(vPassTexCoord.x < 0.5 && vPassTexCoord.x >= 0.3 && vPassTexCoord.y< 0.7 && vPassTexCoord.y >= 0.3) //top left    //ZAC DO THINGS WITH TIME HERE
+		else if(vPassTexCoord.x < 0.5 + 0.3 * sin(newTime) && vPassTexCoord.x >= 0.3 + 0.1* sin(newTime) && vPassTexCoord.y< 0.7 + 0.4 * sin(newTime) && vPassTexCoord.y >= 0.3 + 0.1 * sin(newTime)) //top left    
 		{
 			fbo_tex = texture(uTex_dm, vec2(vPassTexCoord.x*4, vPassTexCoord.y*4));
 		}
