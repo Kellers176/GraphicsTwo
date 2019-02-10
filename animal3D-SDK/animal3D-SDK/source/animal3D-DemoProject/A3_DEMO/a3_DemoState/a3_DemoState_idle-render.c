@@ -1,4 +1,5 @@
 /*
+	“This file was modified by Kelly and Zac with permission of the author.”
 	Copyright 2011-2019 Daniel S. Buckstein
 
 	Licensed under the Apache License, Version 2.0 (the "License");
@@ -474,6 +475,9 @@ void a3demo_render(const a3_DemoState *demoState)
 
 	// ****TO-DO: this
 	// draw to back buffer with depth disabled
+	//kelly
+	/*We did this so that we would be able to draw using a post processing effeect as well as figure out
+	how to enable the post processing*/
 	a3framebufferDeactivateSetViewport(a3fbo_depthDisable,
 		-demoState->frameBorder, -demoState->frameBorder, demoState->frameWidth, demoState->frameHeight);
 
@@ -485,6 +489,8 @@ void a3demo_render(const a3_DemoState *demoState)
 	{
 		currentDemoProgram = demoState->prog_drawCustom_post;
 		a3shaderProgramActivate(currentDemoProgram->program);
+		//kelly
+		/*We needed to pass time to the post processing shader so that we could use it to modify different aspects of it.*/
 		a3shaderUniformSendDouble(a3unif_single, currentDemoProgram->uTime, 1, &demoState->renderTimer->totalTime);
 	}
 	else
@@ -493,7 +499,6 @@ void a3demo_render(const a3_DemoState *demoState)
 		a3shaderProgramActivate(currentDemoProgram->program);
 	}
 	//uncomment when ready
-	
 	a3shaderUniformSendFloatMat(a3unif_mat4, 0, currentDemoProgram->uMVP, 1, a3identityMat4.mm);
 	a3vertexDrawableRenderActive();
 

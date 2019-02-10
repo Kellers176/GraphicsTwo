@@ -1,4 +1,5 @@
 /*
+	“This file was modified by Kelly with permission of the author.”
 	Copyright 2011-2019 Daniel S. Buckstein
 
 	Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,7 +25,8 @@
 
 #version 410
 
-
+//kelly
+/*Create variables that we will use in the future*/
 const int MAX_LIGHTS = 10;
 //out vec4 rtFragColor;
 
@@ -95,6 +97,10 @@ void main()
 	}
 	rtFragColor = vec4(col, 1.0f);
 
+
+	//kelly
+	/*use prospective divide to get the screen projection coordinates. We then get the projective ascpect of the file and use this
+	we use the shadow that we figured out in class and blend the two together.  we did this so that we could get a shadow and projection on the screen*/
 	//shadowMapping
 	vec4 screen_Proj = vPassShadowCoord / vPassShadowCoord.w; // (3)
 

@@ -1,4 +1,5 @@
 /*
+	“This file was modified by Kelly with permission of the author.”
 	Copyright 2011-2019 Daniel S. Buckstein
 
 	Licensed under the Apache License, Version 2.0 (the "License");
@@ -106,6 +107,9 @@ void main()
 	rtFragColor =  vec4(col, 1.0f);
 
 	//shadowMapping
+	//kelly
+	/*use prospective divide to get the screen projection coordinates. we use the shadow that we figured out in class and blend the two together.  we did this
+	so that we could get  ashadow on the screen*/
 	vec4 screen_Proj = vPassShadowCoord / vPassShadowCoord.w; // (3)
 
 	vec4 sample_shadow = texture(uTex_shadow, screen_Proj.xy); //(4)

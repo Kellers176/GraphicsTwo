@@ -1,4 +1,6 @@
 /*
+
+	“This file was modified by Kelly and Zac with permission of the author.”
 	Copyright 2011-2019 Daniel S. Buckstein
 
 	Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,12 +48,16 @@ uniform double uTime;
 
 void main()
 {
+	//kelly
+	/*Create the variables to move around in the scene, also cast time as a float. This will allow us to use time
+	as a float in the future*/
 	vec4 fbo_tex_move = texture(uTex_dm, vec2(vPassTexCoord.x, vPassTexCoord.y));
 	vec4 fbo_tex;// = texture(uTex_dm, vPassTexCoord);
 	rtFragColor = fbo_tex_move;
 	float newTime = float(uTime);
 
 	//Zac
+	/*Create upper and lower bounds of the square to move around. This will allow us to be able to manipulate this in the future*/
 	float up, bot, mid;
 	up = 0.7 + 0.1 * sin(newTime);
 	bot = 0.3 + 0.2 *sin(newTime);
@@ -61,12 +67,14 @@ void main()
 	if (vPassTexCoord.x < up && vPassTexCoord.x >= bot && vPassTexCoord.y< up && vPassTexCoord.y >= bot)
 	{
 		//kelly
+		/*Within the bottom left bounds, create a 4*4 texture and add a color to it. This creates an interesting post processing effect*/
 		if(vPassTexCoord.x < mid && vPassTexCoord.x >= bot && vPassTexCoord.y< mid && vPassTexCoord.y >= bot) //bottom left
 		{
 			fbo_tex = texture(uTex_dm, vec2(vPassTexCoord.x*4, vPassTexCoord.y*4));
 			fbo_tex *= vec4(sin(newTime) + 0.7, 0.3, 0.5, 1.0);
 		}
 		//Zac
+		/*Within the other bounds of the box, create a 4*4 texture and add a color to it. This creates an interesting post processing effect*/
 		//else if(vPassTexCoord.x < 0.7 && vPassTexCoord.x >= 0.5 && vPassTexCoord.y< 0.7 && vPassTexCoord.y >= 0.5)// top right  
 		else if(vPassTexCoord.x < up + 0.3 * sin(newTime) && vPassTexCoord.x >= mid + 0.3 * sin(newTime) && vPassTexCoord.y< up + 0.4 * sin(newTime) && vPassTexCoord.y >= mid + 0.5 * sin(newTime))// top right  
 		{
@@ -88,18 +96,7 @@ void main()
 		//fbo_tex = texture(uTex_dm, vec2( 0.01 * sin(newTime), vPassTexCoord.y));
 	}
 	
-
-	//fbo_tex *= vec4(0.5, 0.5, 1.0, 1.0);
-
-	// DUMMY OUTPUT: all fragments are NORMAL MAP BLUE
-	//rtFragColor = vec4(0.5, 0.5, 1.0, 1.0);
-	//rtFragColor = vec4(vPassTexCoord, 0.0, 1.0);
-	//rtFragColor = vec4(vec2(vPassTexCoord.x, vPassTexCoord.y + 10), 0.0, 1.0);
-	//rtFragColor = texture(uTex_dm, vPassTexCoord);
 	rtFragColor = fbo_tex;
-	//rtFragColor = vec4(0.5f+0.5f*sin(uTime * 10.0), 0.5f + 0.5f*sin(uTime * 10.0), 0.5f + 0.5f*sin(uTime * 10.0), 1.0);
-	//rtFragColor = vec4(0.5f + 0.5f*sin(newTime), 0.0, 0.0, 1.0);//), 0.5f + 0.5f*sin(newTime * 10.0), 0.5f + 0.5f*sin(newTime * 10.0), 1.0);P
-	//rtFragColor = vec4(max(uTime, 0.0), 0.0, 0.0, 1.0);
 	
 
 

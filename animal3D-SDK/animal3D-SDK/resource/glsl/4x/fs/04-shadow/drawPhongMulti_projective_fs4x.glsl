@@ -1,4 +1,5 @@
 /*
+	“This file was modified by Kelly with permission of the author.”
 	Copyright 2011-2019 Daniel S. Buckstein
 
 	Licensed under the Apache License, Version 2.0 (the "License");
@@ -33,6 +34,10 @@
 //	4) sample projective texture using screen-space coordinate
 //		-> *try outputting this on its own
 //	5) apply/blend projective texture properly
+
+//kelly
+//create the variables that we are going to use
+//Allows us to use it further in the program
 const int MAX_LIGHTS = 10;
 //out vec4 rtFragColor;
 
@@ -53,7 +58,7 @@ layout (location = 0) out vec4 rtFragColor;
 vec4 projTex;
 uniform sampler2D uTex_proj; //(1)
 
-
+//gets the info from the vertex shader
 in vPassDataBlock 
 {
 	vec4 vPassPosition;
@@ -68,6 +73,7 @@ in vec4 vPassShadowCoord; // (2)
 
 void main()
 {
+	//kelly
 	//PHONG
 	DiffuseTex = texture(uTex_dm, vPassData.vPassTexcoord);
 	SpecularTex = texture(uTex_sm, vPassData.vPassTexcoord);
@@ -102,13 +108,12 @@ void main()
 	}
 	rtFragColor =  vec4(col, 1.0f);
 
-
+	//kelly
+	/*use prospective divide to get the screen projection coordinates. The use these coordinates to get the sample texture and 
+	then apply this to the screen*/
 	vec4 screen_Proj = vPassShadowCoord / vPassShadowCoord.w; // (3)
 	projTex = texture(uTex_proj,screen_Proj.xy); //(4)
 	rtFragColor = 1 - (1 - rtFragColor) * (1 - projTex);//(5)
 	rtFragColor.a = 1.0;
 
-	//proj tex = 3 lines
-	//inter 5 lines
-	//combo 7-10 lines of code
 }
