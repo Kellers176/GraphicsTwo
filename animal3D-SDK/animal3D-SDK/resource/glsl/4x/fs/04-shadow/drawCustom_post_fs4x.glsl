@@ -50,21 +50,30 @@ void main()
 	vec4 fbo_tex;// = texture(uTex_dm, vPassTexCoord);
 	rtFragColor = fbo_tex_move;
 	float newTime = float(uTime);
-	if (vPassTexCoord.x < 0.7 && vPassTexCoord.x >= 0.3 && vPassTexCoord.y< 0.7 && vPassTexCoord.y >= 0.3)
+
+	//Zac
+	float up, bot, mid;
+	up = 0.7 + 0.1 * sin(newTime);
+	bot = 0.3 + 0.2 *sin(newTime);
+	mid = (up + bot) * 0.5;
+
+
+	if (vPassTexCoord.x < up && vPassTexCoord.x >= bot && vPassTexCoord.y< up && vPassTexCoord.y >= bot)
 	{
 		//kelly
-		if(vPassTexCoord.x < 0.5 && vPassTexCoord.x >= 0.3 && vPassTexCoord.y< 0.5 && vPassTexCoord.y >= 0.3) //bottom left
+		if(vPassTexCoord.x < mid && vPassTexCoord.x >= bot && vPassTexCoord.y< mid && vPassTexCoord.y >= bot) //bottom left
 		{
 			fbo_tex = texture(uTex_dm, vec2(vPassTexCoord.x*4, vPassTexCoord.y*4));
 			fbo_tex *= vec4(sin(newTime) + 0.7, 0.3, 0.5, 1.0);
 		}
+		//Zac
 		//else if(vPassTexCoord.x < 0.7 && vPassTexCoord.x >= 0.5 && vPassTexCoord.y< 0.7 && vPassTexCoord.y >= 0.5)// top right  
-		else if(vPassTexCoord.x < 0.7 + 0.3 * sin(newTime) && vPassTexCoord.x >= 0.5 + 0.3 * sin(newTime) && vPassTexCoord.y< 0.7 + 0.4 * sin(newTime) && vPassTexCoord.y >= 0.5 + 0.5 * sin(newTime))// top right  
+		else if(vPassTexCoord.x < up + 0.3 * sin(newTime) && vPassTexCoord.x >= mid + 0.3 * sin(newTime) && vPassTexCoord.y< up + 0.4 * sin(newTime) && vPassTexCoord.y >= mid + 0.5 * sin(newTime))// top right  
 		{
 			fbo_tex = texture(uTex_dm, vec2(vPassTexCoord.x*4, vPassTexCoord.y*4));
 			fbo_tex *= vec4(1.0 + cos(newTime), 1.0 + sin(newTime), 0.5 + 0.5 *sin(newTime), 1.0); 
 		}
-		else if(vPassTexCoord.x < 0.5 + 0.3 * sin(newTime) && vPassTexCoord.x >= 0.3 + 0.1* sin(newTime) && vPassTexCoord.y< 0.7 + 0.4 * sin(newTime) && vPassTexCoord.y >= 0.3 + 0.1 * sin(newTime)) //top left    
+		else if(vPassTexCoord.x <mid + 0.3 * sin(newTime) && vPassTexCoord.x >= bot + 0.1* sin(newTime) && vPassTexCoord.y< up + 0.4 * sin(newTime) && vPassTexCoord.y >=bot + 0.1 * sin(newTime)) //top left    
 		{
 			fbo_tex = texture(uTex_dm, vec2(vPassTexCoord.x*4, vPassTexCoord.y*4));
 		}
@@ -76,6 +85,7 @@ void main()
 	else
 	{
 		fbo_tex = texture(uTex_dm, vPassTexCoord);
+		//fbo_tex = texture(uTex_dm, vec2( 0.01 * sin(newTime), vPassTexCoord.y));
 	}
 	
 
