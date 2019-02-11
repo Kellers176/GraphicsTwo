@@ -35,15 +35,23 @@ in vec2 vPassTexcoord;
 uniform sampler2D uImage0;
 
 layout (location = 0) out vec4 rtFragColor;
-
+//still needs more
 
 void main()
 {
 	// DUMMY OUTPUT: all fragments are ORANGE
 //	rtFragColor = vec4(1.0, 0.5, 0.0, 1.0);
+	vec4 sample0 = texture(uImage0, vPassTexcoord);
+	//average
+	//float lum = (sample0.r + sample0.g + sample0.b) / 3.0;
+
+	//start on bright pass
+	float lum = (0.2126*sample0.r + 0.7152*sample0.g + 0.0722*sample0.b);
+	rtFragColor = sample0 * lum;
 
 	// DEBUGGING
-	vec4 sample0 = texture(uImage0, vPassTexcoord);
+//	vec4 sample0 = texture(uImage0, vPassTexcoord);
 //	rtFragColor = vec4(vPassTexcoord, 0.0, 1.0);
-	rtFragColor = 0.1 + sample0;
+//	rtFragColor = 0.1 + sample0;
+//	rtFragColor =  vec4(lum, lum, lum , 1.0);
 }

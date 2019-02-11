@@ -789,6 +789,7 @@ void a3demo_loadFramebuffers(a3_DemoState *demoState)
 	const a3_FramebufferDepthType depthType_scene = a3fbo_depth24_stencil8;
 	const a3_FramebufferColorType colorType_comp = colorType_scene;
 	const a3_FramebufferColorType colorType_post = colorType_comp;
+													//a3fbo_colorRGBA32F; <- floating point texture (invest in new unifs)
 
 	// other settings
 	const a3ui16 shadowMapSz = 2048;
