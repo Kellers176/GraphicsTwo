@@ -35,7 +35,13 @@ in vec2 vPassTexcoord;
 uniform sampler2D uImage0;
 
 layout (location = 0) out vec4 rtFragColor;
-//still needs more
+
+float relativeLuminance(in vec4 color)
+{
+	float lum = (0.2126*color.r + 0.7152*color.g + 0.0722*color.b);
+	return lum;
+}
+
 
 void main()
 {
@@ -46,7 +52,8 @@ void main()
 	//float lum = (sample0.r + sample0.g + sample0.b) / 3.0;
 
 	//start on bright pass
-	float lum = (0.2126*sample0.r + 0.7152*sample0.g + 0.0722*sample0.b);
+	//float lum = (0.2126*sample0.r + 0.7152*sample0.g + 0.0722*sample0.b);
+	float lum = relativeLuminance(sample0);
 	rtFragColor = sample0 * lum;
 
 	// DEBUGGING
