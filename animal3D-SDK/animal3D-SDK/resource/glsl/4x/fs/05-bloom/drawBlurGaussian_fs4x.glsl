@@ -45,6 +45,10 @@ layout (location = 0) out vec4 rtFragColor;
 //		2^2 = 4:		1	2	1
 //		2^3 = 8:		1	3	3	1
 //		2^4 = 16:		1	4	6	4	1
+//		2^5 = 32		1   5   10  10  5  1
+//		2^6	= 64		1   6   15  20  15 6  1
+//		2^7
+//		2^8	= 256			1   8   28  56  70 56 28 8 1
 vec4 calcGaussianBlur1D_4(in sampler2D image, in vec2 center, in vec2 axis)	// (2)
 {
 	vec4 color = vec4(0.0);
@@ -61,13 +65,45 @@ vec4 calcGaussianBlur1D_4(in sampler2D image, in vec2 center, in vec2 axis)	// (
 //	return texture(image, center);
 }
 
+vec4 calcGaussianBlur1D_6(in sampler2D image, in vec2 center, in vec2 axis)	// (2)
+{
+	vec4 color = vec4(0.0);
+
+	color += texture(image, center + axis * 3.0);
+	color += texture(image, center + axis * 2.0) * 6.0;
+	color += texture(image, center + axis) * 15.0;
+	color += texture(image, center) * 20.0;
+	color += texture(image, center - axis) * 15.0;
+	color += texture(image, center - axis * 2.0) * 6.0;
+	color += texture(image, center - axis * 3.0);
+
+
+	return color / 64.0;
+}
+vec4 calcGaussianBlur1D_8(in sampler2D image, in vec2 center, in vec2 axis)	// (2)
+{
+	vec4 color = vec4(0.0);
+
+	color += texture(image, center + axis * 4.0);
+	color += texture(image, center + axis * 3.0) * 8.0;
+	color += texture(image, center + axis * 2.0) * 28.0;
+	color += texture(image, center + axis) * 56.0;
+	color += texture(image, center) * 70.0;
+	color += texture(image, center - axis) * 56.0;
+	color += texture(image, center - axis * 2.0) * 28.0;
+	color += texture(image, center - axis * 3.0) * 8.0;
+	color += texture(image, center - axis * 4.0);
+
+
+	return color / 256.0;
+}
 
 void main()
 {
 	// DUMMY OUTPUT: all fragments are LIME
 //	rtFragColor = vec4(0.0, 1.0, 0.5, 1.0);
 
-	rtFragColor = calcGaussianBlur1D_4(uImage0,vPassTexcoord, uPixelSz);
+	rtFragColor = calcGaussianBlur1D_8(uImage0,vPassTexcoord, uPixelSz);// *calcGaussianBlur1D_4(uImage0,vPassTexcoord, uPixelSz);
 
 
 

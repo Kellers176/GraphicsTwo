@@ -38,7 +38,9 @@ layout (location = 0) out vec4 rtFragColor;
 
 float relativeLuminance(in vec4 color)
 {
+
 	float lum = (0.2126*color.r + 0.7152*color.g + 0.0722*color.b);
+
 	return lum;
 }
 
@@ -50,11 +52,24 @@ void main()
 	vec4 sample0 = texture(uImage0, vPassTexcoord);
 	//average
 	//float lum = (sample0.r + sample0.g + sample0.b) / 3.0;
+	
+	float lum = relativeLuminance(sample0);
+
+	vec3 toneMap = sample0.xyz / (sample0.xyz + vec3(1.0)); //vec3(1.0) - exp(-sample0.xyz * 0.5);
+
+	//toneMap = pow(toneMap, vec3(1.0 / gamma));
 
 	//start on bright pass
 	//float lum = (0.2126*sample0.r + 0.7152*sample0.g + 0.0722*sample0.b);
-	float lum = relativeLuminance(sample0);
-	rtFragColor = sample0 * lum;
+	//if(lum > 0.5)
+	//	rtFragColor = vec4(toneMap,1.0) * lum;
+	//else	
+	//	rtFragColor = vec4(toneMap,1.0);
+	
+	rtFragColor = vec4(toneMap,1.0) * lum;
+
+	
+
 
 	// DEBUGGING
 //	vec4 sample0 = texture(uImage0, vPassTexcoord);
