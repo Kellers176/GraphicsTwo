@@ -49,6 +49,8 @@ layout (location = 0) out vec4 rtFragColor;
 //		2^6	= 64		1   6   15  20  15 6  1
 //		2^7
 //		2^8	= 256			1   8   28  56  70 56 28 8 1
+
+//https://github.com/cansik/processing-bloom-filter
 vec4 calcGaussianBlur1D_4(in sampler2D image, in vec2 center, in vec2 axis)	// (2)
 {
 	vec4 color = vec4(0.0);

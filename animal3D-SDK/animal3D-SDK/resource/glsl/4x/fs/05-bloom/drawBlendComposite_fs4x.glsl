@@ -30,6 +30,8 @@
 //	3) implement some multi-image blending algorithms
 //	4) output result as blend between multiple images
 
+//zac
+//Create variables for the project
 in vec2 vPassTexcoord;
 
 uniform sampler2D uImage0;

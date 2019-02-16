@@ -32,14 +32,23 @@
 
 in vec2 vPassTexcoord;
 
+float brightPassMin = 0.2;
+
 uniform sampler2D uImage0;
 
 layout (location = 0) out vec4 rtFragColor;
 
+//kelly
 float relativeLuminance(in vec4 color)
 {
+	//relativeLuminance
+	vec3 lumVector = vec3(0.2126,0.7152,0.0722);
 
-	float lum = (0.2126*color.r + 0.7152*color.g + 0.0722*color.b);
+	//multiplu the vector by the lum;
+	float lum = dot(lumVector, color.rgb);
+
+	//less than this value, filter color out
+	lum = max(0.0, lum - brightPassMin);
 
 	return lum;
 }
@@ -55,7 +64,7 @@ void main()
 	
 	float lum = relativeLuminance(sample0);
 
-	vec3 toneMap = sample0.xyz / (sample0.xyz + vec3(1.0)); //vec3(1.0) - exp(-sample0.xyz * 0.5);
+	//vec3 toneMap = sample0.xyz / (sample0.xyz + vec3(1.0)); //vec3(1.0) - exp(-sample0.xyz * 0.5);
 
 	//toneMap = pow(toneMap, vec3(1.0 / gamma));
 
@@ -65,8 +74,11 @@ void main()
 	//	rtFragColor = vec4(toneMap,1.0) * lum;
 	//else	
 	//	rtFragColor = vec4(toneMap,1.0);
+
+	sample0.xyz *= lum;
 	
-	rtFragColor = vec4(toneMap,1.0) * lum;
+	
+	rtFragColor = sample0;
 
 	
 
