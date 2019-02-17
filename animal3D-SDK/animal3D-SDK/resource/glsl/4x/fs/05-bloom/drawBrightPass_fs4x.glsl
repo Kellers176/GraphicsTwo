@@ -39,6 +39,10 @@ uniform sampler2D uImage0;
 layout (location = 0) out vec4 rtFragColor;
 
 //kelly
+// This funtion calculates the relative luminance of a given color. 
+// It first has a luminance vector containing the values for rgb that the color will be multiplied by
+// It then multiples them together using the dot product, and finally caps the result using the bright pass minium,
+// outputing the result
 float relativeLuminance(in vec4 color)
 {
 	//relativeLuminance
@@ -56,36 +60,19 @@ float relativeLuminance(in vec4 color)
 
 void main()
 {
-	// DUMMY OUTPUT: all fragments are ORANGE
-//	rtFragColor = vec4(1.0, 0.5, 0.0, 1.0);
 	vec4 sample0 = texture(uImage0, vPassTexcoord);
-	//average
-	//float lum = (sample0.r + sample0.g + sample0.b) / 3.0;
 	
 	float lum = relativeLuminance(sample0);
-
-	//vec3 toneMap = sample0.xyz / (sample0.xyz + vec3(1.0)); //vec3(1.0) - exp(-sample0.xyz * 0.5);
-
-	//toneMap = pow(toneMap, vec3(1.0 / gamma));
-
-	//start on bright pass
-	//float lum = (0.2126*sample0.r + 0.7152*sample0.g + 0.0722*sample0.b);
-	//if(lum > 0.5)
-	//	rtFragColor = vec4(toneMap,1.0) * lum;
-	//else	
-	//	rtFragColor = vec4(toneMap,1.0);
-
+	
 	sample0.xyz *= lum;
-	
-	
+		
 	rtFragColor = sample0;
-
-	
-
-
+		
+	// DUMMY OUTPUT: all fragments are ORANGE
+	//rtFragColor = vec4(1.0, 0.5, 0.0, 1.0);
 	// DEBUGGING
-//	vec4 sample0 = texture(uImage0, vPassTexcoord);
-//	rtFragColor = vec4(vPassTexcoord, 0.0, 1.0);
-//	rtFragColor = 0.1 + sample0;
-//	rtFragColor =  vec4(lum, lum, lum , 1.0);
+	//vec4 sample0 = texture(uImage0, vPassTexcoord);
+	//rtFragColor = vec4(vPassTexcoord, 0.0, 1.0);
+	//rtFragColor = 0.1 + sample0;
+	//rtFragColor =  vec4(lum, lum, lum , 1.0);
 }
