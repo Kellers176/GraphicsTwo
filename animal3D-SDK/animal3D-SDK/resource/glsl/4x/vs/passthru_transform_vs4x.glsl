@@ -1,4 +1,6 @@
 /*
+	“This file was modified by Kelly Herstine with permission of the author.”
+
 	Copyright 2011-2019 Daniel S. Buckstein
 
 	Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,10 +30,13 @@
 //	1) declare uniform variable for MVP matrix; see demo code for hint
 //	2) correctly transform input position by MVP matrix
 
+
 layout (location = 0) in vec4 aPosition;
+
+uniform mat4 uMVP;
 
 void main()
 {
 	// DUMMY OUTPUT: directly assign input position to output position
-	gl_Position = aPosition;
+	gl_Position = uMVP * aPosition;
 }

@@ -30,20 +30,37 @@
 //	3) implement some multi-image blending algorithms
 //	4) output result as blend between multiple images
 
+//zac
+//Create variables for the project
 in vec2 vPassTexcoord;
 
 uniform sampler2D uImage0;
+uniform sampler2D uImage1;
+uniform sampler2D uImage2;
+uniform sampler2D uImage3;
 
 layout (location = 0) out vec4 rtFragColor;
 
 
+
 void main()
 {
-	// DUMMY OUTPUT: all fragments are PURPLE
-//	rtFragColor = vec4(0.5, 0.0, 1.0, 1.0);
+	//Zac
+	//The composite takes the sample of each of the passes, and the origonal phong, and adds them together, outputing the result 
 
+	vec4 sample0 = texture(uImage0, vPassTexcoord); //Basic phong
+	vec4 sample1 = texture(uImage1, vPassTexcoord); //Pass 1
+	vec4 sample2 = texture(uImage2, vPassTexcoord); //Pass 2
+	vec4 sample3 = texture(uImage3, vPassTexcoord); //Pass 3
+
+
+	rtFragColor = sample0 + sample1 + sample2 + sample3;
+
+	// DUMMY OUTPUT: all fragments are PURPLE
+	//rtFragColor = vec4(0.5, 0.0, 1.0, 1.0);
 	// DEBUGGING
-	vec4 sample0 = texture(uImage0, vPassTexcoord);
-//	rtFragColor = vec4(vPassTexcoord, 0.0, 1.0);
-	rtFragColor = sample0;
+	//rtFragColor = sample0;
+	//rtFragColor = sample1;
+	//rtFragColor = sample2;
+	//rtFragColor = sample3;
 }
