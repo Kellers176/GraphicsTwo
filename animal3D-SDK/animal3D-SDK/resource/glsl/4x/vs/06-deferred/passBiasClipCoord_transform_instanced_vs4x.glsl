@@ -35,8 +35,26 @@
 
 layout (location = 0) in vec4 aPosition;
 
+//(1)
+#define max_lights 1024
+uniform ubTransformMVP{
+	mat4 uMVP[max_lights];
+};
+uniform ubTransformMVPB{
+	mat4 uMVPB[max_lights];
+};
+
+out vec4 vPassBiasClipCoord;	//(2)
+flat out int vPassInstanceID;		//(2)
+
 void main()
 {
 	// DUMMY OUTPUT: directly assign input position to output position
-	gl_Position = aPosition;
+//	gl_Position = aPosition;
+
+	int i = gl_InstanceID;
+
+	vPassInstanceID = i; // (3)
+	vPassBiasClipCoord = uMVPB[i] * aPosition; // (3,4)
+	gl_Position = uMVP[i] * aPosition; //(3,4)
 }

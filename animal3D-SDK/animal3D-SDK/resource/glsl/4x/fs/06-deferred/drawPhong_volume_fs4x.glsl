@@ -43,11 +43,35 @@
 //	7) use new inputs where appropriate in lighting
 //		-> remove anything that can be deferred further
 
+
+
+in vec4 vPassBiasClipCoord;	//(2)
+flat in int vPassInstanceID;//(2)
+
+
+//(3)
+#define max_lights 1024
+
+struct sPointLight
+{
+	vec4 worldPos;
+	vec4 viewPos;
+	vec4 color;
+	float radius;
+	float radiusInvSq;
+	float pad[2];
+};
+
+uniform ubPointLight{
+	sPointLight uPointLight[max_lights];
+};
+
+
 layout (location = 0) out vec4 rtFragColor;
 
 void main()
 {
 	// DUMMY OUTPUT: all fragments are FADED MAGENTA
-	rtFragColor = vec4(1.0, 0.5, 1.0, 1.0);
+	rtFragColor = uPointLight[vPassInstanceID].color;
 }
 

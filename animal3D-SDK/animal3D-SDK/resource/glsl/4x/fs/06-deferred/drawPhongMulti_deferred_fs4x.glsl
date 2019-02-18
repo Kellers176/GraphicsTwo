@@ -35,10 +35,25 @@
 
 in vec2 vPassTexcoord;
 
+//(1) postion, normal, texcoord, depth
+uniform sampler2D uImage4, uImage5, uImage6, uImage7;
+
 layout (location = 0) out vec4 rtFragColor;
 
 void main()
 {
 	// DUMMY OUTPUT: all fragments are PURPLE
-	rtFragColor = vec4(0.5, 0.0, 1.0, 1.0);
+	//rtFragColor = vec4(0.5, 0.0, 1.0, 1.0);
+	//rtFragColor = vec4(vPassTexcoord, 0.0, 0.0);
+
+
+	vec4 gPosition = texture(uImage4, vPassTexcoord); //(2)
+	vec4 gNormal = texture(uImage5, vPassTexcoord);
+	vec2 gTexcoord = texture(uImage6, vPassTexcoord).xy;
+	float gDepth = texture(uImage7, vPassTexcoord).x;
+
+	//rtFragColor = gPosition; //(2*)
+	//rtFragColor = vec4(gNormal.xyz * 0.5 + 0.5, 1.0); //(2*)
+	//rtFragColor = vec4(gTexcoord, 0.0, 1.0); ; //(2*)
+	//rtFragColor = vec4(gDepth, gDepth, gDepth, 1.0); //(2*)
 }
