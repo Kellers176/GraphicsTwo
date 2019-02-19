@@ -47,9 +47,14 @@ in vPassDataBlock
 
 void main()
 {
+	vec3 normNormal = normalize(vPassData.vPassNormal);
+	vec2 clampTexcoord = vec2(max(1, vPassData.vPassTexcoord.x), max(1, vPassData.vPassTexcoord.y));
+
 	rtFragColor = vPassData.vPassPosition;
-	rtFragColor1 = vec4(vPassData.vPassNormal, 1.0);
+	//rtFragColor1 = vec4(vPassData.vPassNormal, 1.0);
+	rtFragColor1 = vec4(normNormal, 1.0);
 	rtFragColor2 = vec4(vPassData.vPassTexcoord, 0.0, 1.0);
+	//rtFragColor2 = vec4(clampTexcoord, 0.0, 1.0);
 
 	
 	// DUMMY OUTPUT: all fragments are FADED YELLOW
