@@ -35,7 +35,7 @@
 
 // **WARNING: FOR TESTING/COMPARISON ONLY, DO NOT USE IN DELIVERABLE BUILDS**
 // uncomment this to allow shader decoding (if available)
-#define A3_USER_ENABLE_SHADER_DECODING
+//#define A3_USER_ENABLE_SHADER_DECODING
 
 
 //-----------------------------------------------------------------------------
@@ -445,41 +445,41 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 
 			// vs
 			// base
-			{ { { 0 },	"shdr-vs:passthru",				a3shader_vertex  ,	1,{ "../../../../resource/glsl/4x/vs/e/passthru_transform_vs4x.glsl" } } },
-			{ { { 0 },	"shdr-vs:pass-col",				a3shader_vertex  ,	1,{ "../../../../resource/glsl/4x/vs/e/passColor_transform_vs4x.glsl" } } },
-			{ { { 0 },	"shdr-vs:passthru-inst",		a3shader_vertex  ,	1,{ "../../../../resource/glsl/4x/vs/e/passthru_transform_instanced_vs4x.glsl" } } },
-			{ { { 0 },	"shdr-vs:pass-col-inst",		a3shader_vertex  ,	1,{ "../../../../resource/glsl/4x/vs/e/passColor_transform_instanced_vs4x.glsl" } } },
+			{ { { 0 },	"shdr-vs:passthru",				a3shader_vertex  ,	1,{ "../../../../resource/glsl/4x/vs/passthru_transform_vs4x.glsl" } } },
+			{ { { 0 },	"shdr-vs:pass-col",				a3shader_vertex  ,	1,{ "../../../../resource/glsl/4x/vs/passColor_transform_vs4x.glsl" } } },
+			{ { { 0 },	"shdr-vs:passthru-inst",		a3shader_vertex  ,	1,{ "../../../../resource/glsl/4x/vs/passthru_transform_instanced_vs4x.glsl" } } },
+			{ { { 0 },	"shdr-vs:pass-col-inst",		a3shader_vertex  ,	1,{ "../../../../resource/glsl/4x/vs/passColor_transform_instanced_vs4x.glsl" } } },
 			// 02-shading
-			{ { { 0 },	"shdr-vs:pass-tex",				a3shader_vertex  ,	1,{ "../../../../resource/glsl/4x/vs/02-shading/e/passTexcoord_transform_vs4x.glsl" } } },
-			{ { { 0 },	"shdr-vs:pass-Phong",			a3shader_vertex  ,	1,{ "../../../../resource/glsl/4x/vs/02-shading/e/passPhongAttribs_transform_vs4x.glsl" } } },
+			{ { { 0 },	"shdr-vs:pass-tex",				a3shader_vertex  ,	1,{ "../../../../resource/glsl/4x/vs/02-shading/passTexcoord_transform_vs4x.glsl" } } },
+			{ { { 0 },	"shdr-vs:pass-Phong",			a3shader_vertex  ,	1,{ "../../../../resource/glsl/4x/vs/02-shading/passPhongAttribs_transform_vs4x.glsl" } } },
 			// 04-shadow
-			{ { { 0 },	"shdr-vs:pass-Phong-shadow",	a3shader_vertex  ,	1,{ "../../../../resource/glsl/4x/vs/04-shadow/e/passPhongAttribs_passShadowCoord_transform_vs4x.glsl" } } },
+			{ { { 0 },	"shdr-vs:pass-Phong-shadow",	a3shader_vertex  ,	1,{ "../../../../resource/glsl/4x/vs/04-shadow/passPhongAttribs_passShadowCoord_transform_vs4x.glsl" } } },
 			// 06-deferred
-			{ { { 0 },	"shdr-vs:pass-Phong-atlas",		a3shader_vertex  ,	1,{ "../../../../resource/glsl/4x/vs/06-deferred/e/passPhongAttribs_transform_atlas_vs4x.glsl" } } },
+			{ { { 0 },	"shdr-vs:pass-Phong-atlas",		a3shader_vertex  ,	1,{ "../../../../resource/glsl/4x/vs/06-deferred/passPhongAttribs_transform_atlas_vs4x.glsl" } } },
 			{ { { 0 },	"shdr-vs:pass-biasclip",		a3shader_vertex  ,	1,{ "../../../../resource/glsl/4x/vs/06-deferred/passBiasClipCoord_transform_instanced_vs4x.glsl" } } },
 
 			// fs
 			// base
-			{ { { 0 },	"shdr-fs:draw-col-unif",		a3shader_fragment,	1,{ "../../../../resource/glsl/4x/fs/e/drawColorUnif_fs4x.glsl" } } },
-			{ { { 0 },	"shdr-fs:draw-col-attr",		a3shader_fragment,	1,{ "../../../../resource/glsl/4x/fs/e/drawColorAttrib_fs4x.glsl" } } },
+			{ { { 0 },	"shdr-fs:draw-col-unif",		a3shader_fragment,	1,{ "../../../../resource/glsl/4x/fs/drawColorUnif_fs4x.glsl" } } },
+			{ { { 0 },	"shdr-fs:draw-col-attr",		a3shader_fragment,	1,{ "../../../../resource/glsl/4x/fs/drawColorAttrib_fs4x.glsl" } } },
 			// 02-shading
-			{ { { 0 },	"shdr-fs:draw-tex",				a3shader_fragment,	1,{ "../../../../resource/glsl/4x/fs/02-shading/e/drawTexture_fs4x.glsl" } } },
-			{ { { 0 },	"shdr-fs:draw-Phong-multi",		a3shader_fragment,	1,{ "../../../../resource/glsl/4x/fs/02-shading/e/drawPhongMulti_fs4x.glsl" } } },
-			{ { { 0 },	"shdr-fs:draw-nonphoto-multi",	a3shader_fragment,	1,{ "../../../../resource/glsl/4x/fs/02-shading/e/drawNonPhotoMulti_fs4x.glsl" } } },
+			{ { { 0 },	"shdr-fs:draw-tex",				a3shader_fragment,	1,{ "../../../../resource/glsl/4x/fs/02-shading/drawTexture_fs4x.glsl" } } },
+			{ { { 0 },	"shdr-fs:draw-Phong-multi",		a3shader_fragment,	1,{ "../../../../resource/glsl/4x/fs/02-shading/drawPhongMulti_fs4x.glsl" } } },
+			{ { { 0 },	"shdr-fs:draw-nonphoto-multi",	a3shader_fragment,	1,{ "../../../../resource/glsl/4x/fs/02-shading/drawNonPhotoMulti_fs4x.glsl" } } },
 			// 03-framebuffer
-			{ { { 0 },	"shdr-fs:draw-Phong-multi-mrt",	a3shader_fragment,	1,{ "../../../../resource/glsl/4x/fs/03-framebuffer/e/drawPhongMulti_mrt_fs4x.glsl" } } },
-			{ { { 0 },	"shdr-fs:draw-custom-mrt",		a3shader_fragment,	1,{ "../../../../resource/glsl/4x/fs/03-framebuffer/e/drawCustom_mrt_fs4x.glsl" } } },
+			{ { { 0 },	"shdr-fs:draw-Phong-multi-mrt",	a3shader_fragment,	1,{ "../../../../resource/glsl/4x/fs/03-framebuffer/drawPhongMulti_mrt_fs4x.glsl" } } },
+			{ { { 0 },	"shdr-fs:draw-custom-mrt",		a3shader_fragment,	1,{ "../../../../resource/glsl/4x/fs/03-framebuffer/drawCustom_mrt_fs4x.glsl" } } },
 			// 04-shadow
-			{ { { 0 },	"shdr-fs:draw-Phong-projtex",	a3shader_fragment,	1,{ "../../../../resource/glsl/4x/fs/04-shadow/e/drawPhongMulti_projective_fs4x.glsl" } } },
-			{ { { 0 },	"shdr-fs:draw-Phong-shadow",	a3shader_fragment,	1,{ "../../../../resource/glsl/4x/fs/04-shadow/e/drawPhongMulti_shadowmap_fs4x.glsl" } } },
-			{ { { 0 },	"shdr-fs:draw-Phong-shadproj",	a3shader_fragment,	1,{ "../../../../resource/glsl/4x/fs/04-shadow/e/drawPhongMulti_shadowmap_projective_fs4x.glsl" } } },
-			{ { { 0 },	"shdr-fs:draw-custom-post",		a3shader_fragment,	1,{ "../../../../resource/glsl/4x/fs/04-shadow/e/drawCustom_post_fs4x.glsl" } } },
+			{ { { 0 },	"shdr-fs:draw-Phong-projtex",	a3shader_fragment,	1,{ "../../../../resource/glsl/4x/fs/04-shadow/drawPhongMulti_projective_fs4x.glsl" } } },
+			{ { { 0 },	"shdr-fs:draw-Phong-shadow",	a3shader_fragment,	1,{ "../../../../resource/glsl/4x/fs/04-shadow/drawPhongMulti_shadowmap_fs4x.glsl" } } },
+			{ { { 0 },	"shdr-fs:draw-Phong-shadproj",	a3shader_fragment,	1,{ "../../../../resource/glsl/4x/fs/04-shadow/drawPhongMulti_shadowmap_projective_fs4x.glsl" } } },
+			{ { { 0 },	"shdr-fs:draw-custom-post",		a3shader_fragment,	1,{ "../../../../resource/glsl/4x/fs/04-shadow/drawCustom_post_fs4x.glsl" } } },
 			// 05-bloom
-			{ { { 0 },	"shdr-fs:draw-brightpass",		a3shader_fragment,	1,{ "../../../../resource/glsl/4x/fs/05-bloom/e/drawBrightPass_fs4x.glsl" } } },
-			{ { { 0 },	"shdr-fs:draw-blur-Gaussian",	a3shader_fragment,	1,{ "../../../../resource/glsl/4x/fs/05-bloom/e/drawBlurGaussian_fs4x.glsl" } } },
-			{ { { 0 },	"shdr-fs:draw-blend-composite",	a3shader_fragment,	1,{ "../../../../resource/glsl/4x/fs/05-bloom/e/drawBlendComposite_fs4x.glsl" } } },
+			{ { { 0 },	"shdr-fs:draw-brightpass",		a3shader_fragment,	1,{ "../../../../resource/glsl/4x/fs/05-bloom/drawBrightPass_fs4x.glsl" } } },
+			{ { { 0 },	"shdr-fs:draw-blur-Gaussian",	a3shader_fragment,	1,{ "../../../../resource/glsl/4x/fs/05-bloom/drawBlurGaussian_fs4x.glsl" } } },
+			{ { { 0 },	"shdr-fs:draw-blend-composite",	a3shader_fragment,	1,{ "../../../../resource/glsl/4x/fs/05-bloom/drawBlendComposite_fs4x.glsl" } } },
 			// 06-deferred
-			{ { { 0 },	"shdr-fs:draw-gbuffers",		a3shader_fragment,	1,{ "../../../../resource/glsl/4x/fs/06-deferred/e/drawGBuffers_fs4x.glsl" } } },
+			{ { { 0 },	"shdr-fs:draw-gbuffers",		a3shader_fragment,	1,{ "../../../../resource/glsl/4x/fs/06-deferred/drawGBuffers_fs4x.glsl" } } },
 			{ { { 0 },	"shdr-fs:draw-Phong-deferred",	a3shader_fragment,	1,{ "../../../../resource/glsl/4x/fs/06-deferred/drawPhongMulti_deferred_fs4x.glsl" } } },
 			{ { { 0 },	"shdr-fs:draw-Phong-volume",	a3shader_fragment,	1,{ "../../../../resource/glsl/4x/fs/06-deferred/drawPhong_volume_fs4x.glsl" } } },
 			{ { { 0 },	"shdr-fs:draw-deferltcomp",		a3shader_fragment,	1,{ "../../../../resource/glsl/4x/fs/06-deferred/drawDeferredLightingComposite_fs4x.glsl" } } },

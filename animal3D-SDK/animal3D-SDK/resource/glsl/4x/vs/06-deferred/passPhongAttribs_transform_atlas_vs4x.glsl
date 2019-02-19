@@ -32,11 +32,35 @@
 //	4) copy transformed data to varyings
 
 layout (location = 0) in vec4 aPosition;
-layout (location = 2) in vec4 aNormal;
-layout (location = 8) in vec4 aTexcoord;
+layout (location = 2) in vec3 aNormal;
+layout (location = 8) in vec2 aTexcoord;
+
+uniform mat4 uMV; //(1)
+uniform mat4 uP;
+
+uniform mat4 uAtlas;
+
+uniform mat4 uMV_nrm;
+
+
+//varying block
+out vPassDataBlock
+{
+	vec4 vPassPosition;
+	vec3 vPassNormal;
+
+
+	vec2 vPassTexcoord;
+
+} vPassData;
 
 void main()
 {
-	// DUMMY OUTPUT: directly assign input position to output position
-	gl_Position = aPosition;
+	vPassData.vPassPosition = uMV * aPosition; // eye space //(2)
+
+	vPassData.vPassNormal = mat3(uMV_nrm) * aNormal;
+
+	vPassData.vPassTexcoord = aTexcoord;
+
+	gl_Position = uP * uMV * aPosition; //clip space (3)
 }

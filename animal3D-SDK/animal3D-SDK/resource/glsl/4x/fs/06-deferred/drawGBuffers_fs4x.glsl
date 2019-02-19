@@ -29,10 +29,32 @@
 //	2) declare g-buffer render targets
 //	3) pack attribute data into outputs
 
-layout (location = 0) out vec4 rtFragColor;
+layout(location = 0) out vec4 rtFragColor; //position // (2)
+layout(location = 1) out vec4 rtFragColor1; //normal
+layout(location = 2) out vec4 rtFragColor2; //texcoord
+//layout(location = 3) out vec4 rtFragColor3; //depth
+
+
+in vPassDataBlock
+{
+	vec4 vPassPosition;
+	vec3 vPassNormal;
+
+
+	vec2 vPassTexcoord;
+
+} vPassData;
 
 void main()
 {
+	rtFragColor = vPassData.vPassPosition;
+	rtFragColor1 = vec4(vPassData.vPassNormal, 1.0);
+	rtFragColor2 = vec4(vPassData.vPassTexcoord, 0.0, 1.0);
+
+	
 	// DUMMY OUTPUT: all fragments are FADED YELLOW
-	rtFragColor = vec4(1.0, 1.0, 0.5, 1.0);
+	//rtFragColor = vec4(1.0, 1.0, 0.5, 1.0);
+	//rtFragColor1 = vec4(1.0, 0.0, 0.5, 1.0);
+	//rtFragColor2 = vec4(0.0, 1.0, 0.5, 1.0);
+	//rtFragColor3 = vec4(0.0, 0.5, 0.5, 1.0);
 }
