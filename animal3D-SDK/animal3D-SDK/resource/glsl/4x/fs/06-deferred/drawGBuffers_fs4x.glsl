@@ -52,6 +52,7 @@ void main()
 
 	rtFragColor = vPassData.vPassPosition;
 	//rtFragColor1 = vec4(vPassData.vPassNormal, 1.0);
+	//rtFragColor = vec4(gNormal.xyz * 0.5 + 0.5, 1.0); //(2*)
 	rtFragColor1 = vec4(normNormal, 1.0);
 	rtFragColor2 = vec4(vPassData.vPassTexcoord, 0.0, 1.0);
 	//rtFragColor2 = vec4(clampTexcoord, 0.0, 1.0);

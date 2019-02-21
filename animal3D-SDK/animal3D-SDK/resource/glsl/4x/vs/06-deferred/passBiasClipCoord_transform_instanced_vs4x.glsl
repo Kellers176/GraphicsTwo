@@ -34,6 +34,7 @@
 //	4) write to outputs
 
 layout (location = 0) in vec4 aPosition;
+layout(location = 8) in vec2 aTexcoord; // (3) in a3_VertexDescriptor.h
 
 //(1)
 #define max_lights 1024
@@ -53,6 +54,8 @@ void main()
 //	gl_Position = aPosition;
 
 	int i = gl_InstanceID;
+
+	//check if can  pass texCoord
 
 	vPassInstanceID = i; // (3)
 	vPassBiasClipCoord = uMVPB[i] * aPosition; // (3,4)

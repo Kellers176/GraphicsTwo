@@ -60,7 +60,10 @@ void main()
 
 	vPassData.vPassNormal = mat3(uMV_nrm) * aNormal;
 
-	vPassData.vPassTexcoord = aTexcoord;
+	vec4 tempTex = uAtlas * vec4(aTexcoord, 0.0, 1.0);
 
-	gl_Position = uP * uMV * aPosition; //clip space (3)
+//	vPassData.vPassTexcoord = uAtlas * aTexcoord;
+	vPassData.vPassTexcoord = tempTex.xy;
+
+	gl_Position = uP * vPassData.vPassPosition; //clip space (3)
 }
