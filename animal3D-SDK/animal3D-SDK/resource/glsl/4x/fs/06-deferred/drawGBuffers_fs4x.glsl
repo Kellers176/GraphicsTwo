@@ -32,30 +32,23 @@
 layout(location = 0) out vec4 rtFragColor; //position // (2)
 layout(location = 1) out vec4 rtFragColor1; //normal
 layout(location = 2) out vec4 rtFragColor2; //texcoord
-//layout(location = 3) out vec4 rtFragColor3; //depth
 
 
 in vPassDataBlock
 {
 	vec4 vPassPosition;
-	vec3 vPassNormal;
+	vec4 vPassNormal;
 
 
-	vec2 vPassTexcoord;
+	vec4 vPassTexcoord;
 
 } vPassData;
 
 void main()
 {
-	vec3 normNormal = normalize(vPassData.vPassNormal);
-	vec2 clampTexcoord = vec2(max(1, vPassData.vPassTexcoord.x), max(1, vPassData.vPassTexcoord.y));
-
 	rtFragColor = vPassData.vPassPosition;
-	//rtFragColor1 = vec4(vPassData.vPassNormal, 1.0);
-	//rtFragColor = vec4(gNormal.xyz * 0.5 + 0.5, 1.0); //(2*)
-	rtFragColor1 = vec4(normNormal, 1.0);
-	rtFragColor2 = vec4(vPassData.vPassTexcoord, 0.0, 1.0);
-	//rtFragColor2 = vec4(clampTexcoord, 0.0, 1.0);
+	rtFragColor1 = normalize(vPassData.vPassNormal);
+	rtFragColor2 = vPassData.vPassTexcoord;
 
 	
 	// DUMMY OUTPUT: all fragments are FADED YELLOW

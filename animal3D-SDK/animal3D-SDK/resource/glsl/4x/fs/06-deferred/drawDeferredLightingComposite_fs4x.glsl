@@ -33,12 +33,31 @@
 //		-> *test by outputting as color
 //	5) compute final Phong shading model (i.e. the final sum)
 
-in vec2 vPassTexcoord;
+in vec2 vPassTexCoord;
 
 layout (location = 0) out vec4 rtFragColor;
 
+uniform sampler2D uImage4, uImage5, uImage6; //
+
+uniform sampler2D uTex_dm; //(2)
+uniform sampler2D uTex_sm;
+
 void main()
 {
+	vec4 gDiffuse = texture(uImage4, vPassTexCoord); //(2)
+	vec4 gSpecular = texture(uImage5, vPassTexCoord);
+	vec2 gTexcoord = texture(uImage6, vPassTexCoord).xy;
+
+	//Diffuse and specular text
+	vec4 DiffuseTex = texture(uTex_dm, gTexcoord);
+
+	//add together
+
+
 	// DUMMY OUTPUT: all fragments are FADED CYAN
-	rtFragColor = vec4(0.5, 1.0, 1.0, 1.0);
+	//rtFragColor = vec4(0.5, 1.0, 1.0, 1.0);
+	//rtFragColor = vec4(gTexcoord, 0.0, 1.0);
+	//rtFragColor = vec4(vPassTexCoord, 0.0, 1.0);
+	//rtFragColor = gSpecular;
+	//rtFragColor = vec4(DiffuseTex.xyz * gDiffuse.xyz,gDiffuse.a) ;
 }
