@@ -61,6 +61,7 @@ layout (location = 0) out vec4 rtFragColor;
 void main()
 {
 	
+	//vec4 image0Tex = texture(uImage3, vPassTexCoord);
 
 	vec4 gPosition = texture(uImage4, vPassTexCoord); //(2)
 	vec4 gNormal = texture(uImage5, vPassTexCoord);
@@ -112,6 +113,7 @@ void main()
 	//rtFragColor = vec4(vPassTexCoord, 0.0, 0.0);
 	//rtFragColor = DiffuseTex;
 	//rtFragColor = SpecularTex;
+	//rtFragColor = image0Tex;
 	//rtFragColor = gPosition; //(2*)
 	//rtFragColor = vec4(gNormal.xyz * 0.5 + 0.5, 1.0); //(2*)
 	//rtFragColor = vec4(gTexcoord, 0.0, 1.0); ; //(2*)

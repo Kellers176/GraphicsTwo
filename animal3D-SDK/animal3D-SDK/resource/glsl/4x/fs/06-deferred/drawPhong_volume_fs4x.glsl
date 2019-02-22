@@ -78,18 +78,24 @@ uniform ubPointLight{
 layout (location = 0) out vec4 rtFragColor;
 layout (location = 1) out vec4 rtFragColor1;
 
-uniform sampler2D uImage4, uImage5, uImage6, uImage7;
+uniform sampler2D uImage0, uImage4, uImage5, uImage6, uImage7;
+
+in vec2 vPassTexCoord;
 
 
 void main()
 {
-	vec4 gPosition = texture(uImage4, vPassBiasClipCoord.xy); //(2)
-	vec4 gNormal = texture(uImage5, vPassBiasClipCoord.xy);
-	vec2 gTexcoord = texture(uImage6, vPassBiasClipCoord.xy).xy;
-	float gDepth = texture(uImage7, vPassBiasClipCoord.xy).x;
+	//perspective divide
+	vec4 screen_Proj = vPassBiasClipCoord / vPassBiasClipCoord.w; // (3)
+
+	vec4 gPosition = texture(uImage4, screen_Proj.xy); //(2)
+	vec4 gNormal = texture(uImage5, screen_Proj.xy);
+	vec2 gTexcoord = texture(uImage6, screen_Proj.xy).xy;
+	float gDepth = texture(uImage7, screen_Proj.xy).x;
 
 	//PHONG
-	DiffuseTex = texture(uTex_dm, gTexcoord);
+	DiffuseTex = texture(uImage0, gTexcoord);
+	//DiffuseTex = texture(uTex_dm, screen_Proj.xy);
 	SpecularTex = texture(uTex_sm, gTexcoord);
 	
 	//Kelly worked on the for loop while zac and kelly worked on getting the algorithm working
@@ -104,12 +110,17 @@ void main()
 	
 	//float diffuseCoefficient = max(0.0, dot(normal, surfaceToLight));
 	//vec3 diffuse = diffuseCoefficient * surfaceColor.rgb * light.intensities;
-	vec3 diffuse = max(dot(N, L), 0.0f) *  uPointLight[vPassInstanceID].color.xyz * DiffuseTex.xyz;
+	//vec3 diffuse = max(dot(N, L), 0.0f) *  uPointLight[vPassInstanceID].color.xyz * DiffuseTex.xyz;
+	vec3 diffuse = max(dot(N, L), 0.0f) *  uPointLight[vPassInstanceID].color.xyz;//* DiffuseTex.xyz;
 	//vec3 specular = specularCoefficient * materialSpecularColor * light.intensities;
-	vec3 specular = pow(max(dot(R, V), 0.0f), 32.0) * SpecularTex.xyz *  uPointLight[vPassInstanceID].color.xyz;
+	//vec3 specular = pow(max(dot(R, V), 0.0f), 32.0) * SpecularTex.xyz *  uPointLight[vPassInstanceID].color.xyz;
+	//vec3 specular = pow(max(dot(R, V), 0.0f), 32.0) *  uPointLight[vPassInstanceID].color.xyz;
+	vec3 specular = pow(max(dot(N, R), 0.0f), 32.0) *  uPointLight[vPassInstanceID].color.xyz;
 	
 	//float distanceToLight = length(light.position - surfacePos);
-	float distanceToLight = length(uPointLight[vPassInstanceID].worldPos - gPosition); //vec4(vPassData.vPassNormal, 1.0f));
+	//float distanceToLight = length(uPointLight[vPassInstanceID].viewPos - gPosition); //vec4(vPassData.vPassNormal, 1.0f));
+	float distanceToLight = length(L); //vec4(vPassData.vPassNormal, 1.0f));
+	
 	
 	//float attenuation = 1.0 / (1.0 + light.attenuation * pow(distanceToLight, 2));
 	float attenuation = 1.0 / (1.0 + uPointLight[vPassInstanceID].radius * pow(distanceToLight, 2));
@@ -118,10 +129,21 @@ void main()
 	col += attenuation * (diffuse + specular);
 	
 	
-	rtFragColor = vec4(col, 1.0f);
+	//rtFragColor = vec4(col, 1.0f);
 	//// DUMMY OUTPUT: all fragments are FADED MAGENTA
 	//rtFragColor = uPointLight[vPassInstanceID].color;
 	//rtFragColor = DiffuseTex;
-	rtFragColor = vPassBiasClipCoord;
+	//rtFragColor = vPassBiasClipCoord;
+	//rtFragColor = vec4(vPassTexCoord, 0.0, 1.0);
+	//rtFragColor = gPosition;
+	//rtFragColor = gNormal;
+	//rtFragColor1 = gNormal;
+	//rtFragColor = vec4(gTexcoord, 0.0, 1.0);
+	rtFragColor1 = vec4(col, 1.0);
+	//rtFragColor = vec4(diffuse, 1.0);// + vec3(DiffuseTex), 1.0);
+	//rtFragColor = vec4(attenuation * diffuse, 1.0);
+	//rtFragColor = DiffuseTex;
+	//rtFragColor = vec4(DiffuseTex.xyz, 1.0);
+	rtFragColor = vec4(1.0, 1.0, 1.0, 0.5);
 }
 
