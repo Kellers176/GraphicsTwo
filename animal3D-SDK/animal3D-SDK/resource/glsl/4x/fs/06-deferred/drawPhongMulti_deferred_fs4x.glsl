@@ -55,12 +55,12 @@ layout (location = 0) out vec4 rtFragColor;
 
 void main()
 {
+	//kelly and zac
+	//g-buffer variables that we use for the shading and lighting
 	vec4 gPosition = texture(uImage4, vPassTexCoord); //(2)
 	vec4 gNormal = texture(uImage5, vPassTexCoord);
 	vec2 gTexcoord = texture(uImage6, vPassTexCoord).xy;
 	float gDepth = texture(uImage7, vPassTexCoord).x;
-
-	
 
 
 	vec4 DiffuseTex = texture(uTex_dm, gTexcoord);

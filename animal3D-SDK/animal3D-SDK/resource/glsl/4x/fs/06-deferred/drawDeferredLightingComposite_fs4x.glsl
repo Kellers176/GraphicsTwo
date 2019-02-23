@@ -44,6 +44,8 @@ uniform sampler2D uTex_sm;
 
 void main()
 {
+	//Kelly and Zac
+	//g-buffer variables for the diffuse and specular
 	vec4 gDiffuse = texture(uImage4, vPassTexCoord); //(2)
 	vec4 gSpecular = texture(uImage5, vPassTexCoord);
 	vec2 gTexcoord = texture(uImage6, vPassTexCoord).xy;

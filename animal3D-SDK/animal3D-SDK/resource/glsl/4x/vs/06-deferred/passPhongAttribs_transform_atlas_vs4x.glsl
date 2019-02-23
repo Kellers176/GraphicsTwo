@@ -56,6 +56,8 @@ out vPassDataBlock
 
 void main()
 {
+	//kelly and zac
+	//pass variables to the g-buffer shader
 	vPassData.vPassPosition = uMV * aPosition; // eye space //(2)
 	vPassData.vPassNormal = uMV_nrm * aNormal;
 	vPassData.vPassTexcoord = uAtlas * aTexcoord;

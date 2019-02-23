@@ -34,6 +34,9 @@
 //	3) transform input position appropriately
 //	4) write to outputs
 
+//Kelly and Zac
+//We got the variables in class and added them in.
+
 layout (location = 0) in vec4 aPosition;
 layout(location = 8) in vec2 aTexcoord; // (3) in a3_VertexDescriptor.h
 
@@ -52,9 +55,10 @@ flat out int vPassInstanceID;		//(2)
 
 void main()
 {
+	//get the unit ID and pass it to the fragment shader
 	int i = gl_InstanceID;
-
 	vPassInstanceID = i; // (3)
+	//get the position in the scene and pass that
 	vPassBiasClipCoord = uMVPB[i] * aPosition; // (3,4)
 	gl_Position = uMVP[i] * aPosition; //(3,4)
 }

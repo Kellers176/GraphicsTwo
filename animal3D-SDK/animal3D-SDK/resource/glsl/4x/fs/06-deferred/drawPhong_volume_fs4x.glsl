@@ -75,24 +75,26 @@ uniform sampler2D  uImage4, uImage5, uImage6;//, uImage7;
 
 void main()
 {
+	//kelly and zac
+	//get the perspective divide and use those coordinates for the buffer.
 	//perspective divide
 	vec4 screen_Proj = vPassBiasClipCoord / vPassBiasClipCoord.w; // (3)
 
 	vec4 gPosition = texture(uImage4, screen_Proj.xy); //(2)
 	vec4 gNormal = texture(uImage5, screen_Proj.xy);
 	
-
+	//calulcate the distance and other variables needed for each light
 	vec3 N = gNormal.xyz;
 	vec3 L = normalize(uPointLight[vPassInstanceID].viewPos.xyz - gPosition.xyz); 
 	vec3 V = normalize(-gPosition.xyz);
 	vec3 R = reflect(-L, N);
 	
 	
-	
+	//get the distance to the light and use that for the attenuation
 	float distanceToLight = length(gPosition.xyz- uPointLight[vPassInstanceID].viewPos.xyz); 
 	float attenuation = smoothstep(uPointLight[vPassInstanceID].radius, 0, distanceToLight);
 
-
+	//get the diffuse and specular 
 	vec4 diffuse = max(dot(N, L), 0.0f) *  uPointLight[vPassInstanceID].color;
 
 	vec4 specular = pow(max(dot(N, R), 0.0f), 8.0) *  uPointLight[vPassInstanceID].color;
