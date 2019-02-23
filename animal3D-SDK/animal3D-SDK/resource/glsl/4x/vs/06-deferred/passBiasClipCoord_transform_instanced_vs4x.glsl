@@ -1,5 +1,6 @@
 /*
 	Copyright 2011-2019 Daniel S. Buckstein
+	This file was modified by Kelly and Zac with permission of the author.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
@@ -24,7 +25,7 @@
 */
 
 #version 410
-
+//done
 // ****TO-DO: 
 //	1) declare uniform blocks
 //		-> transformations
@@ -48,24 +49,10 @@ uniform ubTransformMVPB{
 out vec4 vPassBiasClipCoord;	//(2)
 flat out int vPassInstanceID;		//(2)
 
-//uniform mat4 uAtlas;
-
-//out vec2 vPassTexCoord;
-
 
 void main()
 {
-	// DUMMY OUTPUT: directly assign input position to output position
-//	gl_Position = aPosition;
-
 	int i = gl_InstanceID;
-
-	//check if can  pass texCoord
-
-	//vec4 tempTex = uAtlas * vec4(aTexcoord, 0.0, 1.0);
-
-//	vPassData.vPassTexcoord = uAtlas * aTexcoord;
-	//vPassTexCoord = tempTex.xy;
 
 	vPassInstanceID = i; // (3)
 	vPassBiasClipCoord = uMVPB[i] * aPosition; // (3,4)

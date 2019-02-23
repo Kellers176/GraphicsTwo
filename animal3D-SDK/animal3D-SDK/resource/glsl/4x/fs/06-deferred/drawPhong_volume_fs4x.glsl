@@ -1,5 +1,6 @@
 /*
 	Copyright 2011-2019 Daniel S. Buckstein
+	This file was modified by Kelly and Zac with permission of the author.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
@@ -49,14 +50,6 @@ in vec4 vPassBiasClipCoord;	//(2)
 flat in int vPassInstanceID;//(2)
 
 
-
-
-//temp
-//vec4 DiffuseTex;
-//vec4 SpecularTex;
-//vec3 col;
-
-
 //(3)
 #define max_lights 1024
 
@@ -87,81 +80,26 @@ void main()
 
 	vec4 gPosition = texture(uImage4, screen_Proj.xy); //(2)
 	vec4 gNormal = texture(uImage5, screen_Proj.xy);
-	//vec2 gTexcoord = texture(uImage6, screen_Proj.xy).xy;
-	//float gDepth = texture(uImage7, screen_Proj.xy).x;
-
-	//PHONG
-	//DiffuseTex = texture(uImage0, gTexcoord);
-	//DiffuseTex = texture(uTex_dm, screen_Proj.xy);
-	//SpecularTex = texture(uTex_sm, gTexcoord);
 	
 
 	vec3 N = gNormal.xyz;
-	vec3 L = normalize(uPointLight[vPassInstanceID].viewPos.xyz - gPosition.xyz);
+	vec3 L = normalize(uPointLight[vPassInstanceID].viewPos.xyz - gPosition.xyz); 
 	vec3 V = normalize(-gPosition.xyz);
 	vec3 R = reflect(-L, N);
 	
-	float kd = max(dot(N, L), 0.0f);// *  uPointLight[vPassInstanceID].color.xyz;//* DiffuseTex.xyz;
-	float ks = max(dot(N, R), 0.0f);
-	ks *= ks;
-	ks *= ks;
-	ks *= ks;
-	ks *= ks;
 	
+	
+	float distanceToLight = length(gPosition.xyz- uPointLight[vPassInstanceID].viewPos.xyz); 
+	float attenuation = smoothstep(uPointLight[vPassInstanceID].radius, 0, distanceToLight);
 
 
-	//float diffuseCoefficient = max(0.0, dot(normal, surfaceToLight));
-	//vec3 diffuse = diffuseCoefficient * surfaceColor.rgb * light.intensities;
-	//vec3 diffuse = max(dot(N, L), 0.0f) *  uPointLight[vPassInstanceID].color.xyz * DiffuseTex.xyz;
-	//vec3 specular = specularCoefficient * materialSpecularColor * light.intensities;
-	//vec3 specular = pow(max(dot(R, V), 0.0f), 32.0) * SpecularTex.xyz *  uPointLight[vPassInstanceID].color.xyz;
-	//vec3 specular = pow(max(dot(R, V), 0.0f), 32.0) *  uPointLight[vPassInstanceID].color.xyz;
-	
-	//*  uPointLight[vPassInstanceID].color.xyz;
-	
-	//float distanceToLight = length(light.position - surfacePos);
-	//float distanceToLight = length(uPointLight[vPassInstanceID].viewPos - gPosition); //vec4(vPassData.vPassNormal, 1.0f));
-	float distanceToLight = length(L); //vec4(vPassData.vPassNormal, 1.0f));
-	
-	
-	//float attenuation = 1.0 / (1.0 + light.attenuation * pow(distanceToLight, 2));
-	//float attenuation = 1.0 / (1.0 + uPointLight[vPassInstanceID].radiusInvSq * pow(distanceToLight, 2));
-	//float attenuation = 50.0 / (1.0 +  pow(distanceToLight, 2));
-	
-	float attenuation =  1.0 /(uPointLight[vPassInstanceID].radiusInvSq);// * uPointLight[vPassInstanceID].radiusInvSq);
+	vec4 diffuse = max(dot(N, L), 0.0f) *  uPointLight[vPassInstanceID].color;
 
-	vec4 specular = uPointLight[vPassInstanceID].color * ks * attenuation;
-	vec4 diffuse = uPointLight[vPassInstanceID].color * kd * attenuation;
+	vec4 specular = pow(max(dot(N, R), 0.0f), 8.0) *  uPointLight[vPassInstanceID].color;
 
-	rtFragColor = diffuse;
-	rtFragColor1 = specular;
-	
-	//vec3 linearColor = ambient + attenuation*(diffuse + specular);
-	//col += attenuation * (diffuse + specular);
-	
-	
-	//rtFragColor = vec4(col, 1.0f);
-	//// DUMMY OUTPUT: all fragments are FADED MAGENTA
-	//rtFragColor = uPointLight[vPassInstanceID].color;
-	//rtFragColor = DiffuseTex;
-	//rtFragColor = vPassBiasClipCoord;
-	//rtFragColor = vec4(vPassTexCoord, 0.0, 1.0);
-	//rtFragColor = gPosition;
-	//rtFragColor = gNormal;
-	//rtFragColor1 = gNormal;
-	//rtFragColor = vec4(gTexcoord, 0.0, 1.0);
-	//rtFragColor1 = vec4(col, 1.0);
-	//rtFragColor = vec4(diffuse, 1.0);// + vec3(DiffuseTex), 1.0);
-	//rtFragColor = vec4(attenuation * diffuse, 1.0);
-	//rtFragColor = DiffuseTex;
-	//rtFragColor = vec4(DiffuseTex.xyz, 1.0);
-	//rtFragColor = vec4(1.0, 1.0, 1.0, 0.5);
-	//rtFragColor = vec4(kd, kd, kd, 1.0);
-	//rtFragColor = vec4(distanceToLight, distanceToLight, distanceToLight, 1.0);
-	//rtFragColor = vec4(L, 1.0);
-	//rtFragColor = vec4(attenuation, 1.0);
-	//rtFragColor = vec4(uPointLight[vPassInstanceID].radiusInvSq, uPointLight[vPassInstanceID].radiusInvSq, uPointLight[vPassInstanceID].radiusInvSq, 1.0);
-	//rtFragColor = uPointLight[vPassInstanceID].color * kd;// * attenuation;
-	//rtFragColor = uPointLight[vPassInstanceID].worldPos;
+
+	rtFragColor = attenuation * diffuse;
+	rtFragColor1 = attenuation* specular;
+
 }
 

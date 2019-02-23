@@ -1,6 +1,6 @@
 /*
 	Copyright 2011-2019 Daniel S. Buckstein
-
+	This file was modified by Kelly and Zac with permission of the author.
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
 	You may obtain a copy of the License at
@@ -24,7 +24,7 @@
 */
 
 #version 410
-
+//done
 // ****TO-DO: 
 //	1) declare transformation uniforms
 //	2) declare varyings (attribute data) to send to fragment shader

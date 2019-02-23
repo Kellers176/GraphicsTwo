@@ -50,14 +50,12 @@ void main()
 
 	//Diffuse and specular text
 	vec4 DiffuseTex = texture(uTex_dm, gTexcoord);
+	vec4 SpecularTex = texture(uTex_sm, gTexcoord);
 
 	//add together
+	vec4 col = vec4(DiffuseTex.xyz * gDiffuse.xyz, DiffuseTex.a);
+	col += vec4(SpecularTex.xyz * gSpecular.xyz, DiffuseTex.a);
 
-
-	// DUMMY OUTPUT: all fragments are FADED CYAN
-	//rtFragColor = vec4(0.5, 1.0, 1.0, 1.0);
-	//rtFragColor = vec4(gTexcoord, 0.0, 1.0);
-	//rtFragColor = vec4(vPassTexCoord, 0.0, 1.0);
-	//rtFragColor = gSpecular;
-	//rtFragColor = vec4(DiffuseTex.xyz * gDiffuse.xyz,gDiffuse.a) ;
+	
+	rtFragColor = col;
 }

@@ -1,5 +1,6 @@
 /*
 	Copyright 2011-2019 Daniel S. Buckstein
+	This file was modified by Kelly and Zac with permission of the author.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
@@ -23,7 +24,7 @@
 */
 
 #version 410
-
+//done
 // ****TO-DO: 
 //	1) declare varyings (attribute data) to receive from vertex shader
 //	2) declare g-buffer render targets
@@ -49,11 +50,4 @@ void main()
 	rtFragColor = vPassData.vPassPosition;
 	rtFragColor1 = normalize(vPassData.vPassNormal);
 	rtFragColor2 = vPassData.vPassTexcoord;
-
-	
-	// DUMMY OUTPUT: all fragments are FADED YELLOW
-	//rtFragColor = vec4(1.0, 1.0, 0.5, 1.0);
-	//rtFragColor1 = vec4(1.0, 0.0, 0.5, 1.0);
-	//rtFragColor2 = vec4(0.0, 1.0, 0.5, 1.0);
-	//rtFragColor3 = vec4(0.0, 0.5, 0.5, 1.0);
 }
