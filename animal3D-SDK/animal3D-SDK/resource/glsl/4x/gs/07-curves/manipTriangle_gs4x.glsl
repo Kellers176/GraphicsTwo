@@ -29,12 +29,56 @@
 //	2) either copy input directly to output for each vertex, or 
 //		do something with the vertices first (e.g. explode, invert)
 
+//no more variables for this shader
 layout (triangles) in;
 layout (triangle_strip, max_vertices = 3) out;
 
 uniform mat4 uP;
 
+//(1)
+//recieved passPhongAttribs
+in vbPassDataBlock
+{
+	vec4 vPosition;
+	vec4 vNormal;
+	vec2 vTexcoord;
+
+} vPassData_in[];
+//pass to drawPhongMulti
+out vbPassDataBlock
+{
+	vec4 vPosition;
+	vec4 vNormal;
+	vec2 vTexcoord;
+
+} vPassData_out;
+
+
 void main()
 {
-	
+	const float explodeSz = 0.5;
+	//use for loop
+	vPassData_out.vPosition = vPassData_in[0].vPosition
+							+ normalize(vPassData_in[0].vNormal) * explodeSz;
+	vPassData_out.vNormal = vPassData_in[0].vNormal;
+	vPassData_out.vTexcoord = vPassData_in[0].vTexcoord;
+	//gl_Position = gl_in[0].gl_Position; //clip space
+	gl_Position = uP * vPassData_out.vPosition;
+	EmitVertex();
+
+	vPassData_out.vPosition = vPassData_in[1].vPosition
+							+ normalize(vPassData_in[1].vNormal) * explodeSz;
+	vPassData_out.vNormal = vPassData_in[1].vNormal;
+	vPassData_out.vTexcoord = vPassData_in[1].vTexcoord;
+	gl_Position = uP * vPassData_out.vPosition;
+	EmitVertex();
+
+	vPassData_out.vPosition = vPassData_in[2].vPosition
+							+ normalize(vPassData_in[2].vNormal) * explodeSz;
+	vPassData_out.vNormal = vPassData_in[2].vNormal;
+	vPassData_out.vTexcoord = vPassData_in[2].vTexcoord;
+	gl_Position = uP * vPassData_out.vPosition;
+	EmitVertex();
+
+	EndPrimitive();
 }

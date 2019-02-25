@@ -61,9 +61,7 @@ mat3 normalMV; //(...5?)
 out vPassDataBlock
 {
 	vec4 vPassPosition;
-	vec3 vPassNormal;
-
-
+	vec4 vPassNormal;
 	vec2 vPassTexcoord;
 
 } vPassData;
