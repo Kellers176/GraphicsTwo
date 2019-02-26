@@ -58,7 +58,7 @@ uniform float uLightSz[MAX_LIGHTS]; //attenuation
 in vPassDataBlock //(1)
 {
 	vec4 vPassPosition;
-	vec3 vPassNormal;
+	vec4 vPassNormal;
 
 	vec2 vPassTexcoord;
 
@@ -83,7 +83,7 @@ void main()
 
 	for(int i = 0; i < uLightCt; i++)
 	{
-		vec3 N = normalize(vPassData.vPassNormal);
+		vec3 N = normalize(vPassData.vPassNormal.xyz);
 		vec3 L = normalize(uLightPos[i].xyz - vPassData.vPassPosition.xyz);
 		vec3 V = normalize(-vPassData.vPassPosition.xyz);
 		vec3 R = reflect(-L, N);
@@ -100,7 +100,7 @@ void main()
 		specularTotal += specularIndiv;
 
 		//float distanceToLight = length(light.position - surfacePos);
-		float distanceToLight = length(uLightPos[i] - vPassData.vPassPosition); //vec4(vPassData.vPassNormal, 1.0f));
+		float distanceToLight = length(uLightPos[i] - vPassData.vPassPosition); //vec4(vPassData.vPassNormal.xyz, 1.0f));
 
 		//float attenuation = 1.0 / (1.0 + light.attenuation * pow(distanceToLight, 2));
 		float attenuation = 1.0 / (1.0 + uLightSz[i]  * pow(distanceToLight, 2));
@@ -111,7 +111,7 @@ void main()
 	}
 
 	rtFragColor =  vPassData.vPassPosition;							// Position attribute data						
-	rtFragColor1 = vec4(normalize(vPassData.vPassNormal), 1.0f);	// Normal attribute data
+	rtFragColor1 = vec4(normalize(vPassData.vPassNormal.xyz), 1.0f);	// Normal attribute data
 	rtFragColor2 = vec4(vPassData.vPassTexcoord, 0.0, 1.0);			// Texcoord attribute data
 	rtFragColor3 = DiffuseTex;										// Diffuse map sample
 	rtFragColor4 = SpecularTex;										// Specular map sample

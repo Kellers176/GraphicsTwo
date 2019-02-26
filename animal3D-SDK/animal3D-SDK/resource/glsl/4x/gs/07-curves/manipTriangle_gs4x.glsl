@@ -56,29 +56,23 @@ out vbPassDataBlock
 
 void main()
 {
-	const float explodeSz = 0.5;
+	const float explodeSz = 0.5f;
 	//use for loop
-	vPassData_out.vPosition = vPassData_in[0].vPosition
-							+ normalize(vPassData_in[0].vNormal) * explodeSz;
-	vPassData_out.vNormal = vPassData_in[0].vNormal;
-	vPassData_out.vTexcoord = vPassData_in[0].vTexcoord;
-	//gl_Position = gl_in[0].gl_Position; //clip space
-	gl_Position = uP * vPassData_out.vPosition;
-	EmitVertex();
+	for(int i = 2; i >= 0; i--)
+//	for(int i = 0; i < 3; i++)
+	{
+		vPassData_out.vPosition = vPassData_in[i].vPosition
+								+ normalize(vPassData_in[i].vNormal) * explodeSz;
 
-	vPassData_out.vPosition = vPassData_in[1].vPosition
-							+ normalize(vPassData_in[1].vNormal) * explodeSz;
-	vPassData_out.vNormal = vPassData_in[1].vNormal;
-	vPassData_out.vTexcoord = vPassData_in[1].vTexcoord;
-	gl_Position = uP * vPassData_out.vPosition;
-	EmitVertex();
+		vPassData_out.vNormal = vPassData_in[i].vNormal;
 
-	vPassData_out.vPosition = vPassData_in[2].vPosition
-							+ normalize(vPassData_in[2].vNormal) * explodeSz;
-	vPassData_out.vNormal = vPassData_in[2].vNormal;
-	vPassData_out.vTexcoord = vPassData_in[2].vTexcoord;
-	gl_Position = uP * vPassData_out.vPosition;
-	EmitVertex();
+		vPassData_out.vTexcoord = vPassData_in[i].vTexcoord;
+
+		gl_Position = uP * vPassData_out.vPosition;
+
+		EmitVertex();
+	}
+	
 
 	EndPrimitive();
 }

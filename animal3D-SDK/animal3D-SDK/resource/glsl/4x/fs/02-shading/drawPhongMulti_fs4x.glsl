@@ -70,7 +70,7 @@ uniform float uLightSz[MAX_LIGHTS]; //attenuation
 in vPassDataBlock //(1)
 {
 	vec4 vPassPosition;
-	vec3 vPassNormal;
+	vec4 vPassNormal;
 
 	vec2 vPassTexcoord;
 
@@ -90,7 +90,7 @@ void main()
 	up into the final color (col) and we set it equal to the frag color.*/
 	for(int i = 0; i < uLightCt; i++)
 	{
-		vec3 N = normalize(vPassData.vPassNormal);
+		vec3 N = normalize(vPassData.vPassNormal.xyz);
 		vec3 L = normalize(uLightPos[i].xyz - vPassData.vPassPosition.xyz);
 		vec3 V = normalize(-vPassData.vPassPosition.xyz);
 		vec3 R = reflect(-L, N);
@@ -102,7 +102,7 @@ void main()
 		vec3 specular =  pow(max(dot(R,V), 0.0f), 32.0) * SpecularTex.xyz *  uLightCol[i].xyz;
 
 		//float distanceToLight = length(light.position - surfacePos);
-		float distanceToLight = length(uLightPos[i] - vPassData.vPassPosition); //vec4(vPassData.vPassNormal, 1.0f));
+		float distanceToLight = length(uLightPos[i] - vPassData.vPassPosition); //vec4(vPassData.vPassNormal,xyz, 1.0f));
 
 		//float attenuation = 1.0 / (1.0 + light.attenuation * pow(distanceToLight, 2));
 		float attenuation = 1.0 / (1.0 + uLightSz[i]  * pow(distanceToLight, 2));

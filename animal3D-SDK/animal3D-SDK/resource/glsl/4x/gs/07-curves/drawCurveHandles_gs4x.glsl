@@ -38,7 +38,23 @@ layout (line_strip, max_vertices = max_verts) out;
 
 uniform mat4 uMVP;
 
+
+uniform vec4 ubCurveWaypoint[32]; //	(2)
+uniform vec4 ubCurveHandle[32];
+
+flat in int vPassInstanceID[]; // (1)
+
 void main()
 {
 	
+	gl_Position =uMVP* gl_in[vPassInstanceID[0]].gl_Position + vec4(-0.0, 0.1, 0.0, 1.0); //clip space
+	//gl_Position = ubCurveWaypoint[vPassInstanceID[0]] + vec4(-0.1, 0.1, 0.0, 1.0); //clip space
+	EmitVertex();
+
+	//gl_Position = ubCurveHandle[vPassInstanceID[0]] + vec4(0.1, -0.1, 0.0, 1.0); //clip space
+	gl_Position = uMVP*gl_in[vPassInstanceID[0]].gl_Position + vec4(0.1, -0.1, 0.0, 1.0); //clip space
+	EmitVertex();
+	
+
+	EndPrimitive();
 }

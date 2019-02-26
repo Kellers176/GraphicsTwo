@@ -43,7 +43,7 @@
 used in order to pass variables to the fragment shader*/
 
 layout (location = 0) in vec4 aPosition;
-layout (location = 2) in vec3 aNormal; //(4)
+layout (location = 2) in vec4 aNormal; //(4)
 layout (location = 8) in vec2 aTexcoord; // (7) in a3_VertexDescriptor.h
 
 /*Dan told me when I came to visit that it would be okay to not use the varyings in the phongAttribs and
@@ -55,7 +55,7 @@ uniform mat4 uP;
 
 uniform mat4 uMV_nrm;
 
-mat3 normalMV; //(...5?)
+//mat3 normalMV; //(...5?)
 
 //varying block
 out vPassDataBlock
@@ -71,9 +71,9 @@ void main()
 {
 	vPassData.vPassPosition = uMV * aPosition; // eye space //(2)
 	//normalMV = mat3(uMV);
-	normalMV = mat3(uMV_nrm);
+	//normalMV = mat3(uMV_nrm);
 
-	vPassData.vPassNormal = normalMV * aNormal;
+	vPassData.vPassNormal = uMV_nrm * aNormal;
 
 	vPassData.vPassTexcoord = aTexcoord;
 

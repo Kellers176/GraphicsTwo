@@ -53,7 +53,7 @@ uniform sampler1D uTex_sm;
 in vPassDataBlock //(1)
 {
 	vec4 vPassPosition;
-	vec3 vPassNormal;
+	vec4 vPassNormal;
 
 	vec2 vPassTexcoord;
 
@@ -63,7 +63,7 @@ in vPassDataBlock //(1)
 vec3 rimShading()
 {
 	vec3 returnVec;
-	vec3 N = normalize(vPassData.vPassNormal);
+	vec3 N = normalize(vPassData.vPassNormal.xyz);
 	vec3 V = normalize(-vPassData.vPassPosition.xyz);
 
 	//this is the rim shading
@@ -84,7 +84,7 @@ vec4 ToonShading()
 	for (int i = 0; i < uLightCt; i++)
 	{
 		vec3 lightDirection = normalize(uLightPos[i].xyz - vPassData.vPassPosition.xyz);
-		float intense = dot(lightDirection, normalize(vPassData.vPassNormal));
+		float intense = dot(lightDirection, normalize(vPassData.vPassNormal.xyz));
 		if (intense > 0.95)
 		{
 			//clamp, lerp, mix?

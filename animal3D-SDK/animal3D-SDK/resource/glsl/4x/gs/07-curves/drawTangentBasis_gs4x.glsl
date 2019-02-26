@@ -33,7 +33,24 @@ layout (line_strip, max_vertices = 18) out;
 
 uniform mat4 uP;
 
+in mat4 vPassTangentBasis[];	// (1)
+out vec4 vPassColor;
+
 void main()
 {
+
+	for(int i = 0; i < 3; i++)
+	{
+		gl_Position = gl_in[i].gl_Position;
+		vPassColor = gl_in[i].gl_Position;
+
+		EmitVertex();
+	
+		gl_Position = gl_in[i].gl_Position + vPassTangentBasis[i][2];
+		//gl_Position =  vPassTangentBasis[i] *gl_in[i].gl_Position;
+		EmitVertex();
+		EndPrimitive();
+	}
+	
 	
 }
