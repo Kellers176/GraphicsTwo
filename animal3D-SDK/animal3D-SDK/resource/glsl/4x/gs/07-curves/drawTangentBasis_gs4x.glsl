@@ -38,16 +38,25 @@ out vec4 vPassColor;
 
 void main()
 {
-
+	//zac
 	for(int i = 0; i < 3; i++)
 	{
-		gl_Position = gl_in[i].gl_Position;
-		vPassColor = gl_in[i].gl_Position;
+		//color per tangent
+		vec4 color = vec4(0.0, 0.0, 0.0, 1.0);
+		color[i] = 1.0;
+		vPassColor =color;
 
+		////move the axis a bit outside of the object
+		vec4 offset = normalize(vPassTangentBasis[i][2]) * 0.01;
+
+		//setting the base position of the axis
+		gl_Position = gl_in[i].gl_Position + offset;
+		//emit the vertex
 		EmitVertex();
-	
-		gl_Position = gl_in[i].gl_Position + vPassTangentBasis[i][2];
-		//gl_Position =  vPassTangentBasis[i] *gl_in[i].gl_Position;
+
+		//getting the actual tangents for the objects
+		gl_Position = gl_in[i].gl_Position+ offset + normalize(vPassTangentBasis[i][i]) * 0.2;
+		//gl_Position = gl_in[i].gl_Position + vPassTangentBasis[i][2];
 		EmitVertex();
 		EndPrimitive();
 	}
