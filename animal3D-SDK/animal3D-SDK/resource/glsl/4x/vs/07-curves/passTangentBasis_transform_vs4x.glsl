@@ -32,10 +32,31 @@
 //	5) transform and pass tangent basis
 //	6) set final clip-space position
 
+
+//what are tangent basis???
+//M = [ T B N P ]
+
+layout (location = 10)	in vec3 aTangent;
+layout (location = 11)	in vec3 aBitangent;
+layout (location = 2)	in vec3 aNormal;
 layout (location = 0)	in vec4 aPosition;
+
+uniform mat4 uMV, uP; //(2)
+
+out mat4 vPassTangentBasis; //(3)
 
 void main()
 {
 	// DUMMY OUTPUT: directly assign input position to output position
 	gl_Position = aPosition;
+
+	mat4 tangentBasis = mat4(
+		aTangent, 0.0,
+		aBitangent, 0.0,
+		aNormal, 0.0,
+		aPosition);
+	
+
+	vPassTangentBasis = uMV * tangentBasis; //5
+	gl_Position = uP * vPassTangentBasis[3]; //(6)
 }

@@ -1,6 +1,6 @@
 /*
 	Copyright 2011-2019 Daniel S. Buckstein
-
+	This file was modified by Kelly and Zac with permission of the author.
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
 	You may obtain a copy of the License at
@@ -24,7 +24,7 @@
 */
 
 #version 410
-
+//done
 // ****TO-DO: 
 //	1) declare transformation uniforms
 //	2) declare varyings (attribute data) to send to fragment shader
@@ -35,8 +35,32 @@ layout (location = 0) in vec4 aPosition;
 layout (location = 2) in vec4 aNormal;
 layout (location = 8) in vec4 aTexcoord;
 
+uniform mat4 uMV; //(1)
+uniform mat4 uP;
+
+uniform mat4 uAtlas;
+
+uniform mat4 uMV_nrm;
+
+
+//varying block
+out vPassDataBlock
+{
+	vec4 vPassPosition;
+	vec4 vPassNormal;
+	   
+	   
+	vec4 vPassTexcoord;
+
+} vPassData;
+
 void main()
 {
-	// DUMMY OUTPUT: directly assign input position to output position
-	gl_Position = aPosition;
+	//kelly and zac
+	//pass variables to the g-buffer shader
+	vPassData.vPassPosition = uMV * aPosition; // eye space //(2)
+	vPassData.vPassNormal = uMV_nrm * aNormal;
+	vPassData.vPassTexcoord = uAtlas * aTexcoord;
+
+	gl_Position = uP * vPassData.vPassPosition; //clip space (3)
 }

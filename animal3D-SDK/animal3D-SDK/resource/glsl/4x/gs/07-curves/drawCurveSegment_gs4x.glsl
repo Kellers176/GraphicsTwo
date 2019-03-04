@@ -39,7 +39,11 @@ layout (line_strip, max_vertices = max_verts) out;
 
 uniform mat4 uMVP;
 
+
+
+flat in int vPassInstanceID[]; // (1)
+
 void main()
 {
-	
+	gl_Position = gl_in[0].gl_Position; //clip space
 }

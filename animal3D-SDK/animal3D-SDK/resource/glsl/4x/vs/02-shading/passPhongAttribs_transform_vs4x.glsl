@@ -1,4 +1,5 @@
 /*
+	“This file was modified by Kelly and Zac with permission of the author.”
 	Copyright 2011-2019 Daniel S. Buckstein
 
 	Licensed under the Apache License, Version 2.0 (the "License");
@@ -37,10 +38,44 @@
 //	8) declare varyings for lighting data
 //	9) copy lighting data to varyings
 
+//Kelly and Zac
+/*Zac and Kelly worked together to create the variables and use them to be set in the main. This program is being
+used in order to pass variables to the fragment shader*/
+
 layout (location = 0) in vec4 aPosition;
+layout (location = 2) in vec4 aNormal; //(4)
+layout (location = 8) in vec2 aTexcoord; // (7) in a3_VertexDescriptor.h
+
+/*Dan told me when I came to visit that it would be okay to not use the varyings in the phongAttribs and
+just use them in the fragment shader since this was technically redundant and wasnt even being used in the vertex
+shader.*/
+
+uniform mat4 uMV; //(1)
+uniform mat4 uP;
+
+uniform mat4 uMV_nrm;
+
+//mat3 normalMV; //(...5?)
+
+//varying block
+out vPassDataBlock
+{
+	vec4 vPassPosition;
+	vec4 vPassNormal;
+	vec2 vPassTexcoord;
+
+} vPassData;
+//vPassData.(member)
 
 void main()
 {
-	// DUMMY OUTPUT: directly assign input position to output position
-	gl_Position = aPosition;
+	vPassData.vPassPosition = uMV * aPosition; // eye space //(2)
+	//normalMV = mat3(uMV);
+	//normalMV = mat3(uMV_nrm);
+
+	vPassData.vPassNormal = uMV_nrm * aNormal;
+
+	vPassData.vPassTexcoord = aTexcoord;
+
+	gl_Position = uP * uMV * aPosition; //clip space (3)
 }

@@ -1,5 +1,6 @@
 /*
 	Copyright 2011-2019 Daniel S. Buckstein
+	This file was modified by Kelly and Zac with permission of the author.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
@@ -24,7 +25,7 @@
 */
 
 #version 410
-
+//done
 // ****TO-DO: 
 //	1) declare uniform blocks
 //		-> transformations
@@ -33,10 +34,31 @@
 //	3) transform input position appropriately
 //	4) write to outputs
 
+//Kelly and Zac
+//We got the variables in class and added them in.
+
 layout (location = 0) in vec4 aPosition;
+layout(location = 8) in vec2 aTexcoord; // (3) in a3_VertexDescriptor.h
+
+//(1)
+#define max_lights 1024
+uniform ubTransformMVP{
+	mat4 uMVP[max_lights];
+};
+uniform ubTransformMVPB{
+	mat4 uMVPB[max_lights];
+};
+
+out vec4 vPassBiasClipCoord;	//(2)
+flat out int vPassInstanceID;		//(2)
+
 
 void main()
 {
-	// DUMMY OUTPUT: directly assign input position to output position
-	gl_Position = aPosition;
+	//get the unit ID and pass it to the fragment shader
+	int i = gl_InstanceID;
+	vPassInstanceID = i; // (3)
+	//get the position in the scene and pass that
+	vPassBiasClipCoord = uMVPB[i] * aPosition; // (3,4)
+	gl_Position = uMVP[i] * aPosition; //(3,4)
 }

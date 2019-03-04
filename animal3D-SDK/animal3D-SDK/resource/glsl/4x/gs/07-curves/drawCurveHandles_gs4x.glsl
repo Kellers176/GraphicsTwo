@@ -38,7 +38,53 @@ layout (line_strip, max_vertices = max_verts) out;
 
 uniform mat4 uMVP;
 
+
+
+//uniform vec4 ubCurveWaypoint[32]; //	(2)
+uniform ubCurveWaypoint{
+	vec4 uCurveWaypoint[max_waypoints];
+}; //	(2)
+uniform ubCurveHandle{
+	vec4 uCurveHandle[max_waypoints];
+};
+
+flat in int vPassInstanceID[]; // (1)
+
 void main()
 {
+	//Draw line between waypoint and handle
+	gl_Position = uMVP * uCurveWaypoint[vPassInstanceID[0]];
+	EmitVertex();
+
+	gl_Position = uMVP * uCurveHandle[vPassInstanceID[0]];
+	EmitVertex();
 	
+	EndPrimitive();
+
+
+	vec4 offset1 = uCurveHandle[vPassInstanceID[0]] + vec4(0, 0.1, 0.0, 0);
+	vec4 offset2 = uCurveHandle[vPassInstanceID[0]] + vec4(0.1, 0.0, 0.0, 0);
+	vec4 offset3 = uCurveHandle[vPassInstanceID[0]] + vec4(0,-0.1, 0.0, 0);
+	vec4 offset4 = uCurveHandle[vPassInstanceID[0]] + vec4(-0.1, 0.0, 0.0, 0);
+
+	//gl_Position = uMVP * (uCurveHandle[vPassInstanceID[0]] + vec4(0, 0.1, 0.0, 1.0));
+	gl_Position = uMVP * offset1;
+	EmitVertex();
+
+	//gl_Position = uMVP * (uCurveHandle[vPassInstanceID[0]] + vec4(0.1, 0.0, 0.0, 1.0));
+	gl_Position = uMVP * offset2;
+	EmitVertex();
+
+	//gl_Position = uMVP * (uCurveHandle[vPassInstanceID[0]] + vec4(0, -0.1, 0.0, 1.0));
+	gl_Position = uMVP * offset3;
+	EmitVertex();
+
+	//gl_Position = uMVP * (uCurveHandle[vPassInstanceID[0]] + vec4(-0.1, 0.0, 0.0, 1.0));
+	gl_Position = uMVP * offset4;
+	EmitVertex();
+
+	//gl_Position = uMVP * (uCurveHandle[vPassInstanceID[0]] + vec4(0, 0.1, 0.0, 1.0));
+	gl_Position = uMVP * offset1;
+		EmitVertex();
+	EndPrimitive();
 }
