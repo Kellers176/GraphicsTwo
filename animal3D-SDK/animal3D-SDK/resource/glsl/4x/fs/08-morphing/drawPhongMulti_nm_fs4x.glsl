@@ -35,5 +35,5 @@ out vec4 rtFragColor;
 void main()
 {
 	// DUMMY OUTPUT: all fragments are FADED CYAN
-	rtFragColor = vec4(0.5, 1.0, 1.0, 1.0);
+	rtFragColor = vec4(0.5, 0.5, 1.0, 1.0);
 }
