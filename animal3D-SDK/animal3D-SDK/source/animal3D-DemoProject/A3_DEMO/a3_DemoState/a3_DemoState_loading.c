@@ -404,6 +404,9 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 			a3_DemoStateShader
 				passPhongAttribs_transform_atlas_vs[1],
 				passBiasClipCoord_transform_instanced_vs[1];
+			//Mid-Fractal
+			a3_DemoStateShader
+				passJuliaFractal_vs[1];
 
 			// fragment shaders
 			// base
@@ -436,6 +439,12 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 				drawPhongMulti_deferred_fs[1],
 				drawPhong_volume_fs[1],
 				drawDeferredLightingComposite_fs[1];
+
+			//Mid-Fractal
+			a3_DemoStateShader
+				drawCel_fs[1],
+				drawJuliaFractal_fs[1],
+				drawJuliaPostProcessing_fs[1];
 		};
 	} shaderList = {
 		{
@@ -457,6 +466,8 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 			// 06-deferred
 			{ { { 0 },	"shdr-vs:pass-Phong-atlas",		a3shader_vertex  ,	1,{ "../../../../resource/glsl/4x/vs/06-deferred/passPhongAttribs_transform_atlas_vs4x.glsl" } } },
 			{ { { 0 },	"shdr-vs:pass-biasclip",		a3shader_vertex  ,	1,{ "../../../../resource/glsl/4x/vs/06-deferred/passBiasClipCoord_transform_instanced_vs4x.glsl" } } },
+			//Mid-term
+			{ { { 0 },	"shdr-fs:pass-Julia",			a3shader_vertex  ,	1,{ "../../../../resource/glsl/4x/fs/Mid-Fractal/passJuliaFractal_vs4x.glsl" } } },
 
 			// fs
 			// base
@@ -483,6 +494,10 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 			{ { { 0 },	"shdr-fs:draw-Phong-deferred",	a3shader_fragment,	1,{ "../../../../resource/glsl/4x/fs/06-deferred/drawPhongMulti_deferred_fs4x.glsl" } } },
 			{ { { 0 },	"shdr-fs:draw-Phong-volume",	a3shader_fragment,	1,{ "../../../../resource/glsl/4x/fs/06-deferred/drawPhong_volume_fs4x.glsl" } } },
 			{ { { 0 },	"shdr-fs:draw-deferltcomp",		a3shader_fragment,	1,{ "../../../../resource/glsl/4x/fs/06-deferred/drawDeferredLightingComposite_fs4x.glsl" } } },
+			//Mid-term
+			{ { { 0 },	"shdr-fs:drawCel",				a3shader_fragment,	1,{ "../../../../resource/glsl/4x/fs/Mid-Fractal/drawCel_fs4x.glsl" } } },
+			{ { { 0 },	"shdr-fs:drawJuliaFractal",		a3shader_fragment,	1,{ "../../../../resource/glsl/4x/fs/Mid-Fractal/drawJuliaFractal_fs4x.glsl" } } },
+			{ { { 0 },	"shdr-fs:drawJuliaPostProcessing",a3shader_fragment,1,{ "../../../../resource/glsl/4x/fs/Mid-Fractal/drawJuliaPostProcessing_fs4x.glsl" } } },
 		}
 	};
 	a3_DemoStateShader *const shaderListPtr = (a3_DemoStateShader *)(&shaderList), *shaderPtr;
@@ -642,6 +657,24 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.passTexcoord_transform_vs->shader);
 	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawDeferredLightingComposite_fs->shader);
 
+	//Mid-Fractal
+	// cel shading
+	currentDemoProg = demoState->prog_drawCel;
+	a3shaderProgramCreate(currentDemoProg->program, "prog:draw-cel");
+	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.passPhongAttribs_transform_vs->shader);
+	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawCel_fs->shader);
+
+	// julia fractal
+	currentDemoProg = demoState->prog_drawJuliaFractal;
+	a3shaderProgramCreate(currentDemoProg->program, "prog:draw-julia");
+	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.passJuliaFractal_vs->shader);
+	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawJuliaFractal_fs->shader);
+
+	// julia post process
+	currentDemoProg = demoState->prog_drawJuliaPostProcess;
+	a3shaderProgramCreate(currentDemoProg->program, "prog:draw-julia-post-process");
+	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.passBiasClipCoord_transform_instanced_vs->shader);
+	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawJuliaPostProcessing_fs->shader);
 
 	// activate a primitive for validation
 	// makes sure the specified geometry can draw using programs

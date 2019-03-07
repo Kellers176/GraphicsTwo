@@ -227,11 +227,15 @@
     <None Include="..\..\..\resource\glsl\4x\fs\06-deferred\drawPhong_volume_fs4x.glsl" />
     <None Include="..\..\..\resource\glsl\4x\fs\drawColorAttrib_fs4x.glsl" />
     <None Include="..\..\..\resource\glsl\4x\fs\drawColorUnif_fs4x.glsl" />
+    <None Include="..\..\..\resource\glsl\4x\fs\Mid-Fractal\drawCel_fs4x.glsl" />
+    <None Include="..\..\..\resource\glsl\4x\fs\Mid-Fractal\drawJuliaFractal_fs4x.glsl" />
+    <None Include="..\..\..\resource\glsl\4x\fs\Mid-Fractal\drawJuliaPostProcessing_fs4x.glsl" />
     <None Include="..\..\..\resource\glsl\4x\vs\02-shading\passPhongAttribs_transform_vs4x.glsl" />
     <None Include="..\..\..\resource\glsl\4x\vs\02-shading\passTexcoord_transform_vs4x.glsl" />
     <None Include="..\..\..\resource\glsl\4x\vs\04-shadow\passPhongAttribs_passShadowCoord_transform_vs4x.glsl" />
     <None Include="..\..\..\resource\glsl\4x\vs\06-deferred\passBiasClipCoord_transform_instanced_vs4x.glsl" />
     <None Include="..\..\..\resource\glsl\4x\vs\06-deferred\passPhongAttribs_transform_atlas_vs4x.glsl" />
+    <None Include="..\..\..\resource\glsl\4x\vs\Mid-Fractal\passJuliaFractal_vs4x.glsl" />
     <None Include="..\..\..\resource\glsl\4x\vs\passColor_transform_instanced_vs4x.glsl" />
     <None Include="..\..\..\resource\glsl\4x\vs\passColor_transform_vs4x.glsl" />
     <None Include="..\..\..\resource\glsl\4x\vs\passthru_transform_instanced_vs4x.glsl" />

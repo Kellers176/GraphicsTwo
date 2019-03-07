@@ -341,6 +341,10 @@ extern "C"
 					prog_drawPhongMulti_deferred[1],			// perform deferred Phong shading
 					prog_drawPhong_volume[1],					// render one light volume with Phong
 					prog_drawDeferredLightingComposite[1];		// composite deferred lighting
+				a3_DemoStateShaderProgram
+					prog_drawCel[1],							// cell shading for scene
+					prog_drawJuliaFractal[1],					// Julia Fractal 
+					prog_drawJuliaPostProcess[1];				// Julia fractal post processing
 			};
 		};
 

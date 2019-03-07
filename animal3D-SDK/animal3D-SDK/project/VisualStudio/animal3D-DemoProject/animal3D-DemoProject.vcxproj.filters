@@ -82,6 +82,12 @@
     <Filter Include="Resource Files\A3_DEMO\glsl\4x\fs\06-deferred">
       <UniqueIdentifier>{609f10e1-54b0-40a2-97dc-4cc96ce3acc7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\A3_DEMO\glsl\4x\fs\Mid-Fractal">
+      <UniqueIdentifier>{57263b46-fe38-492c-8d53-f04c600aa5e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\A3_DEMO\glsl\4x\vs\Mid-Fractal">
+      <UniqueIdentifier>{537a33e1-1dbf-48bc-9204-d11ab3c11595}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="_src_win\main_dll.c">
@@ -213,6 +219,18 @@
     </None>
     <None Include="..\..\..\resource\glsl\4x\vs\06-deferred\passBiasClipCoord_transform_instanced_vs4x.glsl">
       <Filter>Resource Files\A3_DEMO\glsl\4x\vs\06-deferred</Filter>
+    </None>
+    <None Include="..\..\..\resource\glsl\4x\fs\Mid-Fractal\drawCel_fs4x.glsl">
+      <Filter>Resource Files\A3_DEMO\glsl\4x\fs\Mid-Fractal</Filter>
+    </None>
+    <None Include="..\..\..\resource\glsl\4x\fs\Mid-Fractal\drawJuliaFractal_fs4x.glsl">
+      <Filter>Resource Files\A3_DEMO\glsl\4x\fs\Mid-Fractal</Filter>
+    </None>
+    <None Include="..\..\..\resource\glsl\4x\fs\Mid-Fractal\drawJuliaPostProcessing_fs4x.glsl">
+      <Filter>Resource Files\A3_DEMO\glsl\4x\fs\Mid-Fractal</Filter>
+    </None>
+    <None Include="..\..\..\resource\glsl\4x\vs\Mid-Fractal\passJuliaFractal_vs4x.glsl">
+      <Filter>Resource Files\A3_DEMO\glsl\4x\vs\Mid-Fractal</Filter>
     </None>
   </ItemGroup>
 </Project>
