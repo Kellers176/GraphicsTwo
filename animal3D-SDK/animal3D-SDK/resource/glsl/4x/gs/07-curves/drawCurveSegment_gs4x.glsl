@@ -1,6 +1,6 @@
 /*
 	Copyright 2011-2019 Daniel S. Buckstein
-
+	“This file was modified by Kelly and Zac with permission of the author.”
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
 	You may obtain a copy of the License at
@@ -37,13 +37,45 @@
 layout (points) in;
 layout (line_strip, max_vertices = max_verts) out;
 
+uniform ubCurveWaypoint{
+	vec4 uCurveWaypoint[max_waypoints];
+}; //	(2)
+uniform ubCurveHandle{
+	vec4 uCurveHandle[max_waypoints];
+};
 uniform mat4 uMVP;
-
-
 
 flat in int vPassInstanceID[]; // (1)
 
+//kelly and zac
+//We used the fucntion from the SuperBible to get LERP to work :)
+void lerp(in vec4 A, in vec4 B)
+{
+	//set the previous P to the start of the line
+	vec4 prevP = A;
+	float var = 2.0 / float(max_verts);
+
+	//go through each of the segments and use those for the new points
+	for (int i = 0; i < max_verts; i++)
+	{
+		//newP = 
+		vec4 D = (B - A);
+		gl_Position = prevP;
+		EmitVertex();
+	
+		vec4 newP = prevP + var * (D);
+		gl_Position = newP;
+		EmitVertex();
+	
+		//EndPrimitive();
+	
+		prevP = newP;
+	}
+	EndPrimitive();
+
+}
+
 void main()
 {
-	gl_Position = gl_in[0].gl_Position; //clip space
+	lerp(uMVP * uCurveWaypoint[vPassInstanceID[0]], uMVP * uCurveWaypoint[vPassInstanceID[0] + 1]);
 }

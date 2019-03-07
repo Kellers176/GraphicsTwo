@@ -1,6 +1,6 @@
 /*
 	Copyright 2011-2019 Daniel S. Buckstein
-
+	“This file was modified by Zac with permission of the author.”
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
 	You may obtain a copy of the License at
@@ -56,7 +56,6 @@ void main()
 
 		//getting the actual tangents for the objects
 		gl_Position = gl_in[i].gl_Position+ offset + normalize(vPassTangentBasis[i][i]) * 0.2;
-		//gl_Position = gl_in[i].gl_Position + vPassTangentBasis[i][2];
 		EmitVertex();
 		EndPrimitive();
 	}

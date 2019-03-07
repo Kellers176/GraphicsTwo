@@ -1,6 +1,6 @@
 /*
 	Copyright 2011-2019 Daniel S. Buckstein
-
+	“This file was modified by Kelly and Zac with permission of the author.”
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
 	You may obtain a copy of the License at
@@ -52,6 +52,7 @@ flat in int vPassInstanceID[]; // (1)
 
 void main()
 {
+	//kelly and zac
 	//Draw line between waypoint and handle
 	gl_Position = uMVP * uCurveWaypoint[vPassInstanceID[0]];
 	EmitVertex();
@@ -61,29 +62,25 @@ void main()
 	
 	EndPrimitive();
 
-
+	//get the math for the diamond locations 
 	vec4 offset1 = uCurveHandle[vPassInstanceID[0]] + vec4(0, 0.1, 0.0, 0);
 	vec4 offset2 = uCurveHandle[vPassInstanceID[0]] + vec4(0.1, 0.0, 0.0, 0);
 	vec4 offset3 = uCurveHandle[vPassInstanceID[0]] + vec4(0,-0.1, 0.0, 0);
 	vec4 offset4 = uCurveHandle[vPassInstanceID[0]] + vec4(-0.1, 0.0, 0.0, 0);
 
-	//gl_Position = uMVP * (uCurveHandle[vPassInstanceID[0]] + vec4(0, 0.1, 0.0, 1.0));
+	//draw the diamond for the handle with each line
 	gl_Position = uMVP * offset1;
 	EmitVertex();
 
-	//gl_Position = uMVP * (uCurveHandle[vPassInstanceID[0]] + vec4(0.1, 0.0, 0.0, 1.0));
 	gl_Position = uMVP * offset2;
 	EmitVertex();
 
-	//gl_Position = uMVP * (uCurveHandle[vPassInstanceID[0]] + vec4(0, -0.1, 0.0, 1.0));
 	gl_Position = uMVP * offset3;
 	EmitVertex();
 
-	//gl_Position = uMVP * (uCurveHandle[vPassInstanceID[0]] + vec4(-0.1, 0.0, 0.0, 1.0));
 	gl_Position = uMVP * offset4;
 	EmitVertex();
 
-	//gl_Position = uMVP * (uCurveHandle[vPassInstanceID[0]] + vec4(0, 0.1, 0.0, 1.0));
 	gl_Position = uMVP * offset1;
 		EmitVertex();
 	EndPrimitive();

@@ -1,6 +1,6 @@
 /*
 	Copyright 2011-2019 Daniel S. Buckstein
-
+	“This file was modified by Kelly and Zac with permission of the author.”
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
 	You may obtain a copy of the License at
@@ -56,11 +56,13 @@ out vbPassDataBlock
 
 void main()
 {
+	//Kelly and zac and class
+	//add the explode size
 	const float explodeSz = 0.5f;
 	//use for loop
 	for(int i = 2; i >= 0; i--)
-//	for(int i = 0; i < 3; i++)
 	{
+		//change the geometry for the objects (this was done in class, zac did the for loop)
 		vPassData_out.vPosition = vPassData_in[i].vPosition
 								+ normalize(vPassData_in[i].vNormal) * explodeSz;
 
@@ -73,6 +75,6 @@ void main()
 		EmitVertex();
 	}
 	
-
+	//End the primitive
 	EndPrimitive();
 }

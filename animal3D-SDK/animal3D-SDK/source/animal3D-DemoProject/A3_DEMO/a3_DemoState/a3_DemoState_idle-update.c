@@ -299,13 +299,13 @@ void a3demo_update_curve(a3_DemoState *demoState, a3f64 dt)
 		// interpolate object position
 		// ****TO-DO: choose interpolation algorithm from below
 		currentSceneObject = demoState->curveFollowObject;
-	/*
+	
 		// lerp
 		a3real3Lerp(currentSceneObject->position.v,
 			demoState->curveWaypoint[demoState->curveSegmentIndex + 0].v,
 			demoState->curveWaypoint[demoState->curveSegmentIndex + 1].v,
 			demoState->curveSegmentParam);
-		
+	/*
 		// Catmull-Rom
 		a3real3CatmullRom(currentSceneObject->position.v,
 			demoState->curveWaypoint[a3maximum(0, (a3i32)demoState->curveSegmentIndex - 1)].v,
@@ -313,7 +313,7 @@ void a3demo_update_curve(a3_DemoState *demoState, a3f64 dt)
 			demoState->curveWaypoint[demoState->curveSegmentIndex + 1].v,
 			demoState->curveWaypoint[a3minimum(demoState->curveSegmentIndex + 2, demoState->curveWaypointCount - 1)].v,
 			demoState->curveSegmentParam);
-	*/	
+	
 		// cubic Hermite
 		a3real3HermiteControl(currentSceneObject->position.v,
 			demoState->curveWaypoint[demoState->curveSegmentIndex + 0].v,
@@ -321,7 +321,7 @@ void a3demo_update_curve(a3_DemoState *demoState, a3f64 dt)
 			demoState->curveHandle[demoState->curveSegmentIndex + 0].v,
 			demoState->curveHandle[demoState->curveSegmentIndex + 1].v,
 			demoState->curveSegmentParam);
-		
+		*/	
 	}
 
 	// fill curve uniform buffers

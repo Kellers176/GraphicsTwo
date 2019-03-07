@@ -1,6 +1,6 @@
 /*
 	Copyright 2011-2019 Daniel S. Buckstein
-
+	“This file was modified by Kelly and Zac with permission of the author.”
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
 	You may obtain a copy of the License at
@@ -50,6 +50,7 @@ void main()
 	// DUMMY OUTPUT: directly assign input position to output position
 	gl_Position = aPosition;
 
+	//send the tangent basis
 	mat4 tangentBasis = mat4(
 		aTangent, 0.0,
 		aBitangent, 0.0,
