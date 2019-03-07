@@ -47,7 +47,7 @@ void main()
 		vPassColor =color;
 
 		////move the axis a bit outside of the object
-		vec4 offset = normalize(vPassTangentBasis[i][2]) * 0.01;
+		vec4 offset = normalize(vPassTangentBasis[i][2]) * 0.01; //Clip space
 
 		//setting the base position of the axis
 		gl_Position = gl_in[i].gl_Position + offset;
@@ -55,7 +55,7 @@ void main()
 		EmitVertex();
 
 		//getting the actual tangents for the objects
-		gl_Position = gl_in[i].gl_Position+ offset + normalize(vPassTangentBasis[i][i]) * 0.2;
+		gl_Position = gl_in[i].gl_Position+ offset + normalize(vPassTangentBasis[i][i]) * 0.2; //Clip Space
 		EmitVertex();
 		EndPrimitive();
 	}

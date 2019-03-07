@@ -61,6 +61,7 @@ void main()
 	const float explodeSz = 0.5f;
 	//use for loop
 	for(int i = 2; i >= 0; i--)
+	//for(int i = 0; i < 3; i++)
 	{
 		//change the geometry for the objects (this was done in class, zac did the for loop)
 		vPassData_out.vPosition = vPassData_in[i].vPosition
