@@ -46,7 +46,8 @@ void main()
 {
 	//zac
 	//Passing in the variables to the FSQ
-	rtFragColor = vPassData.vPassPosition;
-	rtFragColor1 = normalize(vPassData.vPassNormal);
-	rtFragColor2 = vPassData.vPassTexcoord;
+	//rtFragColor = vPassData.vPassPosition;
+	//rtFragColor1 = normalize(vPassData.vPassNormal);
+	//rtFragColor2 = vPassData.vPassTexcoord;
+	rtFragColor = vec4(1.0, 0.0, 0.0, 1.0);
 }

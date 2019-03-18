@@ -381,14 +381,14 @@ void a3demo_render(const a3_DemoState *demoState)
 				// forward
 			case demoStatePipelineMode_forward:
 				// select program based on settings
-				if (demoState->shadowMapping && demoState->projectiveTexturing)
-					currentDemoProgram = demoState->prog_drawPhongMulti_shadowmap_projtex;
-				else if (demoState->shadowMapping)
-					currentDemoProgram = demoState->prog_drawPhongMulti_shadowmap;
-				else if (demoState->projectiveTexturing)
-					currentDemoProgram = demoState->prog_drawPhongMulti_projtex;
-				else
-					currentDemoProgram = demoState->prog_drawPhongMulti;
+				//if (demoState->shadowMapping && demoState->projectiveTexturing)
+				//	currentDemoProgram = demoState->prog_drawPhongMulti_shadowmap_projtex;
+				//else if (demoState->shadowMapping)
+				//	currentDemoProgram = demoState->prog_drawPhongMulti_shadowmap;
+				//else if (demoState->projectiveTexturing)
+				//	currentDemoProgram = demoState->prog_drawPhongMulti_projtex;
+				//else
+				currentDemoProgram = demoState->prog_drawCel;
 				a3shaderProgramActivate(currentDemoProgram->program);
 
 				// send shared data: 
@@ -678,11 +678,11 @@ void a3demo_render(const a3_DemoState *demoState)
 	if (demoSubMode > demoStateRenderPass_composite)
 	{
 		// set up post-processing pass
-		passIndex = demoStateRenderPass_bloom_bright_2;
+		//passIndex = demoStateRenderPass_bloom_bright_2;
 
 		// select post-processing program
 		//	(if you have uniforms to send, send 'em!)
-		currentDemoProgram = demoState->prog_drawBrightPass;
+		currentDemoProgram = demoState->prog_drawJuliaPostProcess;
 		a3shaderProgramActivate(currentDemoProgram->program);
 
 		// activate post-processing framebuffer
@@ -702,161 +702,161 @@ void a3demo_render(const a3_DemoState *demoState)
 
 
 		// set up next pass
-		passIndex = demoStateRenderPass_bloom_blurH_2;
+		//passIndex = demoStateRenderPass_bloom_blurH_2;
 
 		// the program for this pass is a bit different: needs some uniforms
-		currentDemoProgram = demoState->prog_drawBlurGaussian;
-		a3shaderProgramActivate(currentDemoProgram->program);
-		pixelSzInv.x = +a3recip(readDFBO->frameWidth);
-		pixelSzInv.y = +a3recip(readDFBO->frameHeight);	// a3realZero;
-		a3shaderUniformSendFloat(a3unif_vec2, currentDemoProgram->uPixelSz, 1, pixelSzInv.v);
+		//currentDemoProgram = demoState->prog_drawBlurGaussian;
+		//a3shaderProgramActivate(currentDemoProgram->program);
+		//pixelSzInv.x = +a3recip(readDFBO->frameWidth);
+		//pixelSzInv.y = +a3recip(readDFBO->frameHeight);	// a3realZero;
+		//a3shaderUniformSendFloat(a3unif_vec2, currentDemoProgram->uPixelSz, 1, pixelSzInv.v);
 
 		// buffers
-		writeDFBO = demoState->fbo_dbl_nodepth_2 + 1;
-		a3framebufferDoubleActivate(writeDFBO);
-		readDFBO = demoState->fbo_dbl_nodepth_2 + 0;
-		a3framebufferDoubleBindColorTexture(readDFBO, a3tex_unit00, 0);
+		//writeDFBO = demoState->fbo_dbl_nodepth_2 + 1;
+		//a3framebufferDoubleActivate(writeDFBO);
+		//readDFBO = demoState->fbo_dbl_nodepth_2 + 0;
+		//a3framebufferDoubleBindColorTexture(readDFBO, a3tex_unit00, 0);
 
 		// draw and swap
-		a3vertexDrawableRenderActive();
-		a3framebufferDoubleSwap((a3_FramebufferDouble *)writeDFBO);
+		//a3vertexDrawableRenderActive();
+		//a3framebufferDoubleSwap((a3_FramebufferDouble *)writeDFBO);
 
 
 		// next
-		passIndex = demoStateRenderPass_bloom_blurV_2;
+		//passIndex = demoStateRenderPass_bloom_blurV_2;
 
 		// is it possible to remove redundant code, e.g. program already activated?
 		//	(its actual behavior can be modified by the uniforms!)
 	//	currentDemoProgram = demoState->prog_drawBlurGaussian;
 	//	a3shaderProgramActivate(currentDemoProgram->program);
-		pixelSzInv.x = -a3recip(readDFBO->frameWidth);	// a3realZero;
-		pixelSzInv.y = +a3recip(readDFBO->frameHeight);
-		a3shaderUniformSendFloat(a3unif_vec2, currentDemoProgram->uPixelSz, 1, pixelSzInv.v);
+		//pixelSzInv.x = -a3recip(readDFBO->frameWidth);	// a3realZero;
+		//pixelSzInv.y = +a3recip(readDFBO->frameHeight);
+		//a3shaderUniformSendFloat(a3unif_vec2, currentDemoProgram->uPixelSz, 1, pixelSzInv.v);
 
 		// double framebuffers can be used for r/w simultaneously
-		writeDFBO = demoState->fbo_dbl_nodepth_2 + 1;
-		a3framebufferDoubleActivate(writeDFBO);
-		readDFBO = demoState->fbo_dbl_nodepth_2 + 1;
-		a3framebufferDoubleBindColorTexture(readDFBO, a3tex_unit00, 0);
+		//writeDFBO = demoState->fbo_dbl_nodepth_2 + 1;
+		//a3framebufferDoubleActivate(writeDFBO);
+		//readDFBO = demoState->fbo_dbl_nodepth_2 + 1;
+		//a3framebufferDoubleBindColorTexture(readDFBO, a3tex_unit00, 0);
 
 		// draw and swap
-		a3vertexDrawableRenderActive();
-		a3framebufferDoubleSwap((a3_FramebufferDouble *)writeDFBO);
+		//a3vertexDrawableRenderActive();
+		//a3framebufferDoubleSwap((a3_FramebufferDouble *)writeDFBO);
 
 
 		// next
-		passIndex = demoStateRenderPass_bloom_bright_4;
-
-		currentDemoProgram = demoState->prog_drawBrightPass;
-		a3shaderProgramActivate(currentDemoProgram->program);
-		writeDFBO = demoState->fbo_dbl_nodepth_4 + 0;
-		a3framebufferDoubleActivate(writeDFBO);
-		readDFBO = demoState->fbo_dbl_nodepth_2 + 1;
-		a3framebufferDoubleBindColorTexture(readDFBO, a3tex_unit00, 0);
-		a3vertexDrawableRenderActive();
-		a3framebufferDoubleSwap((a3_FramebufferDouble *)writeDFBO);
-
-
-		// next
-		passIndex = demoStateRenderPass_bloom_blurH_4;
-
-		currentDemoProgram = demoState->prog_drawBlurGaussian;
-		a3shaderProgramActivate(currentDemoProgram->program);
-		pixelSzInv.x = +a3recip(readDFBO->frameWidth);
-		pixelSzInv.y = +a3recip(readDFBO->frameHeight);	// a3realZero;
-		a3shaderUniformSendFloat(a3unif_vec2, currentDemoProgram->uPixelSz, 1, pixelSzInv.v);
-		writeDFBO = demoState->fbo_dbl_nodepth_4 + 1;
-		a3framebufferDoubleActivate(writeDFBO);
-		readDFBO = demoState->fbo_dbl_nodepth_4 + 0;
-		a3framebufferDoubleBindColorTexture(readDFBO, a3tex_unit00, 0);
-		a3vertexDrawableRenderActive();
-		a3framebufferDoubleSwap((a3_FramebufferDouble *)writeDFBO);
+		//passIndex = demoStateRenderPass_bloom_bright_4;
+		//
+		//currentDemoProgram = demoState->prog_drawBrightPass;
+		//a3shaderProgramActivate(currentDemoProgram->program);
+		//writeDFBO = demoState->fbo_dbl_nodepth_4 + 0;
+		//a3framebufferDoubleActivate(writeDFBO);
+		//readDFBO = demoState->fbo_dbl_nodepth_2 + 1;
+		//a3framebufferDoubleBindColorTexture(readDFBO, a3tex_unit00, 0);
+		//a3vertexDrawableRenderActive();
+		//a3framebufferDoubleSwap((a3_FramebufferDouble *)writeDFBO);
 
 
 		// next
-		passIndex = demoStateRenderPass_bloom_blurV_4;
+		//passIndex = demoStateRenderPass_bloom_blurH_4;
+		//
+		//currentDemoProgram = demoState->prog_drawBlurGaussian;
+		//a3shaderProgramActivate(currentDemoProgram->program);
+		//pixelSzInv.x = +a3recip(readDFBO->frameWidth);
+		//pixelSzInv.y = +a3recip(readDFBO->frameHeight);	// a3realZero;
+		//a3shaderUniformSendFloat(a3unif_vec2, currentDemoProgram->uPixelSz, 1, pixelSzInv.v);
+		//writeDFBO = demoState->fbo_dbl_nodepth_4 + 1;
+		//a3framebufferDoubleActivate(writeDFBO);
+		//readDFBO = demoState->fbo_dbl_nodepth_4 + 0;
+		//a3framebufferDoubleBindColorTexture(readDFBO, a3tex_unit00, 0);
+		//a3vertexDrawableRenderActive();
+		//a3framebufferDoubleSwap((a3_FramebufferDouble *)writeDFBO);
+
+
+		// next
+		//passIndex = demoStateRenderPass_bloom_blurV_4;
 
 		//	currentDemoProgram = demoState->prog_drawBlurGaussian;
 		//	a3shaderProgramActivate(currentDemoProgram->program);
-		pixelSzInv.x = -a3recip(readDFBO->frameWidth);	// a3realZero;
-		pixelSzInv.y = +a3recip(readDFBO->frameHeight);
-		a3shaderUniformSendFloat(a3unif_vec2, currentDemoProgram->uPixelSz, 1, pixelSzInv.v);
-		writeDFBO = demoState->fbo_dbl_nodepth_4 + 1;
-		a3framebufferDoubleActivate(writeDFBO);
-		readDFBO = demoState->fbo_dbl_nodepth_4 + 1;
-		a3framebufferDoubleBindColorTexture(readDFBO, a3tex_unit00, 0);
-		a3vertexDrawableRenderActive();
-		a3framebufferDoubleSwap((a3_FramebufferDouble *)writeDFBO);
+		//pixelSzInv.x = -a3recip(readDFBO->frameWidth);	// a3realZero;
+		//pixelSzInv.y = +a3recip(readDFBO->frameHeight);
+		//a3shaderUniformSendFloat(a3unif_vec2, currentDemoProgram->uPixelSz, 1, pixelSzInv.v);
+		//writeDFBO = demoState->fbo_dbl_nodepth_4 + 1;
+		//a3framebufferDoubleActivate(writeDFBO);
+		//readDFBO = demoState->fbo_dbl_nodepth_4 + 1;
+		//a3framebufferDoubleBindColorTexture(readDFBO, a3tex_unit00, 0);
+		//a3vertexDrawableRenderActive();
+		//a3framebufferDoubleSwap((a3_FramebufferDouble *)writeDFBO);
 
 
 		// next
-		passIndex = demoStateRenderPass_bloom_bright_8;
+		//passIndex = demoStateRenderPass_bloom_bright_8;
 
-		currentDemoProgram = demoState->prog_drawBrightPass;
-		a3shaderProgramActivate(currentDemoProgram->program);
-		writeDFBO = demoState->fbo_dbl_nodepth_8 + 0;
-		a3framebufferDoubleActivate(writeDFBO);
-		readDFBO = demoState->fbo_dbl_nodepth_4 + 1;
-		a3framebufferDoubleBindColorTexture(readDFBO, a3tex_unit00, 0);
-		a3vertexDrawableRenderActive();
-		a3framebufferDoubleSwap((a3_FramebufferDouble *)writeDFBO);
-
-
-		// next
-		passIndex = demoStateRenderPass_bloom_blurH_8;
-
-		currentDemoProgram = demoState->prog_drawBlurGaussian;
-		a3shaderProgramActivate(currentDemoProgram->program);
-		pixelSzInv.x = +a3recip(readDFBO->frameWidth);
-		pixelSzInv.y = +a3recip(readDFBO->frameHeight);	// a3realZero;
-		a3shaderUniformSendFloat(a3unif_vec2, currentDemoProgram->uPixelSz, 1, pixelSzInv.v);
-		writeDFBO = demoState->fbo_dbl_nodepth_8 + 1;
-		a3framebufferDoubleActivate(writeDFBO);
-		readDFBO = demoState->fbo_dbl_nodepth_8 + 0;
-		a3framebufferDoubleBindColorTexture(readDFBO, a3tex_unit00, 0);
-		a3vertexDrawableRenderActive();
-		a3framebufferDoubleSwap((a3_FramebufferDouble *)writeDFBO);
+		//currentDemoProgram = demoState->prog_drawBrightPass;
+		//a3shaderProgramActivate(currentDemoProgram->program);
+		//writeDFBO = demoState->fbo_dbl_nodepth_8 + 0;
+		//a3framebufferDoubleActivate(writeDFBO);
+		//readDFBO = demoState->fbo_dbl_nodepth_4 + 1;
+		//a3framebufferDoubleBindColorTexture(readDFBO, a3tex_unit00, 0);
+		//a3vertexDrawableRenderActive();
+		//a3framebufferDoubleSwap((a3_FramebufferDouble *)writeDFBO);
 
 
 		// next
-		passIndex = demoStateRenderPass_bloom_blurV_8;
+		//passIndex = demoStateRenderPass_bloom_blurH_8;
+
+		//currentDemoProgram = demoState->prog_drawBlurGaussian;
+		//a3shaderProgramActivate(currentDemoProgram->program);
+		//pixelSzInv.x = +a3recip(readDFBO->frameWidth);
+		//pixelSzInv.y = +a3recip(readDFBO->frameHeight);	// a3realZero;
+		//a3shaderUniformSendFloat(a3unif_vec2, currentDemoProgram->uPixelSz, 1, pixelSzInv.v);
+		//writeDFBO = demoState->fbo_dbl_nodepth_8 + 1;
+		//a3framebufferDoubleActivate(writeDFBO);
+		//readDFBO = demoState->fbo_dbl_nodepth_8 + 0;
+		//a3framebufferDoubleBindColorTexture(readDFBO, a3tex_unit00, 0);
+		//a3vertexDrawableRenderActive();
+		//a3framebufferDoubleSwap((a3_FramebufferDouble *)writeDFBO);
+
+
+		// next
+		//passIndex = demoStateRenderPass_bloom_blurV_8;
 
 		//	currentDemoProgram = demoState->prog_drawBlurGaussian;
 		//	a3shaderProgramActivate(currentDemoProgram->program);
-		pixelSzInv.x = -a3recip(readDFBO->frameWidth);	// a3realZero;
-		pixelSzInv.y = +a3recip(readDFBO->frameHeight);
-		a3shaderUniformSendFloat(a3unif_vec2, currentDemoProgram->uPixelSz, 1, pixelSzInv.v);
-		writeDFBO = demoState->fbo_dbl_nodepth_8 + 1;
-		a3framebufferDoubleActivate(writeDFBO);
-		readDFBO = demoState->fbo_dbl_nodepth_8 + 1;
-		a3framebufferDoubleBindColorTexture(readDFBO, a3tex_unit00, 0);
-		a3vertexDrawableRenderActive();
-		a3framebufferDoubleSwap((a3_FramebufferDouble *)writeDFBO);
+		//pixelSzInv.x = -a3recip(readDFBO->frameWidth);	// a3realZero;
+		//pixelSzInv.y = +a3recip(readDFBO->frameHeight);
+		//a3shaderUniformSendFloat(a3unif_vec2, currentDemoProgram->uPixelSz, 1, pixelSzInv.v);
+		//writeDFBO = demoState->fbo_dbl_nodepth_8 + 1;
+		//a3framebufferDoubleActivate(writeDFBO);
+		//readDFBO = demoState->fbo_dbl_nodepth_8 + 1;
+		//a3framebufferDoubleBindColorTexture(readDFBO, a3tex_unit00, 0);
+		//a3vertexDrawableRenderActive();
+		//a3framebufferDoubleSwap((a3_FramebufferDouble *)writeDFBO);
 
 
 		// final
-		passIndex = demoStateRenderPass_bloom_blend;
+		//passIndex = demoStateRenderPass_bloom_blend;
 
-		currentDemoProgram = demoState->prog_drawBlendComposite;
-		a3shaderProgramActivate(currentDemoProgram->program);
-		writeDFBO = demoState->fbo_dbl_nodepth + 1;
-		a3framebufferDoubleActivate(writeDFBO);
+		//currentDemoProgram = demoState->prog_drawBlendComposite;
+		//a3shaderProgramActivate(currentDemoProgram->program);
+		//writeDFBO = demoState->fbo_dbl_nodepth + 1;
+		//a3framebufferDoubleActivate(writeDFBO);
 
 		// final pass has multiple texture inputs: 
 		//	composited scene, half blur, quarter blur, eighth blur
 		//	(need to check which "notebooks" contain the correct "pages")
-		readDFBO = demoState->fbo_dbl_nodepth + 1;
-		a3framebufferDoubleBindColorTexture(readDFBO, a3tex_unit00, 0);
-		readDFBO = demoState->fbo_dbl_nodepth_2 + 1;
-		a3framebufferDoubleBindColorTexture(readDFBO, a3tex_unit01, 0);
-		readDFBO = demoState->fbo_dbl_nodepth_4 + 1;
-		a3framebufferDoubleBindColorTexture(readDFBO, a3tex_unit02, 0);
-		readDFBO = demoState->fbo_dbl_nodepth_8 + 1;
-		a3framebufferDoubleBindColorTexture(readDFBO, a3tex_unit03, 0);
+		//readDFBO = demoState->fbo_dbl_nodepth + 1;
+		//a3framebufferDoubleBindColorTexture(readDFBO, a3tex_unit00, 0);
+		//readDFBO = demoState->fbo_dbl_nodepth_2 + 1;
+		//a3framebufferDoubleBindColorTexture(readDFBO, a3tex_unit01, 0);
+		//readDFBO = demoState->fbo_dbl_nodepth_4 + 1;
+		//a3framebufferDoubleBindColorTexture(readDFBO, a3tex_unit02, 0);
+		//readDFBO = demoState->fbo_dbl_nodepth_8 + 1;
+		//a3framebufferDoubleBindColorTexture(readDFBO, a3tex_unit03, 0);
 
 		// draw and swap
-		a3vertexDrawableRenderActive();
-		a3framebufferDoubleSwap((a3_FramebufferDouble *)writeDFBO);
+		//a3vertexDrawableRenderActive();
+		//a3framebufferDoubleSwap((a3_FramebufferDouble *)writeDFBO);
 	}
 
 	//-------------------------------------------------------------------------

@@ -26,27 +26,68 @@ plagiarism-checking service, which may retain a copy of the project on its datab
 //	1) declare varyings (attribute data) to receive from vertex shader
 //	2) declare g-buffer render targets
 //	3) pack attribute data into outputs
+const int MAX_LIGHTS = 10;
 
 layout(location = 0) out vec4 rtFragColor; //position // (2)
 layout(location = 1) out vec4 rtFragColor1; //normal
 layout(location = 2) out vec4 rtFragColor2; //texcoord
 
 
+//Diffuse Texture
+uniform sampler2D uTex_dm; //(2)
+//Specular Texture
+uniform sampler2D uTex_sm;
+//Ramp Diffuse Texture
+uniform sampler2D uTex_dm_ramp;
+//Ramp Specular Texture
+uniform sampler2D uTex_sm_ramp;
+
+uniform int uLightCt; //(8)
+uniform vec4  uLightPos[MAX_LIGHTS]; //position
+uniform vec4  uLightCol[MAX_LIGHTS]; //intensity aka color
+uniform float uLightSz[MAX_LIGHTS]; //attenuation
+
 in vPassDataBlock
 {
 	vec4 vPassPosition;
-	vec4 vPassNormal;
-
-
-	vec4 vPassTexcoord;
+	vec3 vPassNormal;
+	vec2 vPassTexcoord;
 
 } vPassData;
 
 void main()
 {
-	//zac
-	//Passing in the variables to the FSQ
-	rtFragColor = vPassData.vPassPosition;
-	rtFragColor1 = normalize(vPassData.vPassNormal);
-	rtFragColor2 = vPassData.vPassTexcoord;
+	vec4 DiffuseTex = texture(uTex_dm, vPassData.vPassTexcoord);
+	vec4 SpecularTex = texture(uTex_sm, vPassData.vPassTexcoord);
+
+
+	vec3 returnColor;
+	vec4 lightDiffuse;
+	for (int i = 0; i < uLightCt; i++)
+	{
+		vec3 N = normalize(vPassData.vPassNormal);
+		vec3 L = normalize(uLightPos[i].xyz - vPassData.vPassPosition.xyz);
+		vec3 V = normalize(-vPassData.vPassPosition.xyz);
+		vec3 R = reflect(-L, N);
+	
+
+		float diffuseRamp = max(dot(N, L) * 0.5 + 0.5, 0.0f);
+		diffuseRamp = texture(uTex_dm_ramp, vec2(diffuseRamp, 0.0)).x;
+		vec3 diffuse = diffuseRamp *  uLightCol[i].xyz * DiffuseTex.xyz;
+		
+
+		float specularRamp = pow(max(dot(R, V) * 0.5 + 0.5, 0.0f), 1.0);
+		specularRamp = texture(uTex_sm_ramp, vec2(specularRamp, 0.0)).x;	
+		vec3 specular = specularRamp *  uLightCol[i].xyz* SpecularTex.xyz;
+
+
+		float distanceToLight = length(uLightPos[i] - vPassData.vPassPosition); 
+		float attenuation = 1.0 / (1.0 + uLightSz[i] * pow(distanceToLight, 2));
+
+		returnColor += attenuation * (diffuse + specular);
+
+	}
+	
+	rtFragColor = vec4(returnColor, 1.0);
+
 }

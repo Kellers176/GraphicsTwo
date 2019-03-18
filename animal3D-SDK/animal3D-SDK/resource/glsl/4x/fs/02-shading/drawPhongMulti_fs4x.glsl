@@ -80,8 +80,8 @@ in vPassDataBlock //(1)
 
 void main()
 {
-	DiffuseTex = texture(uTex_dm, vPassData.vPassTexcoord);
-	SpecularTex = texture(uTex_sm, vPassData.vPassTexcoord);
+	vec4 DiffuseTex = texture(uTex_dm, vPassData.vPassTexcoord);
+	vec4 SpecularTex = texture(uTex_sm, vPassData.vPassTexcoord);
 
 	//Kelly worked on the for loop while zac and kelly worked on getting the algorithm working
 	/*This for loop works through each light that is passed by the uniforms. This then calculates the and normalizes
