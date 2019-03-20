@@ -36,25 +36,26 @@ plagiarism-checking service, which may retain a copy of the project on its datab
 layout (location = 0) in vec4 aPosition;
 layout(location = 8) in vec2 aTexcoord; // (3) in a3_VertexDescriptor.h
 
-//(1)
-#define max_lights 1024
-uniform ubTransformMVP{
-	mat4 uMVP[max_lights];
-};
-uniform ubTransformMVPB{
-	mat4 uMVPB[max_lights];
-};
 
-out vec4 vPassBiasClipCoord;	//(2)
-flat out int vPassInstanceID;		//(2)
 
+uniform mat4 uMVP;
+//uniform mat4 uP;
+
+out vPassDataBlock
+{
+	vec4 vPassPosition;
+	vec4 vPassNormal;
+
+
+	vec4 vPassTexcoord;
+
+} vPassData;
 
 void main()
 {
-	//get the unit ID and pass it to the fragment shader
-	int i = gl_InstanceID;
-	vPassInstanceID = i; // (3)
-	//get the position in the scene and pass that
-	vPassBiasClipCoord = uMVPB[i] * aPosition; // (3,4)
-	gl_Position = uMVP[i] * aPosition; //(3,4)
+
+	vPassData.vPassTexcoord = vec4(aTexcoord, 0.0, 1.0);
+
+	
+	gl_Position = uMVP * aPosition; 
 }

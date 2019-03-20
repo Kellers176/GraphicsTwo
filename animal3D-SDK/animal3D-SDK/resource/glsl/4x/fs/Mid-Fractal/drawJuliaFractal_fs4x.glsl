@@ -31,24 +31,64 @@ layout(location = 0) out vec4 rtFragColor; //position // (2)
 layout(location = 1) out vec4 rtFragColor1; //normal
 layout(location = 2) out vec4 rtFragColor2; //texcoord
 
+const int max_iter = 400;
+
+uniform vec2 uComplexNumber;
+uniform vec2 uCenter;
+uniform double uScale;
+uniform double uTime;
+
+uniform sampler2D uTex_julia_ramp;
 
 in vPassDataBlock
 {
 	vec4 vPassPosition;
-	vec4 vPassNormal;
+	vec3 vPassNormal;
 
 
-	vec4 vPassTexcoord;
+	vec2 vPassTexcoord;
 
 } vPassData;
 
 void main()
 {
-	//zac
-	//Passing in the variables to the FSQ
-	//rtFragColor = vPassData.vPassPosition;
-	//rtFragColor1 = normalize(vPassData.vPassNormal);
-	//rtFragColor2 = vPassData.vPassTexcoord;
-	rtFragColor = vec4(0.0, 1.0, 0.0, 1.0);
+	
+	vec2 center = uCenter;
+	double scale = 1.0;
+
+	//vec2 complexNumber = vec2(-1.4793,0.002);
+	//vec2 complexNumber = vec2(0.365,0.36);
+	vec2 complexNumber =uComplexNumber;
+
+	vec2 c = (complexNumber * float(scale)) + center;
+
+	int iter = 0;
+	const float threshold_squared = 8.0f;
+	vec2 z;
+	z = vPassData.vPassTexcoord.xy  + vec2(-0.500, -0.500);
+
+	while(iter < max_iter && dot(z,z) < threshold_squared)
+	{
+		vec2 z_squared;
+		z_squared.x = (z.x * z.x - z.y * z.y);//+ scale;
+		z_squared.y = (2.0 * z.x *z.y);// + scale;
+		z = z_squared + c;
+		iter++;
+			
+	}
+
+	if(iter == max_iter)
+	{
+		rtFragColor = vec4(0.0, 0.5, 0.5, 1.0);	
+	}
+	else
+	{
+		rtFragColor = texture2D(uTex_julia_ramp, vec2(float(iter) / float(max_iter)));
+	}
+
+
+	//rtFragColor = vec4(float(uScale), 0.0, 0.0, 1.0);
+	//rtFragColor = vec4(sin(float(uTime)), 0.0, 0.0, 1.0);
+	
 
 }

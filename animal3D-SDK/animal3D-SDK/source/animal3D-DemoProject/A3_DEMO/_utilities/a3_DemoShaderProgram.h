@@ -48,7 +48,7 @@ extern "C"
 	// maximum number of uniforms in a program
 	enum a3_DemoShaderProgramMaxCounts
 	{
-		demoStateMaxCount_shaderProgramUniform = 32,
+		demoStateMaxCount_shaderProgramUniform = 35,
 		demoStateMaxCount_shaderProgramUniformBlock = 4,
 	};
 
@@ -101,6 +101,7 @@ extern "C"
 					uTex_nm,					// named texture handle for normal map
 					uTex_hm,					// named texture handle for height map
 					uTex_dm_ramp,				// named texture handle for diffuse ramp
+					uTex_julia_ramp,
 					uTex_sm_ramp,				// named texture handle for specular ramp
 					uTex_proj,					// named texture handle for projective texture
 					uTex_shadow;				// named texture handle for shadow map
@@ -112,6 +113,11 @@ extern "C"
 				a3i32
 					// common global uniforms
 					uTime;						// time
+				a3i32
+					// Julia Fractal uniforms
+					uScale,
+					uCenter,
+					uComplexNumber;
 			};
 		};
 

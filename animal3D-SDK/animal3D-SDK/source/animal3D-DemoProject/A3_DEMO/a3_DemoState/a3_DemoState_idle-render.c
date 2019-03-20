@@ -367,6 +367,9 @@ void a3demo_render(const a3_DemoState *demoState)
 	//	- send uniforms
 	//	- draw
 
+	//a3vec2 complexNumber;
+	//a3real2Set(complexNumber.v, 0.365f, 0.36f);
+
 	// support multiple geometry passes
 	for (i = 0, j = 1; i < j; ++i)
 	{
@@ -388,13 +391,21 @@ void a3demo_render(const a3_DemoState *demoState)
 				//else if (demoState->projectiveTexturing)
 				//	currentDemoProgram = demoState->prog_drawPhongMulti_projtex;
 				//else
-				currentDemoProgram = demoState->prog_drawCel;
+				//currentDemoProgram = demoState->prog_drawCel;
+				currentDemoProgram = demoState->prog_drawJuliaFractal;
 				a3shaderProgramActivate(currentDemoProgram->program);
 
 				// send shared data: 
 				//	- projection matrix
 				//	- light data
 				//	- activate shared textures including atlases if using
+				a3shaderUniformSendFloat(a3unif_vec2, currentDemoProgram->uComplexNumber, 1, demoState->complexNumber.v);
+				//a3shaderUniformSendFloat(a3unif_single, currentDemoProgram->uScale, 1, &demoState->scaleNumber);
+				a3shaderUniformSendDouble(a3unif_single, currentDemoProgram->uScale, 1, &demoState->scaleNumber);
+				a3shaderUniformSendDouble(a3unif_single, currentDemoProgram->uTime, 1, &demoState->renderTimer->totalTime);
+
+
+				a3shaderUniformSendFloat(a3unif_vec2, currentDemoProgram->uCenter, 1, demoState->centerNumber.v);
 				a3shaderUniformSendFloatMat(a3unif_mat4, 0, currentDemoProgram->uP, 1, camera->projectionMat.mm);
 				a3shaderUniformSendInt(a3unif_single, currentDemoProgram->uLightCt, 1, &demoState->forwardLightCount);
 				a3shaderUniformSendFloat(a3unif_vec4, currentDemoProgram->uLightPos, demoState->forwardLightCount, lightPos_eye->v);
@@ -402,6 +413,7 @@ void a3demo_render(const a3_DemoState *demoState)
 				a3shaderUniformSendFloat(a3unif_single, currentDemoProgram->uLightSz, demoState->forwardLightCount, lightSz);
 				a3shaderUniformSendFloat(a3unif_vec4, currentDemoProgram->uColor, 1, skyblue);	// for ambient
 				a3textureActivate(demoState->tex_ramp_dm, a3tex_unit04);
+				a3textureActivate(demoState->tex_ramp_julia, a3tex_unit08);
 				a3textureActivate(demoState->tex_ramp_sm, a3tex_unit05);
 				a3textureActivate(demoState->tex_earth_dm, a3tex_unit06);
 				a3framebufferBindDepthTexture(demoState->fbo_shadowmap, a3tex_unit07);

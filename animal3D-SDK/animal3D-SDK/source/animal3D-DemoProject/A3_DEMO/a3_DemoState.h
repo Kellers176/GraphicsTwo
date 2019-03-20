@@ -202,6 +202,10 @@ extern "C"
 		a3ui32 forwardLightCount;
 		a3ui32 deferredLightCount, deferredLightBlockCount, deferredLightCountPerBlock[demoStateMaxCount_lightVolumeBlock];
 
+		a3vec2 complexNumber;
+		a3vec2 centerNumber;
+		a3f64 scaleNumber;
+
 		// texture atlas transforms
 		union {
 			a3mat4 atlasTransform[4];
@@ -364,6 +368,7 @@ extern "C"
 					tex_mars_dm[1],
 					tex_mars_sm[1],
 					tex_ramp_dm[1],
+					tex_ramp_julia[1],
 					tex_ramp_sm[1],
 					tex_checker[1];
 			};

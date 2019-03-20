@@ -89,5 +89,6 @@ void main()
 	}
 	
 	rtFragColor = vec4(returnColor, 1.0);
+	//rtFragColor = vec4(vPassData.vPassTexcoord.xy, 0.0, 1.0);	
 
 }

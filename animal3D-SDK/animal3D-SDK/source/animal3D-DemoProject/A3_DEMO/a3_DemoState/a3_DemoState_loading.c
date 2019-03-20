@@ -355,13 +355,16 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 		"uColor",
 
 		// named textures
-		"uTex_dm","uTex_sm","uTex_nm","uTex_hm","uTex_dm_ramp","uTex_sm_ramp","uTex_proj","uTex_shadow",
+		"uTex_dm","uTex_sm","uTex_nm","uTex_hm","uTex_dm_ramp", "uTex_julia_ramp","uTex_sm_ramp","uTex_proj","uTex_shadow",
 
 		// generic images
 		"uImage0","uImage1","uImage2","uImage3","uImage4","uImage5","uImage6","uImage7",
 
 		// common global
 		"uTime",
+
+		//Julia fractal
+		"uCenter", "uScale", "uComplexNumber",
 	};
 
 	// list of uniform block names: align with uniform block list in demo struct!
@@ -667,7 +670,7 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 	// julia fractal
 	currentDemoProg = demoState->prog_drawJuliaFractal;
 	a3shaderProgramCreate(currentDemoProg->program, "prog:draw-julia");
-	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.passJuliaFractal_vs->shader);
+	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.passPhongAttribs_transform_vs->shader);
 	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawJuliaFractal_fs->shader);
 
 	// julia post process
@@ -771,6 +774,8 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 			a3shaderUniformSendInt(a3unif_single, uLocation, 1, defaultTexUnits + 6);
 		if ((uLocation = currentDemoProg->uTex_shadow) >= 0)
 			a3shaderUniformSendInt(a3unif_single, uLocation, 1, defaultTexUnits + 7);
+		if ((uLocation = currentDemoProg->uTex_julia_ramp) >= 0)
+			a3shaderUniformSendInt(a3unif_single, uLocation, 1, defaultTexUnits + 8);
 
 		// generic images
 		if ((uLocation = currentDemoProg->uImage0) >= 0)
@@ -793,6 +798,9 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 		// common general
 		if ((uLocation = currentDemoProg->uTime) >= 0)
 			a3shaderUniformSendDouble(a3unif_single, uLocation, 1, defaultDouble);
+
+		if ((uLocation = currentDemoProg->uScale) >= 0)
+			a3shaderUniformSendDouble(a3unif_single, uLocation, 1, defaultDouble + 1);
 
 		// lighting uniform blocks
 		if ((uLocation = currentDemoProg->ubTransformMVP) >= 0)
@@ -851,6 +859,7 @@ void a3demo_loadTextures(a3_DemoState *demoState)
 			a3_DemoStateTexture texMarsDM[1];
 			a3_DemoStateTexture texMarsSM[1];
 			a3_DemoStateTexture texRampDM[1];
+			a3_DemoStateTexture texRampJulia[1];
 			a3_DemoStateTexture texRampSM[1];
 			a3_DemoStateTexture texChecker[1];
 		};
@@ -866,6 +875,7 @@ void a3demo_loadTextures(a3_DemoState *demoState)
 			{ demoState->tex_mars_dm,		"tex:mars-dm",		"../../../../resource/tex/mars/1k/mars_1k_dm.png" },
 			{ demoState->tex_mars_sm,		"tex:mars-sm",		"../../../../resource/tex/mars/1k/mars_1k_sm.png" },
 			{ demoState->tex_ramp_dm,		"tex:ramp-dm",		"../../../../resource/tex/sprite/celRamp_dm.png" },
+			{ demoState->tex_ramp_julia,	"tex:ramp-dm",		"../../../../resource/tex/sprite/juliaRamp.png" },
 			{ demoState->tex_ramp_sm,		"tex:ramp-sm",		"../../../../resource/tex/sprite/celRamp_sm.png" },
 			{ demoState->tex_checker,		"tex:checker",		"../../../../resource/tex/sprite/checker.png" },
 		}
