@@ -670,7 +670,7 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 	// julia fractal
 	currentDemoProg = demoState->prog_drawJuliaFractal;
 	a3shaderProgramCreate(currentDemoProg->program, "prog:draw-julia");
-	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.passPhongAttribs_transform_vs->shader);
+	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.passTexcoord_transform_vs->shader);
 	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawJuliaFractal_fs->shader);
 
 	// julia post process
@@ -966,6 +966,11 @@ void a3demo_loadFramebuffers(a3_DemoState *demoState)
 	a3framebufferCreate(fbo, "fbo:shadowmap", 
 		0, a3fbo_colorDisable, a3fbo_depth24, 
 		shadowMapSz, shadowMapSz);
+
+	fbo = demoState->fbo_fractal;
+	a3framebufferCreate(fbo, "fbo:fractal",
+		0, colorType_scene, depthType_scene,
+		demoState->frameWidth, demoState->frameHeight);
 
 
 	// double framebuffers: 

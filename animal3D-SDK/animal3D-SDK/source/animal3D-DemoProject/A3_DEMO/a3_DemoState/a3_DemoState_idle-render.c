@@ -285,31 +285,49 @@ void a3demo_render(const a3_DemoState *demoState)
 	//		- capture whatever data is needed
 
 	// enter shadow pass (pre-processing pass)
-	passIndex = demoStateRenderPass_shadow;
+	passIndex = demoStateRenderPass_fractal;
 
 	// activate framebuffer ("notebook") for this pass
-	writeFBO = demoState->fbo_shadowmap;
+	//writeFBO = demoState->fbo_shadowmap;
+	writeFBO = demoState->fbo_fractal;
 	a3framebufferActivate(writeFBO);
+
+	//currentDemoProgram = demoState->prog_drawJuliaFractal;
+	//a3shaderProgramActivate(currentDemoProgram->program);
+
 
 	// clear buffers
 	glClear(GL_DEPTH_BUFFER_BIT);
 
 	// shadow mapping: render shadow-casters (inverted helps)
-	currentDemoProgram = demoState->prog_transform;
+	//currentDemoProgram = demoState->prog_transform;
+	//a3shaderProgramActivate(currentDemoProgram->program);
+	currentDemoProgram = demoState->prog_drawJuliaFractal;
 	a3shaderProgramActivate(currentDemoProgram->program);
 
-	glCullFace(GL_FRONT);
-	for (k = 0, currentDrawable = demoState->draw_plane,
-		currentSceneObject = demoState->planeObject, endSceneObject = demoState->teapotObject;
-		currentSceneObject <= endSceneObject;
-		++k, ++currentDrawable, ++currentSceneObject)
-	{
-		// calculate and use projector MVP, save for later (no bias yet)
-		a3real4x4Product(modelViewProjectionBiasMat[k].m, demoState->projectorLight->viewProjectionMat.m, currentSceneObject->modelMat.m);
-		a3shaderUniformSendFloatMat(a3unif_mat4, 0, currentDemoProgram->uMVP, 1, modelViewProjectionBiasMat[k].mm);
-		a3vertexDrawableActivateAndRender(currentDrawable);
-	}
-	glCullFace(GL_BACK);
+	//glCullFace(GL_FRONT);
+	//for (k = 0, currentDrawable = demoState->draw_plane,
+	//	currentSceneObject = demoState->planeObject, endSceneObject = demoState->teapotObject;
+	//	currentSceneObject <= endSceneObject;
+	//	++k, ++currentDrawable, ++currentSceneObject)
+	//{
+	//	// calculate and use projector MVP, save for later (no bias yet)
+	//	//a3real4x4Product(modelViewProjectionBiasMat[k].m, demoState->projectorLight->viewProjectionMat.m, currentSceneObject->modelMat.m);
+	//	//a3shaderUniformSendFloatMat(a3unif_mat4, 0, currentDemoProgram->uMVP, 1, modelViewProjectionBiasMat[k].mm);
+	//	//a3vertexDrawableActivateAndRender(currentDrawable);
+	//}
+	a3shaderUniformSendFloat(a3unif_vec2, currentDemoProgram->uComplexNumber, 1, demoState->complexNumber.v);
+	//a3shaderUniformSendFloat(a3unif_single, currentDemoProgram->uScale, 1, &demoState->scaleNumber);
+	a3shaderUniformSendDouble(a3unif_single, currentDemoProgram->uScale, 1, &demoState->scaleNumber);
+	a3shaderUniformSendDouble(a3unif_single, currentDemoProgram->uTime, 1, &demoState->renderTimer->totalTime);
+	a3shaderUniformSendFloat(a3unif_vec2, currentDemoProgram->uCenter, 1, demoState->centerNumber.v);
+	a3shaderUniformSendFloatMat(a3unif_mat4, 0, currentDemoProgram->uMVP, 1, a3identityMat4.mm);
+	//a3textureActivate(demoState->tex_ramp_dm, a3tex_unit04);
+	a3textureActivate(demoState->tex_ramp_julia, a3tex_unit08);
+
+	currentDrawable = demoState->draw_unitquad;
+	a3vertexDrawableActivateAndRender(currentDrawable);
+	//glCullFace(GL_BACK);
 
 
 	//-------------------------------------------------------------------------
@@ -921,6 +939,9 @@ void a3demo_render(const a3_DemoState *demoState)
 	case demoStateRenderPass_shadow:
 		readFBO = demoState->fbo_shadowmap;
 		break;
+	case demoStateRenderPass_fractal:
+		readFBO = demoState->fbo_fractal;
+		break;
 	}
 
 	// select render texture(s) ("page(s)") to use for display
@@ -929,6 +950,7 @@ void a3demo_render(const a3_DemoState *demoState)
 	{
 		// single framebuffers
 	case demoStateRenderPass_scene:
+	case demoStateRenderPass_fractal:
 	case demoStateRenderPass_shadow:
 		if (readFBO->color && (!readFBO->depthStencil || demoOutput < demoOutputCount - 1))
 			a3framebufferBindColorTexture(readFBO, a3tex_unit00, demoOutput);
@@ -988,9 +1010,9 @@ void a3demo_render(const a3_DemoState *demoState)
 	// camera to use for overlay
 	switch (demoSubMode)
 	{
-	case demoStateRenderPass_shadow:
-		camera = demoState->projectorLight;
-		break;
+	//case demoStateRenderPass_shadow:
+	//	camera = demoState->projectorLight;
+	//	break;
 	default:
 		camera = demoState->sceneCamera;
 		break;

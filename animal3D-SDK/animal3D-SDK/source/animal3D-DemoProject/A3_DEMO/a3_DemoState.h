@@ -121,6 +121,9 @@ extern "C"
 
 		// supplementary
 		demoStateRenderPass_shadow = demoStateMaxSubModes - 1,
+
+		//fractal
+		demoStateRenderPass_fractal,
 	};
 
 	// pipeline modes
@@ -381,6 +384,8 @@ extern "C"
 			struct {
 				a3_Framebuffer
 					fbo_scene[1];					// fbo with color and depth
+				a3_Framebuffer
+					fbo_fractal[1];					// fbo with color and depth
 				a3_Framebuffer
 					fbo_shadowmap[1];				// fbo for shadow map with depth only
 			};
