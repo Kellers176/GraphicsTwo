@@ -120,10 +120,10 @@ extern "C"
 		demoStateRenderPass_bloom_blend,
 
 		// supplementary
-		demoStateRenderPass_shadow = demoStateMaxSubModes - 1,
+		demoStateRenderPass_shadow,
 
 		//fractal
-		demoStateRenderPass_fractal,
+		demoStateRenderPass_fractal = demoStateMaxSubModes - 1,
 	};
 
 	// pipeline modes

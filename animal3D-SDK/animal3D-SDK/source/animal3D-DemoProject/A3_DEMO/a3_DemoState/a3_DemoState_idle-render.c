@@ -429,7 +429,10 @@ void a3demo_render(const a3_DemoState *demoState)
 				a3textureActivate(demoState->tex_ramp_sm, a3tex_unit05);
 				//a3textureActivate(demoState->tex_earth_dm, a3tex_unit06);
 				//a3framebufferBindDepthTexture(demoState->fbo_shadowmap, a3tex_unit07);
-				a3framebufferBindDepthTexture(demoState->fbo_fractal, a3tex_unit06);
+				//a3framebufferBindTexture(demoState->fbo_fractal, a3tex_unit06);
+				a3framebufferBindColorTexture(demoState->fbo_fractal, a3tex_unit06, 0);
+				
+				//a3textureActivate(demoState->)
 
 				// individual object requirements: 
 				//	- modelviewprojection
@@ -1132,6 +1135,7 @@ void a3demo_render_controls(const a3_DemoState *demoState)
 			"Blur pass V 1/8",
 			"Blending (bloom composite)",
 			"Shadow map (supplementary)",
+			"Fractal",
 		},
 	};
 	const a3byte *outputText[demoStateMaxModes][demoStateMaxSubModes][demoStateMaxOutputModes] = {

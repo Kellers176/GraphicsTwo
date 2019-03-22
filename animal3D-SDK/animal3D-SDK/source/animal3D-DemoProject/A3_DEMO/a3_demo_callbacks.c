@@ -391,6 +391,7 @@ A3DYLIBSYMBOL void a3demoCB_keyCharPress(a3_DemoState *demoState, a3i32 asciiKey
 		if (!demoState->previewIntermediatePostProcessing &&
 			demoSubMode > demoStateRenderPass_composite &&
 			demoSubMode < demoStateRenderPass_bloom_blend)
+			//demoState->demoSubMode[demoState->demoMode] = demoStateRenderPass_fractal;
 			demoState->demoSubMode[demoState->demoMode] = demoStateRenderPass_bloom_blend;
 		if (demoState->lightingPipelineMode != demoStatePipelineMode_deferredLighting &&
 			demoSubMode > demoStateRenderPass_scene &&
