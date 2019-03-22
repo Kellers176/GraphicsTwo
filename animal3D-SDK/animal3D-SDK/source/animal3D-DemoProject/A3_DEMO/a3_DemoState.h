@@ -88,7 +88,7 @@ extern "C"
 	enum a3_DemoStateModeCounts
 	{
 		demoStateMaxModes = 1,
-		demoStateMaxSubModes = 14,
+		demoStateMaxSubModes = 15,
 		demoStateMaxOutputModes = 4,
 	};
 

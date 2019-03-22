@@ -305,7 +305,7 @@ void a3demo_render(const a3_DemoState *demoState)
 	currentDemoProgram = demoState->prog_drawJuliaFractal;
 	a3shaderProgramActivate(currentDemoProgram->program);
 
-	//glCullFace(GL_FRONT);
+	glCullFace(GL_FRONT);
 	//for (k = 0, currentDrawable = demoState->draw_plane,
 	//	currentSceneObject = demoState->planeObject, endSceneObject = demoState->teapotObject;
 	//	currentSceneObject <= endSceneObject;
@@ -327,7 +327,7 @@ void a3demo_render(const a3_DemoState *demoState)
 
 	currentDrawable = demoState->draw_unitquad;
 	a3vertexDrawableActivateAndRender(currentDrawable);
-	//glCullFace(GL_BACK);
+	glCullFace(GL_BACK);
 
 
 	//-------------------------------------------------------------------------
@@ -409,21 +409,15 @@ void a3demo_render(const a3_DemoState *demoState)
 				//else if (demoState->projectiveTexturing)
 				//	currentDemoProgram = demoState->prog_drawPhongMulti_projtex;
 				//else
-				//currentDemoProgram = demoState->prog_drawCel;
-				currentDemoProgram = demoState->prog_drawJuliaFractal;
+				currentDemoProgram = demoState->prog_drawCel;
+				//currentDemoProgram = demoState->prog_drawJuliaFractal;
 				a3shaderProgramActivate(currentDemoProgram->program);
 
 				// send shared data: 
 				//	- projection matrix
 				//	- light data
 				//	- activate shared textures including atlases if using
-				a3shaderUniformSendFloat(a3unif_vec2, currentDemoProgram->uComplexNumber, 1, demoState->complexNumber.v);
-				//a3shaderUniformSendFloat(a3unif_single, currentDemoProgram->uScale, 1, &demoState->scaleNumber);
-				a3shaderUniformSendDouble(a3unif_single, currentDemoProgram->uScale, 1, &demoState->scaleNumber);
-				a3shaderUniformSendDouble(a3unif_single, currentDemoProgram->uTime, 1, &demoState->renderTimer->totalTime);
-
-
-				a3shaderUniformSendFloat(a3unif_vec2, currentDemoProgram->uCenter, 1, demoState->centerNumber.v);
+								
 				a3shaderUniformSendFloatMat(a3unif_mat4, 0, currentDemoProgram->uP, 1, camera->projectionMat.mm);
 				a3shaderUniformSendInt(a3unif_single, currentDemoProgram->uLightCt, 1, &demoState->forwardLightCount);
 				a3shaderUniformSendFloat(a3unif_vec4, currentDemoProgram->uLightPos, demoState->forwardLightCount, lightPos_eye->v);
@@ -431,10 +425,11 @@ void a3demo_render(const a3_DemoState *demoState)
 				a3shaderUniformSendFloat(a3unif_single, currentDemoProgram->uLightSz, demoState->forwardLightCount, lightSz);
 				a3shaderUniformSendFloat(a3unif_vec4, currentDemoProgram->uColor, 1, skyblue);	// for ambient
 				a3textureActivate(demoState->tex_ramp_dm, a3tex_unit04);
-				a3textureActivate(demoState->tex_ramp_julia, a3tex_unit08);
+				//a3textureActivate(demoState->tex_ramp_julia, a3tex_unit08);
 				a3textureActivate(demoState->tex_ramp_sm, a3tex_unit05);
-				a3textureActivate(demoState->tex_earth_dm, a3tex_unit06);
-				a3framebufferBindDepthTexture(demoState->fbo_shadowmap, a3tex_unit07);
+				//a3textureActivate(demoState->tex_earth_dm, a3tex_unit06);
+				//a3framebufferBindDepthTexture(demoState->fbo_shadowmap, a3tex_unit07);
+				a3framebufferBindDepthTexture(demoState->fbo_fractal, a3tex_unit06);
 
 				// individual object requirements: 
 				//	- modelviewprojection
@@ -453,7 +448,7 @@ void a3demo_render(const a3_DemoState *demoState)
 					modelViewMat.v3 = a3zeroVec4;
 					a3shaderUniformSendFloatMat(a3unif_mat4, 0, currentDemoProgram->uMV_nrm, 1, modelViewMat.mm);
 					a3real4x4ConcatR(bias.m, modelViewProjectionBiasMat[k].m);
-					a3shaderUniformSendFloatMat(a3unif_mat4, 0, currentDemoProgram->uMVPB_proj, 1, modelViewProjectionBiasMat[k].mm);
+					//a3shaderUniformSendFloatMat(a3unif_mat4, 0, currentDemoProgram->uMVPB_proj, 1, modelViewProjectionBiasMat[k].mm);
 
 					// activate textures
 					a3textureActivate(tex_dm[k], a3tex_unit00);
@@ -514,51 +509,51 @@ void a3demo_render(const a3_DemoState *demoState)
 	//-------------------------------------------------------------------------
 	// 1B) LIGHTING PRE-PASS: render light volumes to do deferred lighting
 
-	if (demoState->lightingPipelineMode == demoStatePipelineMode_deferredLighting)
-	{
-		passIndex = demoStateRenderPass_deferred_volumes;
-
-		// draw to appropriate fbo or double fbo
-		writeDFBO = demoState->fbo_dbl_nodepth + 0;
-		a3framebufferDoubleActivate(writeDFBO);
-
-		// clear
-		glClear(GL_COLOR_BUFFER_BIT);
-
-		// use additive blending so lighting accumulates realistically
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_ONE, GL_ONE);
-
-		// reverse culling
-		glCullFace(GL_FRONT);
-
-		// read g-buffers from scene pass
-		readFBO = demoState->fbo_scene;
-		a3framebufferBindColorTexture(readFBO, a3tex_unit04, 0);	// position output
-		a3framebufferBindColorTexture(readFBO, a3tex_unit05, 1);	// normal output
-		a3framebufferBindDepthTexture(readFBO, a3tex_unit07);		// depth buffer
-		a3shaderUniformSendFloatMat(a3unif_mat4, 0, currentDemoProgram->uP_inv, 1, camera->projectionMatInv.mm);
-
-		// draw volumes, instanced; update and upload lighting data		// activate program
-		currentDemoProgram = demoState->prog_drawPhong_volume;
-		a3shaderProgramActivate(currentDemoProgram->program);
-		currentDrawable = demoState->draw_pointlight;
-		a3vertexDrawableActivate(currentDrawable);
-		for (i = 0; i < demoState->deferredLightBlockCount; ++i)
-		{
-			// render light volumes
-			a3shaderUniformBufferActivate(demoState->ubo_transformMVP + i, 0);
-			a3shaderUniformBufferActivate(demoState->ubo_transformMVPB + i, 1);
-			a3shaderUniformBufferActivate(demoState->ubo_pointLight + i, 2);
-			a3vertexDrawableRenderActiveInstanced(demoState->deferredLightCountPerBlock[i]);
-		}
-
-		// revert culling
-		glCullFace(GL_BACK);
-
-		// end pass
-		a3framebufferDoubleSwap((a3_FramebufferDouble *)writeDFBO);
-	}
+	//if (demoState->lightingPipelineMode == demoStatePipelineMode_deferredLighting)
+	//{
+	//	passIndex = demoStateRenderPass_deferred_volumes;
+	//
+	//	// draw to appropriate fbo or double fbo
+	//	writeDFBO = demoState->fbo_dbl_nodepth + 0;
+	//	a3framebufferDoubleActivate(writeDFBO);
+	//
+	//	// clear
+	//	glClear(GL_COLOR_BUFFER_BIT);
+	//
+	//	// use additive blending so lighting accumulates realistically
+	//	glEnable(GL_BLEND);
+	//	glBlendFunc(GL_ONE, GL_ONE);
+	//
+	//	// reverse culling
+	//	glCullFace(GL_FRONT);
+	//
+	//	// read g-buffers from scene pass
+	//	readFBO = demoState->fbo_scene;
+	//	a3framebufferBindColorTexture(readFBO, a3tex_unit04, 0);	// position output
+	//	a3framebufferBindColorTexture(readFBO, a3tex_unit05, 1);	// normal output
+	//	a3framebufferBindDepthTexture(readFBO, a3tex_unit07);		// depth buffer
+	//	a3shaderUniformSendFloatMat(a3unif_mat4, 0, currentDemoProgram->uP_inv, 1, camera->projectionMatInv.mm);
+	//
+	//	// draw volumes, instanced; update and upload lighting data		// activate program
+	//	currentDemoProgram = demoState->prog_drawPhong_volume;
+	//	a3shaderProgramActivate(currentDemoProgram->program);
+	//	currentDrawable = demoState->draw_pointlight;
+	//	a3vertexDrawableActivate(currentDrawable);
+	//	for (i = 0; i < demoState->deferredLightBlockCount; ++i)
+	//	{
+	//		// render light volumes
+	//		a3shaderUniformBufferActivate(demoState->ubo_transformMVP + i, 0);
+	//		a3shaderUniformBufferActivate(demoState->ubo_transformMVPB + i, 1);
+	//		a3shaderUniformBufferActivate(demoState->ubo_pointLight + i, 2);
+	//		a3vertexDrawableRenderActiveInstanced(demoState->deferredLightCountPerBlock[i]);
+	//	}
+	//
+	//	// revert culling
+	//	glCullFace(GL_BACK);
+	//
+	//	// end pass
+	//	a3framebufferDoubleSwap((a3_FramebufferDouble *)writeDFBO);
+	//}
 
 
 	//-------------------------------------------------------------------------
@@ -652,19 +647,19 @@ void a3demo_render(const a3_DemoState *demoState)
 		break;
 
 		// deferred lighting: composite
-	case demoStatePipelineMode_deferredLighting:
-		// bind atlases and result of light pre-pass
-		readDFBO = demoState->fbo_dbl_nodepth + 0;
-		readFBO = demoState->fbo_scene;
-		a3textureActivate(demoState->tex_atlas_dm, a3tex_unit00);		// diffuse atlas
-		a3textureActivate(demoState->tex_atlas_sm, a3tex_unit01);		// specular atlas
-		a3framebufferDoubleBindColorTexture(readDFBO, a3tex_unit04, 0);	// diffuse output (lights)
-		a3framebufferDoubleBindColorTexture(readDFBO, a3tex_unit05, 1);	// specular output (lights)
-		a3framebufferBindColorTexture(readFBO, a3tex_unit06, 2);		// texcoord output (scene)
-
-		// send lighting data
-		a3shaderUniformSendFloat(a3unif_vec4, currentDemoProgram->uColor, 1, skyblue);	// for ambient
-		break;
+	//case demoStatePipelineMode_deferredLighting:
+	//	// bind atlases and result of light pre-pass
+	//	readDFBO = demoState->fbo_dbl_nodepth + 0;
+	//	readFBO = demoState->fbo_scene;
+	//	a3textureActivate(demoState->tex_atlas_dm, a3tex_unit00);		// diffuse atlas
+	//	a3textureActivate(demoState->tex_atlas_sm, a3tex_unit01);		// specular atlas
+	//	a3framebufferDoubleBindColorTexture(readDFBO, a3tex_unit04, 0);	// diffuse output (lights)
+	//	a3framebufferDoubleBindColorTexture(readDFBO, a3tex_unit05, 1);	// specular output (lights)
+	//	a3framebufferBindColorTexture(readFBO, a3tex_unit06, 2);		// texcoord output (scene)
+	//
+	//	// send lighting data
+	//	a3shaderUniformSendFloat(a3unif_vec4, currentDemoProgram->uColor, 1, skyblue);	// for ambient
+	//	break;
 	}
 
 	// start using unit quad as FSQ drawable

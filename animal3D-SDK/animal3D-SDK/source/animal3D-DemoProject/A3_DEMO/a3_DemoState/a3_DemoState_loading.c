@@ -969,7 +969,7 @@ void a3demo_loadFramebuffers(a3_DemoState *demoState)
 
 	fbo = demoState->fbo_fractal;
 	a3framebufferCreate(fbo, "fbo:fractal",
-		0, colorType_scene, depthType_scene,
+		1, colorType_scene, 0,
 		demoState->frameWidth, demoState->frameHeight);
 
 
