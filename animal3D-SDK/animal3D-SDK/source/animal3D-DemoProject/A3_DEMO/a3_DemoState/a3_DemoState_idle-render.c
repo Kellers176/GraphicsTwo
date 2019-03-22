@@ -305,7 +305,7 @@ void a3demo_render(const a3_DemoState *demoState)
 	currentDemoProgram = demoState->prog_drawJuliaFractal;
 	a3shaderProgramActivate(currentDemoProgram->program);
 
-	glCullFace(GL_FRONT);
+	//glCullFace(GL_FRONT);
 	//for (k = 0, currentDrawable = demoState->draw_plane,
 	//	currentSceneObject = demoState->planeObject, endSceneObject = demoState->teapotObject;
 	//	currentSceneObject <= endSceneObject;
@@ -327,7 +327,7 @@ void a3demo_render(const a3_DemoState *demoState)
 
 	currentDrawable = demoState->draw_unitquad;
 	a3vertexDrawableActivateAndRender(currentDrawable);
-	glCullFace(GL_BACK);
+	//glCullFace(GL_BACK);
 
 
 	//-------------------------------------------------------------------------
@@ -432,6 +432,7 @@ void a3demo_render(const a3_DemoState *demoState)
 				//a3framebufferBindTexture(demoState->fbo_fractal, a3tex_unit06);
 				a3framebufferBindColorTexture(demoState->fbo_fractal, a3tex_unit06, 0);
 				
+
 				//a3textureActivate(demoState->)
 
 				// individual object requirements: 

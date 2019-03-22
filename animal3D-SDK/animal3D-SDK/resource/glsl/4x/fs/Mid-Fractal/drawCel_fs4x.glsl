@@ -35,7 +35,7 @@ layout(location = 0) out vec4 rtFragColor; //position // (2)
 
 //Diffuse Texture
 uniform sampler2D uTex_dm; //(2)
-uniform sampler2D uImage;
+uniform sampler2D uImage6;
 //Specular Texture
 uniform sampler2D uTex_sm;
 //Ramp Diffuse Texture
@@ -58,6 +58,7 @@ in vPassDataBlock
 
 void main()
 {
+	vec4 FractalTex = texture(uImage6, vPassData.vPassTexcoord);
 	vec4 DiffuseTex = texture(uTex_dm, vPassData.vPassTexcoord);
 	vec4 SpecularTex = texture(uTex_sm, vPassData.vPassTexcoord);
 
@@ -89,7 +90,8 @@ void main()
 
 	}
 	
-	rtFragColor = vec4(returnColor, 1.0);
+	rtFragColor = vec4(returnColor + FractalTex.xyz, 1.0);
 	//rtFragColor = vec4(vPassData.vPassTexcoord.xy, 0.0, 1.0);	
+	//rtFragColor = texture(uImage6, vPassData.vPassTexcoord);	
 
 }

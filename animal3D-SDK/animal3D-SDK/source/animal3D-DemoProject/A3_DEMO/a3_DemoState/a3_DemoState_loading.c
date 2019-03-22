@@ -970,7 +970,7 @@ void a3demo_loadFramebuffers(a3_DemoState *demoState)
 	fbo = demoState->fbo_fractal;
 	a3framebufferCreate(fbo, "fbo:fractal",
 		1, colorType_scene, 0,
-		demoState->frameWidth, demoState->frameHeight);
+		shadowMapSz, shadowMapSz);
 
 
 	// double framebuffers: 
