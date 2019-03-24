@@ -123,7 +123,7 @@ extern "C"
 		demoStateRenderPass_shadow,
 
 		//fractal
-		demoStateRenderPass_fractal = demoStateMaxSubModes - 1,
+		demoStateRenderPass_fractal,
 	};
 
 	// pipeline modes

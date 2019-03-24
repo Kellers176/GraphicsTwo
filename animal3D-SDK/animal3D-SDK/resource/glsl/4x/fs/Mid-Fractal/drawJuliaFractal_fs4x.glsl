@@ -40,15 +40,9 @@ uniform double uTime;
 
 uniform sampler2D uTex_julia_ramp;
 
-//in vPassDataBlock
-//{
-	//vec4 vPassPosition;
-	//vec3 vPassNormal;
-
 
 in vec2 vPassTexCoord;
 
-//} vPassData;
 
 void main()
 {
@@ -56,9 +50,8 @@ void main()
 	vec2 center = uCenter;
 	double scale = 1.0;
 
-	//vec2 complexNumber = vec2(-1.4793,0.002);
-	//vec2 complexNumber = vec2(0.365,0.36);
-	vec2 complexNumber =uComplexNumber;
+	//get the complex number from the uniform
+	vec2 complexNumber = uComplexNumber;
 
 	vec2 c = (complexNumber * float(scale)) + center;
 
@@ -67,6 +60,8 @@ void main()
 	vec2 z;
 	z = vPassTexCoord.xy  + vec2(-0.500, -0.500);
 
+	//used the books algorithm to help with this
+	//iterate through and assign different values for the square of the z
 	while(iter < max_iter && dot(z,z) < threshold_squared)
 	{
 		vec2 z_squared;
@@ -76,19 +71,15 @@ void main()
 		iter++;
 			
 	}
-
+	//if we are at the max, output a color
 	if(iter == max_iter)
 	{
 		rtFragColor = vec4(0.0, 0.5, 0.5, 1.0);	
 	}
+	//output the ramp that we have
 	else
 	{
 		rtFragColor = texture2D(uTex_julia_ramp, vec2(float(iter) / float(max_iter)));
-	}
-
-
-	//rtFragColor = vec4(float(uScale), 0.0, 0.0, 1.0);
-	//rtFragColor = vec4(sin(float(uTime)), 0.0, 0.0, 1.0);
-	
+	}	
 
 }

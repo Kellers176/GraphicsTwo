@@ -1,6 +1,6 @@
 /*
 	Copyright 2011-2019 Daniel S. Buckstein
-
+	“This file was modified by Kelly Herstine and Zachary Taylor with permission of the author.”
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
 	You may obtain a copy of the License at
@@ -711,7 +711,7 @@ void a3demo_render(const a3_DemoState *demoState)
 
 		// select post-processing program
 		//	(if you have uniforms to send, send 'em!)
-		currentDemoProgram = demoState->prog_drawJuliaPostProcess;
+		currentDemoProgram = demoState->prog_drawBlendComposite;
 		a3shaderProgramActivate(currentDemoProgram->program);
 
 		// activate post-processing framebuffer
@@ -974,7 +974,7 @@ void a3demo_render(const a3_DemoState *demoState)
 
 	
 	// final display: activate desired final program and draw FSQ
-	if (demoState->additionalPostProcessing && demoSubMode != demoStateRenderPass_shadow)
+	if (demoState->additionalPostProcessing) // && demoSubMode != demoStateRenderPass_shadow
 	{
 		// bind appropriate framebuffer textures
 		readFBO = demoState->fbo_scene;
@@ -982,7 +982,8 @@ void a3demo_render(const a3_DemoState *demoState)
 		a3framebufferBindDepthTexture(readFBO, a3tex_unit07);
 
 		// activate additional post-processing program
-		currentDemoProgram = demoState->prog_drawCustom_post;
+		//currentDemoProgram = demoState->prog_drawCustom_post;
+		currentDemoProgram = demoState->prog_drawJuliaPostProcess;
 		a3shaderProgramActivate(currentDemoProgram->program);
 
 		// send uniforms

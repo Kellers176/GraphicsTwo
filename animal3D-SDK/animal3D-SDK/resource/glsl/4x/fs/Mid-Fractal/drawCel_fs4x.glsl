@@ -58,6 +58,9 @@ in vPassDataBlock
 
 void main()
 {
+
+	//use phong lighting from previous assignment
+	//add the fractal that we create in the drawJuliaFractal fragment shader
 	vec4 FractalTex = texture(uImage6, vPassData.vPassTexcoord);
 	vec4 DiffuseTex = texture(uTex_dm, vPassData.vPassTexcoord);
 	vec4 SpecularTex = texture(uTex_sm, vPassData.vPassTexcoord);
@@ -72,12 +75,12 @@ void main()
 		vec3 V = normalize(-vPassData.vPassPosition.xyz);
 		vec3 R = reflect(-L, N);
 	
-
+		//assign the diffuse ramp using the ramp texture that we created
 		float diffuseRamp = max(dot(N, L) * 0.5 + 0.5, 0.0f);
 		diffuseRamp = texture(uTex_dm_ramp, vec2(diffuseRamp, 0.0)).x;
 		vec3 diffuse = diffuseRamp *  uLightCol[i].xyz * DiffuseTex.xyz;
 		
-
+		//assign the specular ramp using the ramp texture that we created
 		float specularRamp = pow(max(dot(R, V) * 0.5 + 0.5, 0.0f), 1.0);
 		specularRamp = texture(uTex_sm_ramp, vec2(specularRamp, 0.0)).x;	
 		vec3 specular = specularRamp *  uLightCol[i].xyz* SpecularTex.xyz;
@@ -86,12 +89,11 @@ void main()
 		float distanceToLight = length(uLightPos[i] - vPassData.vPassPosition); 
 		float attenuation = 1.0 / (1.0 + uLightSz[i] * pow(distanceToLight, 2));
 
+		//add all values at the end to get cel shading
 		returnColor += attenuation * (diffuse + specular);
 
 	}
-	
+	//add the fractal to the cell shading
 	rtFragColor = vec4(returnColor + FractalTex.xyz, 1.0);
-	//rtFragColor = vec4(vPassData.vPassTexcoord.xy, 0.0, 1.0);	
-	//rtFragColor = texture(uImage6, vPassData.vPassTexcoord);	
 
 }

@@ -1,5 +1,6 @@
 /*
 	Copyright 2011-2019 Daniel S. Buckstein
+	“This file was modified by Kelly Herstine and Zachary Taylor with permission of the author.”
 
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
@@ -676,7 +677,7 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 	// julia post process
 	currentDemoProg = demoState->prog_drawJuliaPostProcess;
 	a3shaderProgramCreate(currentDemoProg->program, "prog:draw-julia-post-process");
-	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.passBiasClipCoord_transform_instanced_vs->shader);
+	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.passTexcoord_transform_vs->shader);
 	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawJuliaPostProcessing_fs->shader);
 
 	// activate a primitive for validation
