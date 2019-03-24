@@ -28,8 +28,6 @@ plagiarism-checking service, which may retain a copy of the project on its datab
 //	3) pack attribute data into outputs
 
 layout(location = 0) out vec4 rtFragColor; //position // (2)
-//layout(location = 1) out vec4 rtFragColor1; //normal
-//layout(location = 2) out vec4 rtFragColor2; //texcoord
 
 const int max_iter = 400;
 
@@ -43,7 +41,8 @@ uniform sampler2D uTex_julia_ramp;
 
 in vec2 vPassTexCoord;
 
-
+//https://lodev.org/cgtutor/juliamandelbrot.html
+//http://nuclear.mutantstargoat.com/articles/sdr_fract/
 void main()
 {
 	

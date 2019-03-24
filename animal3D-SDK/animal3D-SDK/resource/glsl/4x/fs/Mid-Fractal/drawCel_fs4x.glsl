@@ -29,8 +29,6 @@ plagiarism-checking service, which may retain a copy of the project on its datab
 const int MAX_LIGHTS = 10;
 
 layout(location = 0) out vec4 rtFragColor; //position // (2)
-//layout(location = 1) out vec4 rtFragColor1; //normal
-//layout(location = 2) out vec4 rtFragColor2; //texcoord
 
 
 //Diffuse Texture
