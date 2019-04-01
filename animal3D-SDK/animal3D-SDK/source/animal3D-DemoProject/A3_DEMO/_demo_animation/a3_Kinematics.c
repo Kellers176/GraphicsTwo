@@ -40,7 +40,27 @@ extern inline a3i32 a3kinematicsSolveForwardPartial(const a3_HierarchyState *hie
 		firstIndex < hierarchyState->poseGroup->hierarchy->numNodes && nodeCount)
 	{
 		// ****TO-DO: implement forward kinematics algorithm
-
+		a3ui32 i, end = firstIndex + nodeCount;
+		for (i = firstIndex; i < end; i++)
+		{
+			//blah blah
+			//else
+			// general forward kinematics: 
+			// given local transforms for hierarchy nodes, calculate object-space: 
+			//		if not root, 
+			//			object-space node = object-space parent * local-space node
+			//		else
+			//			object-space node = local-space node
+			//might not be 0
+			if (firstIndex == 0)
+			{
+				//something like this
+				//not necessarily i - 1
+				//hierarchyState->objectSpace->transform[i] = hierarchyState->objectSpace->transform[i - 1] * hierarchyState->localSpace->transform[i];
+			}
+			else
+				hierarchyState->objectSpace->transform[i] = hierarchyState->localSpace->transform[i];
+		}
 	}
 	return -1;
 }

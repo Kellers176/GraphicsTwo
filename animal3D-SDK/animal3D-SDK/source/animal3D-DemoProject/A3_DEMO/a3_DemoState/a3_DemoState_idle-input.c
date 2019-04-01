@@ -104,29 +104,29 @@ void a3demo_input_main(a3_DemoState *demoState, a3f64 dt)
 				demoState->verticalAxis ? a3realZero : azimuth);
 		}
 		
-		float complexNumX = (a3real)a3keyboardGetDifference(demoState->keyboard, a3key_rightArrow, a3key_leftArrow);
-		float complexNumY = (a3real)a3keyboardGetDifference(demoState->keyboard, a3key_downArrow, a3key_upArrow);
+		//float complexNumX = (a3real)a3keyboardGetDifference(demoState->keyboard, a3key_rightArrow, a3key_leftArrow);
+		//float complexNumY = (a3real)a3keyboardGetDifference(demoState->keyboard, a3key_downArrow, a3key_upArrow);
+		//
+		//complexNumX *= 0.0001f;
+		//complexNumY *= 0.0001f;
 
-		complexNumX *= 0.0001f;
-		complexNumY *= 0.0001f;
-
-		complexNumX += demoState->complexNumber.x;
-		complexNumY += demoState->complexNumber.y;
-
-		a3real2Set(demoState->complexNumber.v, complexNumX, complexNumY);
-
-		//vec2(-1.4793,0.002);
-		if (a3keyboardIsHeld(demoState->keyboard, a3key_1))
-		{
-			a3real2Set(demoState->complexNumber.v, 0.365f, 0.36f);
-		}
-		else if (a3keyboardIsHeld(demoState->keyboard, a3key_2))
-		{
-			a3real2Set(demoState->complexNumber.v, -1.4793f, 0.002f);
-		}
-		
-		demoState->scaleNumber = 1.0f;
-		a3real2Set(demoState->centerNumber.v, 0.0f, 0.0f);
+		//complexNumX += demoState->complexNumber.x;
+		//complexNumY += demoState->complexNumber.y;
+		//
+		//a3real2Set(demoState->complexNumber.v, complexNumX, complexNumY);
+		//
+		////vec2(-1.4793,0.002);
+		//if (a3keyboardIsHeld(demoState->keyboard, a3key_1))
+		//{
+		//	a3real2Set(demoState->complexNumber.v, 0.365f, 0.36f);
+		//}
+		//else if (a3keyboardIsHeld(demoState->keyboard, a3key_2))
+		//{
+		//	a3real2Set(demoState->complexNumber.v, -1.4793f, 0.002f);
+		//}
+		//
+		//demoState->scaleNumber = 1.0f;
+		//a3real2Set(demoState->centerNumber.v, 0.0f, 0.0f);
 	}
 }
 
