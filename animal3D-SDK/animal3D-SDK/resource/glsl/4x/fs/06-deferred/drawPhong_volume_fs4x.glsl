@@ -1,5 +1,6 @@
 /*
 	Copyright 2011-2019 Daniel S. Buckstein
+	This file was modified by Kelly and Zac with permission of the author.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
@@ -43,11 +44,64 @@
 //	7) use new inputs where appropriate in lighting
 //		-> remove anything that can be deferred further
 
+
+
+in vec4 vPassBiasClipCoord;	//(2)
+flat in int vPassInstanceID;//(2)
+
+
+//(3)
+#define max_lights 1024
+
+struct sPointLight
+{
+	vec4 worldPos;
+	vec4 viewPos;
+	vec4 color;
+	float radius;
+	float radiusInvSq;
+	float pad[2];
+};
+
+uniform ubPointLight{
+	sPointLight uPointLight[max_lights];
+};
+
 layout (location = 0) out vec4 rtFragColor;
+layout (location = 1) out vec4 rtFragColor1;
+
+uniform sampler2D  uImage4, uImage5, uImage6;//, uImage7;
+
 
 void main()
 {
-	// DUMMY OUTPUT: all fragments are FADED MAGENTA
-	rtFragColor = vec4(1.0, 0.5, 1.0, 1.0);
+	//kelly and zac
+	//get the perspective divide and use those coordinates for the buffer.
+	//perspective divide
+	vec4 screen_Proj = vPassBiasClipCoord / vPassBiasClipCoord.w; // (3)
+
+	vec4 gPosition = texture(uImage4, screen_Proj.xy); //(2)
+	vec4 gNormal = texture(uImage5, screen_Proj.xy);
+	
+	//calulcate the distance and other variables needed for each light
+	vec3 N = gNormal.xyz;
+	vec3 L = normalize(uPointLight[vPassInstanceID].viewPos.xyz - gPosition.xyz); 
+	vec3 V = normalize(-gPosition.xyz);
+	vec3 R = reflect(-L, N);
+	
+	
+	//get the distance to the light and use that for the attenuation
+	float distanceToLight = length(gPosition.xyz- uPointLight[vPassInstanceID].viewPos.xyz); 
+	float attenuation = smoothstep(uPointLight[vPassInstanceID].radius, 0, distanceToLight);
+
+	//get the diffuse and specular 
+	vec4 diffuse = max(dot(N, L), 0.0f) *  uPointLight[vPassInstanceID].color;
+
+	vec4 specular = pow(max(dot(N, R), 0.0f), 8.0) *  uPointLight[vPassInstanceID].color;
+
+
+	rtFragColor = attenuation * diffuse;
+	rtFragColor1 = attenuation* specular;
+
 }
 

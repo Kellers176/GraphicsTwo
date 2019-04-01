@@ -1,5 +1,6 @@
 /*
 	Copyright 2011-2019 Daniel S. Buckstein
+	This file was modified by Kelly and Zac with permission of the author.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
@@ -23,16 +24,32 @@
 */
 
 #version 410
-
+//done
 // ****TO-DO: 
 //	1) declare varyings (attribute data) to receive from vertex shader
 //	2) declare g-buffer render targets
 //	3) pack attribute data into outputs
 
-layout (location = 0) out vec4 rtFragColor;
+layout(location = 0) out vec4 rtFragColor; //position // (2)
+layout(location = 1) out vec4 rtFragColor1; //normal
+layout(location = 2) out vec4 rtFragColor2; //texcoord
+
+
+in vPassDataBlock
+{
+	vec4 vPassPosition;
+	vec4 vPassNormal;
+
+
+	vec4 vPassTexcoord;
+
+} vPassData;
 
 void main()
 {
-	// DUMMY OUTPUT: all fragments are FADED YELLOW
-	rtFragColor = vec4(1.0, 1.0, 0.5, 1.0);
+	//zac
+	//Passing in the variables to the FSQ
+	rtFragColor = vPassData.vPassPosition;
+	rtFragColor1 = normalize(vPassData.vPassNormal);
+	rtFragColor2 = vPassData.vPassTexcoord;
 }
