@@ -1302,6 +1302,7 @@ void a3demo_loadAnimation(a3_DemoState *demoState)
 
 
 	// next set up hierarchy poses
+	//****TO-DO: Add in multiple pose 
 	demoState->editSkeletonIndex = 0;
 	hierarchy = demoState->hierarchy_skel + demoState->editSkeletonIndex;
 	hierarchyPoseGroup = demoState->hierarchyPoseGroup_skel + demoState->editSkeletonIndex;

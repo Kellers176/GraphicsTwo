@@ -264,6 +264,7 @@ extern "C"
 
 
 		// skeletal objects
+
 		a3_Hierarchy hierarchy_skel[1];
 		a3_HierarchyState hierarchyState_skel[1];
 		a3_HierarchyPoseGroup hierarchyPoseGroup_skel[1];

@@ -381,6 +381,7 @@ void a3demo_render_skeletal_controls(const a3_DemoState *demoState)
 	// editing controls
 	if (demoState->editingJoint)
 	{
+		//****TO-DO: Add in multiple pose 
 		const a3_HierarchyNodePose *currentNodePose = demoState->hierarchyState_skel[demoState->editSkeletonIndex].poseGroup->pose[0].nodePose + demoState->editJointIndex;
 		const a3_HierarchyPoseFlag currentPoseFlag = demoState->hierarchyPoseFlag_skel[demoState->editSkeletonIndex][demoState->editJointIndex];
 

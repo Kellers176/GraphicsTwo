@@ -203,6 +203,7 @@ inline void a3demoCB_keyCharHold_skeletal(a3_DemoState *demoState, a3i32 asciiKe
 	// individual DOF editing
 	if (demoState->editingJoint)
 	{
+		//****TO-DO: Add in multiple pose 
 		a3_HierarchyNodePose *currentNodePose = demoState->hierarchyState_skel[demoState->editSkeletonIndex].poseGroup->pose[0].nodePose + demoState->editJointIndex;
 		const a3_HierarchyPoseFlag currentPoseFlag = demoState->hierarchyPoseFlag_skel[demoState->editSkeletonIndex][demoState->editJointIndex];
 		const a3boolean doesRotate = currentPoseFlag & a3poseFlag_rotate;
