@@ -294,6 +294,15 @@ inline void a3demoCB_keyCharPress_skeletal(a3_DemoState *demoState, a3i32 asciiK
 		if (demoState->editingJoint)
 			demoState->editJointIndex = (demoState->editJointIndex + demoState->hierarchy_skel[demoState->editSkeletonIndex].numNodes - 1) % demoState->hierarchy_skel[demoState->editSkeletonIndex].numNodes;
 		break;
+	case '>':
+		//****To-Do
+		if(demoState->editingJoint)
+			demoState->editSkeletonIndex = (demoState->editSkeletonIndex + 1) % demoState->skeletonNum;
+		break;
+	case '<':
+		if (demoState->editingJoint)
+			demoState->editSkeletonIndex = (demoState->editSkeletonIndex - 1) % demoState->skeletonNum;
+		break;
 	}
 
 	// call editing control
@@ -684,6 +693,10 @@ A3DYLIBSYMBOL void a3demoCB_keyCharPress(a3_DemoState *demoState, a3i32 asciiKey
 		// update animation
 	case 'm':
 		demoState->updateAnimation = 1 - demoState->updateAnimation;
+		break;
+
+	case 'l':
+		demoState->animationControl = 1 - demoState->animationControl;
 		break;
 	}
 

@@ -216,6 +216,7 @@ extern "C"
 		a3boolean stencilTest, singleForwardLight;
 		a3boolean lightingPipelineMode;
 		a3boolean updateAnimation;
+		a3boolean animationControl;
 
 		// lighting modes
 		a3ui32 forwardShadingMode, forwardShadingModeCount;
@@ -264,13 +265,13 @@ extern "C"
 
 
 		// skeletal objects
-
-		a3_Hierarchy hierarchy_skel[1];
-		a3_HierarchyState hierarchyState_skel[1];
-		a3_HierarchyPoseGroup hierarchyPoseGroup_skel[1];
-		a3_HierarchyPoseFlag hierarchyPoseFlag_skel[1][128];
+		a3_Hierarchy hierarchy_skel[4];
+		a3_HierarchyState hierarchyState_skel[4];
+		a3_HierarchyPoseGroup hierarchyPoseGroup_skel[4];
+		a3_HierarchyPoseFlag hierarchyPoseFlag_skel[4][128];
 
 		// skeletal controls
+		a3ui32 skeletonNum;
 		a3ui32 editSkeletonIndex;
 		a3ui32 editJointIndex;
 		a3boolean editingJoint;

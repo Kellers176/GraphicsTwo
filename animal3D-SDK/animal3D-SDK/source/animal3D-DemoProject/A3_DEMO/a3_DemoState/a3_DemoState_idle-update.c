@@ -451,7 +451,7 @@ void a3demo_update_skeletal(a3_DemoState *demoState, a3f64 dt)
 		currentHierarchyPoseGroup->pose + 0, currentHierarchy->numNodes);
 	a3hierarchyPoseConvert(currentHierarchyState->localSpace,
 		currentHierarchyState->localPose, currentHierarchy->numNodes, 0);
-	a3kinematicsSolveForward(demoState->hierarchyState_skel);
+	a3kinematicsSolveForward(demoState->hierarchyState_skel + demoState->editSkeletonIndex);
 //	a3hierarchyStateUpdateObjectBindToCurrent(currentHierarchyState, ???);
 
 

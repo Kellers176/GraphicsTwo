@@ -51,14 +51,9 @@ extern inline a3i32 a3kinematicsSolveForwardPartial(const a3_HierarchyState *hie
 			//			object-space node = object-space parent * local-space node
 			//		else
 			//			object-space node = local-space node
-			//this is right
 			if (firstIndex == (hierarchyState->poseGroup->hierarchy->nodes[i].parentIndex < 0))
 			{
-				//something like this
-				//not necessarily i - 1
-				//a3real4x4Product(hierarchyState->objectSpace->transform[i].m, hierarchyState->localSpace->transform[i].m);
 				a3real4x4Product(hierarchyState->objectSpace->transform[i].m, hierarchyState->objectSpace->transform[hierarchyState->poseGroup->hierarchy->nodes[i].parentIndex].m, hierarchyState->localSpace->transform[i].m );
-				//hierarchyState->objectSpace->transform[i] = hierarchyState->objectSpace->transform[i - 1] * hierarchyState->localSpace->transform[i];
 			}
 			else
 				hierarchyState->objectSpace->transform[i] = hierarchyState->localSpace->transform[i];

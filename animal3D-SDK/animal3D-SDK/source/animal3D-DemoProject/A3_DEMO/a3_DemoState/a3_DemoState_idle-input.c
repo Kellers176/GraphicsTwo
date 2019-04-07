@@ -104,6 +104,14 @@ void a3demo_input_main(a3_DemoState *demoState, a3f64 dt)
 				demoState->verticalAxis ? a3realZero : azimuth);
 		}
 		
+		//if (a3keyboardIsPressed(demoState->keyboard, a3key_L))
+		//{
+		//	demoState->animationControl = true;
+		//}
+		//else if (a3keyboardIsPressed(demoState->keyboard, a3key_K))
+		//{
+		//	demoState->animationControl = false;
+		//}
 		//float complexNumX = (a3real)a3keyboardGetDifference(demoState->keyboard, a3key_rightArrow, a3key_leftArrow);
 		//float complexNumY = (a3real)a3keyboardGetDifference(demoState->keyboard, a3key_downArrow, a3key_upArrow);
 		//
