@@ -379,6 +379,8 @@ void a3demo_render_skeletal_controls(const a3_DemoState *demoState)
 		"EDIT JOINTS (toggle '0') %d", demoState->editingJoint);
 	a3textDraw(demoState->text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
 		"ANIMATE JOINTS (toggle 'l') %d", demoState->animationControl);
+	a3textDraw(demoState->text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
+		"SKELETON TIME %f", demoState->skeletonTime);
 
 	// editing controls
 	if (demoState->editingJoint)
