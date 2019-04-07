@@ -273,6 +273,8 @@ extern "C"
 		// skeletal controls
 		a3ui32 skeletonNum;
 		a3ui32 editSkeletonIndex;
+		a3real skeletonDuration, skeletonDurationInv;
+		a3real skeletonTime, skeletonParam;
 		a3ui32 editJointIndex;
 		a3boolean editingJoint;
 

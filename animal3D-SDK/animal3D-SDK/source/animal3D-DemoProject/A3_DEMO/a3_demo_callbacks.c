@@ -295,7 +295,6 @@ inline void a3demoCB_keyCharPress_skeletal(a3_DemoState *demoState, a3i32 asciiK
 			demoState->editJointIndex = (demoState->editJointIndex + demoState->hierarchy_skel[demoState->editSkeletonIndex].numNodes - 1) % demoState->hierarchy_skel[demoState->editSkeletonIndex].numNodes;
 		break;
 	case '>':
-		//****To-Do
 		if(demoState->editingJoint)
 			demoState->editSkeletonIndex = (demoState->editSkeletonIndex + 1) % demoState->skeletonNum;
 		break;

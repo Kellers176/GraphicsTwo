@@ -1248,7 +1248,6 @@ void a3demo_loadAnimation(a3_DemoState *demoState)
 		const a3ui32 jointCount = 32;
 
 		// indices of joints, their parents and branching joints
-		//****To-Do: 2 to variable
 		for (demoState->editSkeletonIndex = 0; demoState->editSkeletonIndex < demoState->skeletonNum; demoState->editSkeletonIndex++)
 		{
 			a3ui32 jointIndex = 0;
@@ -1309,7 +1308,6 @@ void a3demo_loadAnimation(a3_DemoState *demoState)
 
 
 	// next set up hierarchy poses
-	//****TO-DO:2 to variable
 	for (demoState->editSkeletonIndex = 0; demoState->editSkeletonIndex < demoState->skeletonNum; demoState->editSkeletonIndex++)
 	{
 		hierarchy = demoState->hierarchy_skel + demoState->editSkeletonIndex;
