@@ -288,11 +288,11 @@ inline void a3demoCB_keyCharPress_skeletal(a3_DemoState *demoState, a3i32 asciiK
 
 	case ')':
 		if (demoState->editingJoint)
-			demoState->editJointIndex = (demoState->editJointIndex + 1) % demoState->hierarchy_skel[0].numNodes;
+			demoState->editJointIndex = (demoState->editJointIndex + 1) % demoState->hierarchy_skel[demoState->editPoseIndex].numNodes;
 		break;
 	case '(':
 		if (demoState->editingJoint)
-			demoState->editJointIndex = (demoState->editJointIndex + demoState->PoseNum - 1) % demoState->hierarchy_skel[0].numNodes;
+			demoState->editJointIndex = (demoState->editJointIndex + demoState->hierarchy_skel[demoState->editPoseIndex].numNodes - 1) % demoState->hierarchy_skel[demoState->editPoseIndex].numNodes;
 		break;
 	case '>':
 		if(demoState->editingJoint)

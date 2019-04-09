@@ -1683,7 +1683,7 @@ void a3demo_render_skeletal(const a3_DemoState *demoState)
 	// set up to draw skeleton
 	currentDemoProgram = demoState->prog_drawColorUnif_instanced;
 	a3shaderProgramActivate(currentDemoProgram->program);
-	currentHierarchyState = demoState->hierarchyState_skel; //+ demoState->editSkeletonIndex;
+	currentHierarchyState = demoState->hierarchyState_skel;
 	currentHierarchy = currentHierarchyState->poseGroup->hierarchy;
 
 	// draw skeletal joints
