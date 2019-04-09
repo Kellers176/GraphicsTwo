@@ -265,14 +265,14 @@ extern "C"
 
 
 		// skeletal objects
-		a3_Hierarchy hierarchy_skel[4];
-		a3_HierarchyState hierarchyState_skel[4];
-		a3_HierarchyPoseGroup hierarchyPoseGroup_skel[4];
-		a3_HierarchyPoseFlag hierarchyPoseFlag_skel[4][128];
+		a3_Hierarchy hierarchy_skel[1];
+		a3_HierarchyState hierarchyState_skel[1];
+		a3_HierarchyPoseGroup hierarchyPoseGroup_skel[1];
+		a3_HierarchyPoseFlag hierarchyPoseFlag_skel[1][128];
 
 		// skeletal controls
-		a3ui32 skeletonNum;
-		a3ui32 editSkeletonIndex;
+		a3ui32 PoseNum;
+		a3ui32 editPoseIndex;
 		a3real skeletonDuration, skeletonDurationInv;
 		a3real skeletonTime, skeletonParam;
 		a3ui32 editJointIndex;

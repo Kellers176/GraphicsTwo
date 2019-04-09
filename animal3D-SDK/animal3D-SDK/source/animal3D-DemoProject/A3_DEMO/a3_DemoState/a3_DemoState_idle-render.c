@@ -385,15 +385,15 @@ void a3demo_render_skeletal_controls(const a3_DemoState *demoState)
 	// editing controls
 	if (demoState->editingJoint)
 	{
-		const a3_HierarchyNodePose *currentNodePose = demoState->hierarchyState_skel[demoState->editSkeletonIndex].poseGroup->pose[0].nodePose + demoState->editJointIndex;
-		const a3_HierarchyPoseFlag currentPoseFlag = demoState->hierarchyPoseFlag_skel[demoState->editSkeletonIndex][demoState->editJointIndex];
+		const a3_HierarchyNodePose *currentNodePose = demoState->hierarchyState_skel[0].poseGroup->pose[demoState->editPoseIndex].nodePose + demoState->editJointIndex;
+		const a3_HierarchyPoseFlag currentPoseFlag = demoState->hierarchyPoseFlag_skel[0][demoState->editJointIndex];
 		
 		a3textDraw(demoState->text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
-			"    Editing Skeleton %d / %d ( '<' prev | next '>' )", demoState->editSkeletonIndex + 1, demoState->skeletonNum);
+			"    Editing Skeleton %d / %d ( '<' prev | next '>' )", demoState->editPoseIndex + 1, demoState->PoseNum);
 		a3textDraw(demoState->text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
-			"    Editing joint %d / %d ( '(' prev | next ')' )", demoState->editJointIndex + 1, demoState->hierarchy_skel[demoState->editSkeletonIndex].numNodes);
+			"    Editing joint %d / %d ( '(' prev | next ')' )", demoState->editJointIndex + 1, demoState->hierarchy_skel[demoState->editPoseIndex].numNodes);
 		a3textDraw(demoState->text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
-			"    Joint name: '%s'", demoState->hierarchy_skel[demoState->editSkeletonIndex].nodes[demoState->editJointIndex].name);
+			"    Joint name: '%s'", demoState->hierarchy_skel[demoState->editPoseIndex].nodes[demoState->editJointIndex].name);
 		a3textDraw(demoState->text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
 			"    Edit DOFs: ");
 		if (currentPoseFlag & a3poseFlag_rotate)
@@ -1683,7 +1683,7 @@ void a3demo_render_skeletal(const a3_DemoState *demoState)
 	// set up to draw skeleton
 	currentDemoProgram = demoState->prog_drawColorUnif_instanced;
 	a3shaderProgramActivate(currentDemoProgram->program);
-	currentHierarchyState = demoState->hierarchyState_skel + demoState->editSkeletonIndex;
+	currentHierarchyState = demoState->hierarchyState_skel; //+ demoState->editSkeletonIndex;
 	currentHierarchy = currentHierarchyState->poseGroup->hierarchy;
 
 	// draw skeletal joints

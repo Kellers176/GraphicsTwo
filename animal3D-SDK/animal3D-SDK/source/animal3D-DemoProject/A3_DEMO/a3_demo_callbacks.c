@@ -204,8 +204,8 @@ inline void a3demoCB_keyCharHold_skeletal(a3_DemoState *demoState, a3i32 asciiKe
 	if (demoState->editingJoint)
 	{
 		//****TO-DO: Add in multiple pose 
-		a3_HierarchyNodePose *currentNodePose = demoState->hierarchyState_skel[demoState->editSkeletonIndex].poseGroup->pose[0].nodePose + demoState->editJointIndex;
-		const a3_HierarchyPoseFlag currentPoseFlag = demoState->hierarchyPoseFlag_skel[demoState->editSkeletonIndex][demoState->editJointIndex];
+		a3_HierarchyNodePose *currentNodePose = demoState->hierarchyState_skel[0].poseGroup->pose[demoState->editPoseIndex].nodePose + demoState->editJointIndex;
+		const a3_HierarchyPoseFlag currentPoseFlag = demoState->hierarchyPoseFlag_skel[0][demoState->editJointIndex];
 		const a3boolean doesRotate = currentPoseFlag & a3poseFlag_rotate;
 		const a3boolean doesTranslate = currentPoseFlag & a3poseFlag_translate;
 		const a3real rotateRate = a3realHalf;
@@ -288,19 +288,19 @@ inline void a3demoCB_keyCharPress_skeletal(a3_DemoState *demoState, a3i32 asciiK
 
 	case ')':
 		if (demoState->editingJoint)
-			demoState->editJointIndex = (demoState->editJointIndex + 1) % demoState->hierarchy_skel[demoState->editSkeletonIndex].numNodes;
+			demoState->editJointIndex = (demoState->editJointIndex + 1) % demoState->hierarchy_skel[0].numNodes;
 		break;
 	case '(':
 		if (demoState->editingJoint)
-			demoState->editJointIndex = (demoState->editJointIndex + demoState->hierarchy_skel[demoState->editSkeletonIndex].numNodes - 1) % demoState->hierarchy_skel[demoState->editSkeletonIndex].numNodes;
+			demoState->editJointIndex = (demoState->editJointIndex + demoState->PoseNum - 1) % demoState->hierarchy_skel[0].numNodes;
 		break;
 	case '>':
 		if(demoState->editingJoint)
-			demoState->editSkeletonIndex = (demoState->editSkeletonIndex + 1) % demoState->skeletonNum;
+			demoState->editPoseIndex = (demoState->editPoseIndex + 1) % demoState->PoseNum;
 		break;
 	case '<':
 		if (demoState->editingJoint)
-			demoState->editSkeletonIndex = (demoState->editSkeletonIndex - 1) % demoState->skeletonNum;
+			demoState->editPoseIndex = (demoState->editPoseIndex - 1) % demoState->PoseNum;
 		break;
 	}
 

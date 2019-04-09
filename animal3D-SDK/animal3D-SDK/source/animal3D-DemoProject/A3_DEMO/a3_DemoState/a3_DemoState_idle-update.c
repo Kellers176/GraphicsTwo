@@ -454,7 +454,7 @@ void a3demo_update_skeletal(a3_DemoState *demoState, a3f64 dt)
 		//	-> convert the current pose to transforms
 		//	-> forward kinematics
 		//	-> skinning matrices
-		currentHierarchyState = demoState->hierarchyState_skel + demoState->editSkeletonIndex;
+		currentHierarchyState = demoState->hierarchyState_skel;// +demoState->editSkeletonIndex;
 		currentHierarchyPoseGroup = currentHierarchyState->poseGroup;
 
 		//currentHierarchyPoseGroupAnimate = currentHierarchyState->poseGroup[0];
@@ -480,8 +480,9 @@ void a3demo_update_skeletal(a3_DemoState *demoState, a3f64 dt)
 			j = currentHierarchy->nodes[i].index;
 
 			a3real3p output = { 0,0,0 };
-			a3_HierarchyNodePose* currentPos = demoState->hierarchyState_skel[demoState->editSkeletonIndex + 0].poseGroup->pose[0].nodePose + j;
-			a3_HierarchyNodePose* nextPos = demoState->hierarchyState_skel[demoState->editSkeletonIndex + 1 % (demoState->skeletonNum - 1)].poseGroup->pose[0].nodePose + j;
+			a3_HierarchyNodePose* currentPos = demoState->hierarchyState_skel[0].poseGroup->pose[demoState->editPoseIndex].nodePose + j;
+			a3_HierarchyNodePose* nextPos = demoState->hierarchyState_skel[0].poseGroup->pose[(demoState->editPoseIndex + 1) % (demoState->PoseNum)].nodePose + j;
+			//a3_HierarchyNodePose* outputPose = currentHierarchyState->localPose;
 
 			a3real3p curTranslation = { currentPos->translation.x, currentPos->translation.y, currentPos->translation.z };
 			a3real3p curOrientation = { currentPos->orientation.x, currentPos->orientation.y, currentPos->orientation.z };
@@ -492,12 +493,12 @@ void a3demo_update_skeletal(a3_DemoState *demoState, a3f64 dt)
 
 
 
+			a3real3Lerp(currentHierarchyState->localPose->nodePose[i].translation.v, curTranslation, nextTranslation, demoState->skeletonParam);
+			//a3hierarchyNodePoseSetTranslation(currentPos, (a3f32)output[0], (a3f32)output[1], (a3f32)output[2]);
+			//currentHierarchyState->localSpace->transform = output;
 
-			a3real3Lerp(output, curTranslation, nextTranslation, 0.1f);
-			a3hierarchyNodePoseSetTranslation(currentPos, (a3f32)output[0], (a3f32)output[1], (a3f32)output[2]);
-
-			a3real3Lerp(output, curOrientation, nextOrientation, 0.1f);
-			a3hierarchyNodePoseSetRotation(currentPos, (a3f32)output[0], (a3f32)output[1], (a3f32)output[2], true);
+			a3real3Lerp(currentHierarchyState->localPose->nodePose[i].orientation.v, curOrientation, nextOrientation, demoState->skeletonParam);
+			//a3hierarchyNodePoseSetRotation(currentPos, (a3f32)output[0], (a3f32)output[1], (a3f32)output[2], true);
 
 
 			//a3real3Lerp(currentHierarchyPoseGroupAnimate.pose[0].nodePose[i].orientation.v,
@@ -508,7 +509,7 @@ void a3demo_update_skeletal(a3_DemoState *demoState, a3f64 dt)
 		if (demoState->skeletonTime >= demoState->skeletonDuration)
 		{
 			demoState->skeletonTime -= demoState->skeletonDuration;
-			demoState->editSkeletonIndex = (demoState->editSkeletonIndex + 1) % (demoState->skeletonNum - 1);
+			demoState->editPoseIndex = (demoState->editPoseIndex + 1) % (demoState->PoseNum/* - 1*/);
 
 			//if(demoState->editSkeletonIndex == 0)
 			//{
@@ -519,12 +520,11 @@ void a3demo_update_skeletal(a3_DemoState *demoState, a3f64 dt)
 		// in any case calculate interpolation param
 		demoState->skeletonParam = demoState->skeletonTime * demoState->skeletonDurationInv;
 
-
 		//a3hierarchyPoseCopy(currentHierarchyState->localPose,
 		//	currentPos.pose + 0, currentHierarchy->numNodes);
 		a3hierarchyPoseConvert(currentHierarchyState->localSpace,
 			currentHierarchyState->localPose, currentHierarchy->numNodes, 0);
-		a3kinematicsSolveForward(demoState->hierarchyState_skel + demoState->editSkeletonIndex);		
+		a3kinematicsSolveForward(demoState->hierarchyState_skel);
 	}
 	else
 	{
@@ -533,7 +533,7 @@ void a3demo_update_skeletal(a3_DemoState *demoState, a3f64 dt)
 		//	-> convert the current pose to transforms
 		//	-> forward kinematics
 		//	-> skinning matrices
-		currentHierarchyState = demoState->hierarchyState_skel + demoState->editSkeletonIndex;
+		currentHierarchyState = demoState->hierarchyState_skel;
 		currentHierarchyPoseGroup = currentHierarchyState->poseGroup;
 		currentHierarchy = currentHierarchyPoseGroup->hierarchy;
 
@@ -541,7 +541,7 @@ void a3demo_update_skeletal(a3_DemoState *demoState, a3f64 dt)
 			currentHierarchyPoseGroup->pose + 0, currentHierarchy->numNodes);
 		a3hierarchyPoseConvert(currentHierarchyState->localSpace,
 			currentHierarchyState->localPose, currentHierarchy->numNodes, 0);
-		a3kinematicsSolveForward(demoState->hierarchyState_skel + demoState->editSkeletonIndex);
+		a3kinematicsSolveForward(demoState->hierarchyState_skel);
 		//	a3hierarchyStateUpdateObjectBindToCurrent(currentHierarchyState, ???);
 	}
 	
