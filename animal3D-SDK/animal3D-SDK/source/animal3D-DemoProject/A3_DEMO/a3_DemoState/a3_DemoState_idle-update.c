@@ -406,7 +406,7 @@ void a3demo_update_skeletal(a3_DemoState *demoState, a3f64 dt)
 	a3_HierarchyState *currentHierarchyState;
 	//a3_HierarchyState currentHierarchyStateAnimate;
 	const a3_HierarchyPoseGroup *currentHierarchyPoseGroup;
-	a3_HierarchyPoseGroup currentHierarchyPoseGroupAnimate;
+	//a3_HierarchyPoseGroup currentHierarchyPoseGroupAnimate;
 	const a3_Hierarchy *currentHierarchy;
 //	a3_Hierarchy currentHierarchyAnimate;
 
@@ -447,16 +447,8 @@ void a3demo_update_skeletal(a3_DemoState *demoState, a3f64 dt)
 		demoState->skeletonTime += (a3real)dt;
 
 		// if we surpass the time for one segment
-		if (demoState->skeletonTime >= demoState->skeletonDuration)
-		{
-			demoState->skeletonTime -= demoState->skeletonDuration;
-			demoState->editSkeletonIndex = (demoState->editSkeletonIndex + 1) % (demoState->skeletonNum - 1);
-		}
-
-		// in any case calculate interpolation param
-		demoState->skeletonParam = demoState->skeletonTime * demoState->skeletonDurationInv;
-	
-
+		
+		
 		// update animation: 
 		//	-> copy pose from set to state (pro tip: seems pointless but it is not)
 		//	-> convert the current pose to transforms
@@ -464,7 +456,8 @@ void a3demo_update_skeletal(a3_DemoState *demoState, a3f64 dt)
 		//	-> skinning matrices
 		currentHierarchyState = demoState->hierarchyState_skel + demoState->editSkeletonIndex;
 		currentHierarchyPoseGroup = currentHierarchyState->poseGroup;
-		currentHierarchyPoseGroupAnimate = currentHierarchyState->poseGroup[0];
+
+		//currentHierarchyPoseGroupAnimate = currentHierarchyState->poseGroup[0];
 		currentHierarchy = currentHierarchyPoseGroup->hierarchy;
 		
 		// lerp
@@ -478,25 +471,57 @@ void a3demo_update_skeletal(a3_DemoState *demoState, a3f64 dt)
 		//	a3real3Lerp(currentHierarchyPoseGroup->pose[0].nodePose[i].orientation.v,
 		//		demoState->hierarchyState_skel[demoState->editSkeletonIndex + 0].poseGroup->pose[0].nodePose[i].orientation.v,
 		//		demoState->hierarchyState_skel[demoState->editSkeletonIndex + 1 % (demoState->skeletonNum-1)].poseGroup->pose[0].nodePose[i].orientation.v,
-		//		.1f);
+		//		.1f);currentHierarchy
 		//}
 
-		for (a3ui32 i = 0; i < currentHierarchyPoseGroupAnimate.hierarchy->numNodes; i++)
+		for (a3ui32 i = 0; i < currentHierarchy->numNodes; i++)
 		{
-			a3real3Lerp(currentHierarchyPoseGroupAnimate.pose[0].nodePose[i].translation.v,
-				demoState->hierarchyState_skel[demoState->editSkeletonIndex + 0].poseGroup->pose[0].nodePose[i].translation.v,
-				demoState->hierarchyState_skel[demoState->editSkeletonIndex + 1 % (demoState->skeletonNum-1)].poseGroup->pose[0].nodePose[i].translation.v,
-				.1f);
+			currentHierarchyPoseGroup = currentHierarchyState->poseGroup;
+			j = currentHierarchy->nodes[i].index;
 
-			a3real3Lerp(currentHierarchyPoseGroupAnimate.pose[0].nodePose[i].orientation.v,
-				demoState->hierarchyState_skel[demoState->editSkeletonIndex + 0].poseGroup->pose[0].nodePose[i].orientation.v,
-				demoState->hierarchyState_skel[demoState->editSkeletonIndex + 1 % (demoState->skeletonNum-1)].poseGroup->pose[0].nodePose[i].orientation.v,
-				.1f);
+			a3real3p output = { 0,0,0 };
+			a3_HierarchyNodePose* currentPos = demoState->hierarchyState_skel[demoState->editSkeletonIndex + 0].poseGroup->pose[0].nodePose + j;
+			a3_HierarchyNodePose* nextPos = demoState->hierarchyState_skel[demoState->editSkeletonIndex + 1 % (demoState->skeletonNum - 1)].poseGroup->pose[0].nodePose + j;
+
+			a3real3p curTranslation = { currentPos->translation.x, currentPos->translation.y, currentPos->translation.z };
+			a3real3p curOrientation = { currentPos->orientation.x, currentPos->orientation.y, currentPos->orientation.z };
+
+
+			a3real3p nextTranslation = { nextPos->translation.x, nextPos->translation.y, nextPos->translation.z };
+			a3real3p nextOrientation = { nextPos->orientation.x, nextPos->orientation.y, nextPos->orientation.z };
+
+
+
+
+			a3real3Lerp(output, curTranslation, nextTranslation, 0.1f);
+			a3hierarchyNodePoseSetTranslation(currentPos, (a3f32)output[0], (a3f32)output[1], (a3f32)output[2]);
+
+			a3real3Lerp(output, curOrientation, nextOrientation, 0.1f);
+			a3hierarchyNodePoseSetRotation(currentPos, (a3f32)output[0], (a3f32)output[1], (a3f32)output[2], true);
+
+
+			//a3real3Lerp(currentHierarchyPoseGroupAnimate.pose[0].nodePose[i].orientation.v,
+			//	demoState->hierarchyState_skel[demoState->editSkeletonIndex + 0].poseGroup->pose[0].nodePose[i].orientation.v,
+			//	demoState->hierarchyState_skel[demoState->editSkeletonIndex + 1 % (demoState->skeletonNum-1)].poseGroup->pose[0].nodePose[i].orientation.v,
+			//	.1f);
 		}
-		
+		if (demoState->skeletonTime >= demoState->skeletonDuration)
+		{
+			demoState->skeletonTime -= demoState->skeletonDuration;
+			demoState->editSkeletonIndex = (demoState->editSkeletonIndex + 1) % (demoState->skeletonNum - 1);
 
-		a3hierarchyPoseCopy(currentHierarchyState->localPose,
-			currentHierarchyPoseGroupAnimate.pose + 0, currentHierarchy->numNodes);
+			//if(demoState->editSkeletonIndex == 0)
+			//{
+			//	demoState->editSkeletonIndex = 1;
+			//}
+		}	//
+
+		// in any case calculate interpolation param
+		demoState->skeletonParam = demoState->skeletonTime * demoState->skeletonDurationInv;
+
+
+		//a3hierarchyPoseCopy(currentHierarchyState->localPose,
+		//	currentPos.pose + 0, currentHierarchy->numNodes);
 		a3hierarchyPoseConvert(currentHierarchyState->localSpace,
 			currentHierarchyState->localPose, currentHierarchy->numNodes, 0);
 		a3kinematicsSolveForward(demoState->hierarchyState_skel + demoState->editSkeletonIndex);		
