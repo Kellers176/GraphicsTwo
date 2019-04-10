@@ -28,6 +28,8 @@
 
 // math library
 #include "animal3D-A3DM/animal3D-A3DM.h"
+#include "animal3D/a3/a3types_integer.h"
+#include "animal3D/a3utility/a3_Stream.h"
 
 
 //-----------------------------------------------------------------------------
@@ -39,12 +41,42 @@ extern "C"
 	typedef struct a3_DemoSceneObject	a3_DemoSceneObject;
 	typedef struct a3_DemoCamera		a3_DemoCamera;
 	typedef struct a3_DemoPointLight	a3_DemoPointLight;
+	typedef struct a3_DemoSceneHierarchy		a3_DemoSceneHierarchy;
+	typedef struct a3_DemoSceneHierarchyNode	a3_DemoSceneHierarchyNode;
 #endif	// __cplusplus
 
 	
 //-----------------------------------------------------------------------------
 
+	// A3: Node name string max length (including null terminator).
+	enum a3_HierarchyDemoSceneNodeNameSize
+	{
+		a3DemoScenenode_nameSize = 4
+	};
 
+
+	// A3: Hierarchy node, a single link in a hierarchy tree.
+	//	member name: name of node (defaults to a3node_[index])
+	//	member index: index of node in hierarchy
+	//	member parentIndex: index of parent in hierarchy (-1 if root)
+	struct a3_DemoSceneHierarchyNode
+	{
+		a3byte name[a3DemoScenenode_nameSize];
+		a3i32 index;
+		a3i32 parentIndex;
+	};
+
+
+	// A3: Hierarchy node container, the hierarchy itself.
+	//	member nodes: array of nodes (null if unused)
+	//	member numNodes: maximum number of nodes in hierarchy (zero if unused)
+	struct a3_DemoSceneHierarchy
+	{
+		a3_DemoSceneHierarchyNode *nodes;
+		a3ui32 numNodes;
+	};
+
+//-----------------------------------------------------------------------------
 	// general scene objects
 	struct a3_DemoSceneObject
 	{
@@ -99,7 +131,96 @@ extern "C"
 
 
 //-----------------------------------------------------------------------------
+	// A3: Allocate hierarchy with maximum node count, names optional.
+	//	param hierarchy_out: non-null pointer to uninitialized hierarchy
+	//	param numNodes: non-zero node count to initialize
+	//	param names_opt: optional pointer to a list of names to set immediately
+	//	return: numNodes if success
+	//	return: -1 if invalid params
+	inline a3i32 a3hierarchyDemoStateCreate(a3_DemoSceneHierarchy *hierarchy_out, const a3ui32 numNodes, const a3byte **names_opt);
 
+	// A3: Set a hierarchy node's info; overwrites existing node at index.
+	//	param hierarchy: non-null pointer to initialized hierarchy
+	//	param index: non-negative index of node in hierarchy
+	//	param parentIndex: index of parent node in hierarchy; -1 if this node 
+	//		is a root node; *parent index is LESS THAN node index!!!*
+	//	param name: name of node
+	//	return: index if success
+	//	return: -1 if invalid params
+	inline a3i32 a3hierarchyDemoStateSetNode(const a3_DemoSceneHierarchy *hierarchy, const a3ui32 index, const a3i32 parentIndex, const a3byte name[a3DemoScenenode_nameSize]);
+
+	// A3: Get node index by name.
+	//	param hierarchy: non-null pointer to initialized hierarchy
+	//	param name: name to search for in hierarchy
+	//	return: index if success
+	//	return: -1 if invalid params or node not found
+	inline a3i32 a3hierarchyDemoStateGetNodeIndex(const a3_DemoSceneHierarchy *hierarchy, const a3byte name[a3DemoScenenode_nameSize]);
+	// A3: Check if node is a parent of another.
+	//	param hierarchy: non-null pointer to initialized hierarchy
+	//	param parentIndex: non-negative possible parent node index
+	//	param otherIndex: non-negative index of node to check for relationship
+	//	return: boolean, 1 if the node is a parent of the other; 0 if not
+	//	return: -1 if invalid params
+	inline a3i32 a3hierarchyDemoStateIsParentNode(const a3_DemoSceneHierarchy *hierarchy, const a3ui32 parentIndex, const a3ui32 otherIndex);
+
+	// A3: Check if a node is a child of another.
+	//	param hierarchy: non-null pointer to initialized hierarchy
+	//	param childIndex: non-negative possible child node index
+	//	param otherIndex: non-negative index of node to check for relationship
+	//	return: boolean, 1 if the node is a child of the other; 0 if not
+	//	return: -1 if invalid params
+	inline a3i32 a3hierarchyDemoStateIsChildNode(const a3_DemoSceneHierarchy *hierarchy, const a3ui32 childIndex, const a3ui32 otherIndex);
+
+	// A3: Check if a node is a sibling of another.
+	//	param hierarchy: non-null pointer to initialized hierarchy
+	//	param siblingIndex: non-negative possible sibling node index
+	//	param otherIndex: non-negative index of node to check for relationship
+	//	return: boolean, 1 if the node is a parent of the other; 0 if not
+	//	return: -1 if invalid params
+	inline a3i32 a3hierarchyDemoStateIsSiblingNode(const a3_DemoSceneHierarchy *hierarchy, const a3ui32 siblingIndex, const a3ui32 otherIndex);
+
+	// A3: Check if a node is an ancestor of another.
+	//	param hierarchy: non-null pointer to initialized hierarchy
+	//	param ancestorIndex: non-negative possible ancestor node index
+	//	param otherIndex: non-negative index of node to check for relationship
+	//	return: boolean, 1 if the node is a parent of the other; 0 if not
+	//	return: -1 if invalid params
+	inline a3i32 a3hierarchyDemoStateIsAncestorNode(const a3_DemoSceneHierarchy *hierarchy, const a3ui32 ancestorIndex, const a3ui32 otherIndex);
+
+	// A3: Check if a node is a descendant of another.
+	//	param hierarchy: non-null pointer to initialized hierarchy
+	//	param descendantIndex: non-negative possible descendant node index
+	//	param otherIndex: non-negative index of node to check for relationship
+	//	return: boolean, 1 if the node is a parent of the other; 0 if not
+	//	return: -1 if invalid params
+	inline a3i32 a3hierarchyDemoStateIsDescendantNode(const a3_DemoSceneHierarchy *hierarchy, const a3ui32 descendantIndex, const a3ui32 otherIndex);
+	// A3: Store hierarchy in string.
+	//	param hierarchy: non-null pointer to initialized hierarchy
+	//	param str: non-null byte array to stream into
+	//	return: number of bytes copied if success
+	//	return: 0 if failed
+	//	return: -1 if invalid params
+	inline a3i32 a3hierarchyDemoStateCopyToString(const a3_DemoSceneHierarchy *hierarchy, a3byte *str);
+
+	// A3: Read hierarchy from string.
+	//	param hierarchy: non-null pointer to unused hierarchy
+	//	param str: non-null byte array to stream from
+	//	return: number of bytes copied if success
+	//	return: 0 if failed
+	//	return: -1 if invalid params
+	inline a3i32 a3hierarchyDemoStateCopyFromString(a3_DemoSceneHierarchy *hierarchy, const a3byte *str);
+
+	// A3: Get hierarchy stream size.
+	//	param hierarchy: non-null pointer to initialized hierarchy
+	//	return: number of bytes required to store hierarchy in string
+	//	return: -1 if invalid param
+	inline a3i32 a3hierarchyDemoStateGetStringSize(const a3_DemoSceneHierarchy *hierarchy);
+
+	// A3: Release hierarchy.
+	//	param hierarchy: non-null pointer to initialized hierarchy
+	//	return: 1 if success
+	//	return: -1 if invalid param
+	inline a3i32 a3hierarchyDemoStateRelease(a3_DemoSceneHierarchy *hierarchy);
 
 #ifdef __cplusplus
 }
