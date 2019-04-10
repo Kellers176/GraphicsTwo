@@ -1,4 +1,6 @@
 /*
+	“This file was modified by Kelly Herstine with permission of the author.”
+
 	Copyright 2011-2019 Daniel S. Buckstein
 
 	Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,11 +29,12 @@
 // ****TO-DO: 
 //	1) declare uniform variable for color; see demo code for hints
 //	2) assign uniform variable to output color
+uniform vec4 uColor;
 
 out vec4 rtFragColor;
 
 void main()
 {
 	// DUMMY OUTPUT: all fragments are OPAQUE WHITE
-	rtFragColor = vec4(1.0, 1.0, 1.0, 1.0);
+	rtFragColor = uColor;
 }

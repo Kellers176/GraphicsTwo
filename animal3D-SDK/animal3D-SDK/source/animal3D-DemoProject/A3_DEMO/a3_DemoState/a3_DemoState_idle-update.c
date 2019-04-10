@@ -272,6 +272,7 @@ void a3demo_update_main(a3_DemoState *demoState, a3f64 dt)
 
 		// in any case calculate interpolation param
 		demoState->targetParam = demoState->targetTime * demoState->targetDurationInv;
+		demoState->skeletonParam = demoState->targetTime * demoState->targetDurationInv;
 	}
 }
 
@@ -403,8 +404,11 @@ void a3demo_update_skeletal(a3_DemoState *demoState, a3f64 dt)
 
 	// other objects
 	a3_HierarchyState *currentHierarchyState;
+	//a3_HierarchyState currentHierarchyStateAnimate;
 	const a3_HierarchyPoseGroup *currentHierarchyPoseGroup;
+	a3_HierarchyPoseGroup currentHierarchyPoseGroupAnimate;
 	const a3_Hierarchy *currentHierarchy;
+//	a3_Hierarchy currentHierarchyAnimate;
 
 
 	// update scene objects
@@ -437,23 +441,85 @@ void a3demo_update_skeletal(a3_DemoState *demoState, a3f64 dt)
 	else
 		demoState->gridColor.b = 0.25f;
 
+	if (demoState->animationControl)
+	{
+		// time step for controller
+		demoState->skeletonTime += (a3real)dt;
 
-	// update animation: 
-	//	-> copy pose from set to state (pro tip: seems pointless but it is not)
-	//	-> convert the current pose to transforms
-	//	-> forward kinematics
-	//	-> skinning matrices
-	currentHierarchyState = demoState->hierarchyState_skel + demoState->editSkeletonIndex;
-	currentHierarchyPoseGroup = currentHierarchyState->poseGroup;
-	currentHierarchy = currentHierarchyPoseGroup->hierarchy;
+		// if we surpass the time for one segment
+		if (demoState->skeletonTime >= demoState->skeletonDuration)
+		{
+			demoState->skeletonTime -= demoState->skeletonDuration;
+			demoState->editSkeletonIndex = (demoState->editSkeletonIndex + 1) % (demoState->skeletonNum - 1);
+		}
 
-	a3hierarchyPoseCopy(currentHierarchyState->localPose,
-		currentHierarchyPoseGroup->pose + 0, currentHierarchy->numNodes);
-	a3hierarchyPoseConvert(currentHierarchyState->localSpace,
-		currentHierarchyState->localPose, currentHierarchy->numNodes, 0);
-	a3kinematicsSolveForward(demoState->hierarchyState_skel);
-//	a3hierarchyStateUpdateObjectBindToCurrent(currentHierarchyState, ???);
+		// in any case calculate interpolation param
+		demoState->skeletonParam = demoState->skeletonTime * demoState->skeletonDurationInv;
+	
 
+		// update animation: 
+		//	-> copy pose from set to state (pro tip: seems pointless but it is not)
+		//	-> convert the current pose to transforms
+		//	-> forward kinematics
+		//	-> skinning matrices
+		currentHierarchyState = demoState->hierarchyState_skel + demoState->editSkeletonIndex;
+		currentHierarchyPoseGroup = currentHierarchyState->poseGroup;
+		currentHierarchyPoseGroupAnimate = currentHierarchyState->poseGroup[0];
+		currentHierarchy = currentHierarchyPoseGroup->hierarchy;
+		
+		// lerp
+		//for (a3ui32 i = 0; i < currentHierarchyPoseGroup->hierarchy->numNodes; i++)
+		//{
+		//	a3real3Lerp(currentHierarchyPoseGroup->pose[0].nodePose[i].translation.v,
+		//		demoState->hierarchyState_skel[demoState->editSkeletonIndex + 0].poseGroup->pose[0].nodePose[i].translation.v,
+		//		demoState->hierarchyState_skel[demoState->editSkeletonIndex + 1 % (demoState->skeletonNum-1)].poseGroup->pose[0].nodePose[i].translation.v,
+		//		.1f);
+		//
+		//	a3real3Lerp(currentHierarchyPoseGroup->pose[0].nodePose[i].orientation.v,
+		//		demoState->hierarchyState_skel[demoState->editSkeletonIndex + 0].poseGroup->pose[0].nodePose[i].orientation.v,
+		//		demoState->hierarchyState_skel[demoState->editSkeletonIndex + 1 % (demoState->skeletonNum-1)].poseGroup->pose[0].nodePose[i].orientation.v,
+		//		.1f);
+		//}
+
+		for (a3ui32 i = 0; i < currentHierarchyPoseGroupAnimate.hierarchy->numNodes; i++)
+		{
+			a3real3Lerp(currentHierarchyPoseGroupAnimate.pose[0].nodePose[i].translation.v,
+				demoState->hierarchyState_skel[demoState->editSkeletonIndex + 0].poseGroup->pose[0].nodePose[i].translation.v,
+				demoState->hierarchyState_skel[demoState->editSkeletonIndex + 1 % (demoState->skeletonNum-1)].poseGroup->pose[0].nodePose[i].translation.v,
+				.1f);
+
+			a3real3Lerp(currentHierarchyPoseGroupAnimate.pose[0].nodePose[i].orientation.v,
+				demoState->hierarchyState_skel[demoState->editSkeletonIndex + 0].poseGroup->pose[0].nodePose[i].orientation.v,
+				demoState->hierarchyState_skel[demoState->editSkeletonIndex + 1 % (demoState->skeletonNum-1)].poseGroup->pose[0].nodePose[i].orientation.v,
+				.1f);
+		}
+		
+
+		a3hierarchyPoseCopy(currentHierarchyState->localPose,
+			currentHierarchyPoseGroupAnimate.pose + 0, currentHierarchy->numNodes);
+		a3hierarchyPoseConvert(currentHierarchyState->localSpace,
+			currentHierarchyState->localPose, currentHierarchy->numNodes, 0);
+		a3kinematicsSolveForward(demoState->hierarchyState_skel + demoState->editSkeletonIndex);		
+	}
+	else
+	{
+		// update animation: 
+		//	-> copy pose from set to state (pro tip: seems pointless but it is not)
+		//	-> convert the current pose to transforms
+		//	-> forward kinematics
+		//	-> skinning matrices
+		currentHierarchyState = demoState->hierarchyState_skel + demoState->editSkeletonIndex;
+		currentHierarchyPoseGroup = currentHierarchyState->poseGroup;
+		currentHierarchy = currentHierarchyPoseGroup->hierarchy;
+
+		a3hierarchyPoseCopy(currentHierarchyState->localPose,
+			currentHierarchyPoseGroup->pose + 0, currentHierarchy->numNodes);
+		a3hierarchyPoseConvert(currentHierarchyState->localSpace,
+			currentHierarchyState->localPose, currentHierarchy->numNodes, 0);
+		a3kinematicsSolveForward(demoState->hierarchyState_skel + demoState->editSkeletonIndex);
+		//	a3hierarchyStateUpdateObjectBindToCurrent(currentHierarchyState, ???);
+	}
+	
 
 	// update buffers: 
 	//	-> calculate and store bone transforms

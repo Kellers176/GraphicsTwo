@@ -377,13 +377,19 @@ void a3demo_render_skeletal_controls(const a3_DemoState *demoState)
 		"ANIMATION updates (toggle 'm') %d", demoState->updateAnimation);
 	a3textDraw(demoState->text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
 		"EDIT JOINTS (toggle '0') %d", demoState->editingJoint);
+	a3textDraw(demoState->text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
+		"ANIMATE JOINTS (toggle 'l') %d", demoState->animationControl);
+	a3textDraw(demoState->text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
+		"SKELETON TIME %f", demoState->skeletonTime);
 
 	// editing controls
 	if (demoState->editingJoint)
 	{
 		const a3_HierarchyNodePose *currentNodePose = demoState->hierarchyState_skel[demoState->editSkeletonIndex].poseGroup->pose[0].nodePose + demoState->editJointIndex;
 		const a3_HierarchyPoseFlag currentPoseFlag = demoState->hierarchyPoseFlag_skel[demoState->editSkeletonIndex][demoState->editJointIndex];
-
+		
+		a3textDraw(demoState->text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
+			"    Editing Skeleton %d / %d ( '<' prev | next '>' )", demoState->editSkeletonIndex + 1, demoState->skeletonNum);
 		a3textDraw(demoState->text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
 			"    Editing joint %d / %d ( '(' prev | next ')' )", demoState->editJointIndex + 1, demoState->hierarchy_skel[demoState->editSkeletonIndex].numNodes);
 		a3textDraw(demoState->text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,

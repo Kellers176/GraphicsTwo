@@ -1,4 +1,6 @@
 /*
+	“This file was modified by Kelly Herstine with permission of the author.”
+
 	Copyright 2011-2019 Daniel S. Buckstein
 
 	Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,14 +24,19 @@
 	Pass-thru GLSL vertex shader. Pre-multiplies position by local-space 
 		transformation then outputs transformed position attribute.
 */
-
 #version 410
 
-#define MAX_INSTANCES 128
+#define MAX_INSTANCES 1024
 
-layout (location = 0) in vec4 aPosition;
+layout(location = 0) in vec4 aPosition;
+
+
+uniform ubTransformMVP{
+	mat4 uMVP[MAX_INSTANCES];
+};
+
 
 void main()
 {
-	gl_Position = aPosition;
+	gl_Position = uMVP[gl_InstanceID] * aPosition;
 }

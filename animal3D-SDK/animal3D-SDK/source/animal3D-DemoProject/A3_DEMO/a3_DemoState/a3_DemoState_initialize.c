@@ -324,6 +324,12 @@ void a3demo_initScene(a3_DemoState *demoState)
 		demoState->skeletonObject->position.y = +4.0f;
 		demoState->skeletonObject->euler.z = +180.0f;
 	}
+
+	//skeleton
+	demoState->skeletonDuration = a3realTwo;
+	demoState->skeletonDurationInv = a3recip(demoState->skeletonDuration);
+	demoState->skeletonTime = demoState->skeletonParam = a3realZero;
+
 }
 
 // refresh non-asset scene objects (e.g. re-link pointers)
