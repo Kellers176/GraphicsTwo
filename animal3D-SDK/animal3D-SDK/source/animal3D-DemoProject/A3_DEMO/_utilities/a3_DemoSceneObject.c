@@ -171,6 +171,50 @@ extern inline a3i32 a3hierarchyDemoStateCreate(a3_DemoSceneHierarchy *hierarchy_
 	return -1;
 }
 
+extern inline a3i32 a3hierarchyDemoStateSaveBinary(const a3_DemoSceneHierarchy *hierarchy, const a3_FileStream *fileStream)
+{
+	FILE *fp;
+	a3ui32 ret = 0;
+	if (hierarchy && fileStream)
+	{
+		if (hierarchy->nodes)
+		{
+			fp = fileStream->stream;
+			if (fp)
+			{
+				ret += (a3ui32)fwrite(&hierarchy->numNodes, 1, sizeof(a3ui32), fp);
+				ret += (a3ui32)fwrite(hierarchy->nodes, 1, sizeof(a3_DemoSceneHierarchyNode) * hierarchy->numNodes, fp);
+			}
+			return ret;
+		}
+	}
+	return -1;
+}
+
+extern inline a3i32 a3hierarchyDemoStateLoadBinary(a3_DemoSceneHierarchy *hierarchy, const a3_FileStream *fileStream)
+{
+	FILE *fp;
+	a3ui32 ret = 0;
+	a3ui32 dataSize = 0;
+	if (hierarchy && fileStream)
+	{
+		if (!hierarchy->nodes)
+		{
+			fp = fileStream->stream;
+			if (fp)
+			{
+				ret += (a3ui32)fread(&hierarchy->numNodes, 1, sizeof(a3ui32), fp);
+
+				dataSize = sizeof(a3_DemoSceneHierarchyNode) * hierarchy->numNodes;
+				hierarchy->nodes = (a3_DemoSceneHierarchyNode *)malloc(dataSize);
+				ret += (a3ui32)fread(hierarchy->nodes, 1, dataSize, fp);
+			}
+			return ret;
+		}
+	}
+	return -1;
+}
+
 extern inline a3i32 a3hierarchyDemoStateSetNode(const a3_DemoSceneHierarchy *hierarchy, const a3ui32 index, const a3i32 parentIndex, const a3byte name[a3DemoScenenode_nameSize])
 {
 	a3_DemoSceneHierarchyNode *node;

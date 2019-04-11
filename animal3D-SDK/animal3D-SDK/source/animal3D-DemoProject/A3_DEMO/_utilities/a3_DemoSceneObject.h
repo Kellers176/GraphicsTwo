@@ -155,6 +155,23 @@ extern "C"
 	//	return: index if success
 	//	return: -1 if invalid params or node not found
 	inline a3i32 a3hierarchyDemoStateGetNodeIndex(const a3_DemoSceneHierarchy *hierarchy, const a3byte name[a3DemoScenenode_nameSize]);
+
+	// A3: Save hierarchy to binary file.
+	//	param hierarchy: non-null pointer to initialized hierarchy
+	//	param fileStream: non-null pointer to file stream opened in write mode
+	//	return: number of bytes written if success
+	//	return: 0 if failed
+	//	return: -1 if invalid params
+	inline a3i32 a3hierarchyDemoStateSaveBinary(const a3_DemoSceneHierarchy *hierarchy, const a3_FileStream *fileStream);
+
+	// A3: Load hierarchy from binary file.
+	//	param hierarchy: non-null pointer to unused hierarchy
+	//	param fileStream: non-null pointer to file stream opened in read mode
+	//	return: number of bytes read if success
+	//	return: 0 if failed
+	//	return: -1 if invalid params
+	inline a3i32 a3hierarchyDemoStateLoadBinary(a3_DemoSceneHierarchy *hierarchy, const a3_FileStream *fileStream);
+
 	// A3: Check if node is a parent of another.
 	//	param hierarchy: non-null pointer to initialized hierarchy
 	//	param parentIndex: non-negative possible parent node index

@@ -124,10 +124,13 @@ void a3demo_loadGeometry(a3_DemoState *demoState)
 	a3ui32 numVerts = 0;
 	a3ui32 i, j;
 
+	a3_DemoSceneHierarchy *hierarchy;
+
 
 	// file streaming (if requested)
 	a3_FileStream fileStream[1] = { 0 };
 	const a3byte *const geometryStream = "./data/geom_data_gpro_skeletal.dat";
+	// stream animation assets
 
 	// geometry data
 	a3_GeometryData displayShapesData[6] = { 0 };
@@ -154,29 +157,36 @@ void a3demo_loadGeometry(a3_DemoState *demoState)
 
 	// procedural scene objects
 	// attempt to load stream if requested
+
 	if (demoState->streaming && a3fileStreamOpenRead(fileStream, geometryStream))
 	{
 		// read from stream
+		hierarchy = demoState->hierarchyDemoState_skel;
 
 		// static display objects
 		for (i = 0; i < displayShapesCount; ++i)
 			a3fileStreamReadObject(fileStream, displayShapesData + i, (a3_FileStreamReadFunc)a3geometryLoadDataBinary);
+			a3hierarchyDemoStateLoadBinary(hierarchy, fileStream);
 
 		// hidden volume objects
 		for (i = 0; i < hiddenShapesCount; ++i)
-			a3fileStreamReadObject(fileStream, hiddenShapesData + i, (a3_FileStreamReadFunc)a3geometryLoadDataBinary);
+		    a3fileStreamReadObject(fileStream, hiddenShapesData + i, (a3_FileStreamReadFunc)a3geometryLoadDataBinary);
+			a3hierarchyDemoStateLoadBinary(hierarchy, fileStream);
 
 		// procedurally-generated objects
 		for (i = 0; i < proceduralShapesCount; ++i)
 			a3fileStreamReadObject(fileStream, proceduralShapesData + i, (a3_FileStreamReadFunc)a3geometryLoadDataBinary);
+			a3hierarchyDemoStateLoadBinary(hierarchy, fileStream);
 
 		// loaded model objects
 		for (i = 0; i < loadedModelsCount; ++i)
 			a3fileStreamReadObject(fileStream, loadedModelsData + i, (a3_FileStreamReadFunc)a3geometryLoadDataBinary);
+			a3hierarchyDemoStateLoadBinary(hierarchy, fileStream);
 
 		// morphing model objects
 		for (i = 0; i < morphTargetCount; ++i)
 			a3fileStreamReadObject(fileStream, morphTargetData + i, (a3_FileStreamReadFunc)a3geometryLoadDataBinary);
+			a3hierarchyDemoStateLoadBinary(hierarchy, fileStream);
 
 		// done
 		a3fileStreamClose(fileStream);
@@ -257,6 +267,9 @@ void a3demo_loadGeometry(a3_DemoState *demoState)
 		
 		// done
 		a3fileStreamClose(fileStream);
+		//****To-Do
+		//need to do some stuff with a3_DemoSceneObject
+		//then forward kinematics
 	}
 
 

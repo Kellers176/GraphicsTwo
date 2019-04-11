@@ -274,6 +274,9 @@ void a3demo_update_main(a3_DemoState *demoState, a3f64 dt)
 		demoState->targetParam = demoState->targetTime * demoState->targetDurationInv;
 		demoState->skeletonParam = demoState->targetTime * demoState->targetDurationInv;
 	}
+
+	a3kinematicsSolveForward(demoState->hierarchyState_skel + demoState->editSkeletonIndex);
+
 }
 
 

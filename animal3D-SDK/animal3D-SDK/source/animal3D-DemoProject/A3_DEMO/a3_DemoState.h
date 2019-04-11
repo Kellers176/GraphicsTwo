@@ -270,6 +270,9 @@ extern "C"
 		a3_HierarchyPoseGroup hierarchyPoseGroup_skel[4];
 		a3_HierarchyPoseFlag hierarchyPoseFlag_skel[4][128];
 
+		//demo state
+		a3_DemoSceneHierarchy hierarchyDemoState_skel[1];
+
 		// skeletal controls
 		a3ui32 skeletonNum;
 		a3ui32 editSkeletonIndex;
