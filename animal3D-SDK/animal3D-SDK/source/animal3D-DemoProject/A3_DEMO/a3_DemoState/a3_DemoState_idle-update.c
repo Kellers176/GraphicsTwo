@@ -493,11 +493,11 @@ void a3demo_update_skeletal(a3_DemoState *demoState, a3f64 dt)
 
 
 
-			a3real3Lerp(currentHierarchyState->localPose->nodePose[i].translation.v, curTranslation, nextTranslation, demoState->skeletonParam);
+			a3real3Lerp(currentHierarchyState->localPose->nodePose[j].translation.v, curTranslation, nextTranslation, demoState->skeletonParam);
 			//a3hierarchyNodePoseSetTranslation(currentPos, (a3f32)output[0], (a3f32)output[1], (a3f32)output[2]);
 			//currentHierarchyState->localSpace->transform = output;
 
-			a3real3Lerp(currentHierarchyState->localPose->nodePose[i].orientation.v, curOrientation, nextOrientation, demoState->skeletonParam);
+			a3real3Lerp(currentHierarchyState->localPose->nodePose[j].orientation.v, curOrientation, nextOrientation, demoState->skeletonParam);
 			//a3hierarchyNodePoseSetRotation(currentPos, (a3f32)output[0], (a3f32)output[1], (a3f32)output[2], true);
 
 
@@ -538,7 +538,7 @@ void a3demo_update_skeletal(a3_DemoState *demoState, a3f64 dt)
 		currentHierarchy = currentHierarchyPoseGroup->hierarchy;
 
 		a3hierarchyPoseCopy(currentHierarchyState->localPose,
-			currentHierarchyPoseGroup->pose + 0, currentHierarchy->numNodes);
+			currentHierarchyPoseGroup->pose + demoState->editPoseIndex, currentHierarchy->numNodes);
 		a3hierarchyPoseConvert(currentHierarchyState->localSpace,
 			currentHierarchyState->localPose, currentHierarchy->numNodes, 0);
 		a3kinematicsSolveForward(demoState->hierarchyState_skel);

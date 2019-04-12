@@ -391,9 +391,9 @@ void a3demo_render_skeletal_controls(const a3_DemoState *demoState)
 		a3textDraw(demoState->text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
 			"    Editing Skeleton %d / %d ( '<' prev | next '>' )", demoState->editPoseIndex + 1, demoState->PoseNum);
 		a3textDraw(demoState->text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
-			"    Editing joint %d / %d ( '(' prev | next ')' )", demoState->editJointIndex + 1, demoState->hierarchy_skel[demoState->editPoseIndex].numNodes);
+			"    Editing joint %d / %d ( '(' prev | next ')' )", demoState->editJointIndex + 1, demoState->hierarchy_skel[0].numNodes);
 		a3textDraw(demoState->text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
-			"    Joint name: '%s'", demoState->hierarchy_skel[demoState->editPoseIndex].nodes[demoState->editJointIndex].name);
+			"    Joint name: '%s'", demoState->hierarchy_skel[0].nodes[demoState->editJointIndex].name);
 		a3textDraw(demoState->text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
 			"    Edit DOFs: ");
 		if (currentPoseFlag & a3poseFlag_rotate)
