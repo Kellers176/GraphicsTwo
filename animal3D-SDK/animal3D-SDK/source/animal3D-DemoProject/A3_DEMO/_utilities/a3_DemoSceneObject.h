@@ -43,6 +43,8 @@ extern "C"
 	typedef struct a3_DemoPointLight	a3_DemoPointLight;
 	typedef struct a3_DemoSceneHierarchy		a3_DemoSceneHierarchy;
 	typedef struct a3_DemoSceneHierarchyNode	a3_DemoSceneHierarchyNode;
+	typedef struct a3_ObjectManager		a3_ObjectManager;
+
 #endif	// __cplusplus
 
 	
@@ -76,6 +78,8 @@ extern "C"
 		a3ui32 numNodes;
 	};
 
+	
+
 //-----------------------------------------------------------------------------
 	// general scene objects
 	struct a3_DemoSceneObject
@@ -86,6 +90,8 @@ extern "C"
 		a3vec3 position;	// scene position for direct control
 		a3vec3 scale;		// scale (not accounted for in update)
 		a3i32 scaleMode;		// 0 = off; 1 = uniform; other = non-uniform (nightmare)
+		a3mat4 localModelMat; //local model matrix
+		a3mat4 localModelMatInv; //inverse model matrix
 	};
 
 	// camera/viewer
@@ -115,7 +121,11 @@ extern "C"
 		a3real pad[2];						// padding
 	};
 
-
+	struct a3_ObjectManager
+	{
+		a3_DemoSceneHierarchy* nodeGroup;
+		a3_DemoSceneObject*  objectInfo;
+	};
 //-----------------------------------------------------------------------------
 
 	// scene object initializers and updates

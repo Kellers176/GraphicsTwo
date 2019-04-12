@@ -145,6 +145,12 @@ void a3demo_update_main(a3_DemoState *demoState, a3f64 dt)
 	for (i = 0; i < demoStateMaxCount_lightObject; ++i)
 		a3demo_updateSceneObject(demoState->lightObject + i, 1);
 
+	//****To-Do
+	//need to do some stuff with a3_DemoSceneObject
+	//then forward kinematics
+	a3kinematicsSolveForwardObjects(demoState->objectManager);
+
+
 	// update cameras/projectors
 	for (i = 0; i < demoStateMaxCount_projector; ++i)
 		a3demo_updateCameraViewProjection(demoState->camera + i);

@@ -27,6 +27,7 @@
 
 
 #include "a3_HierarchyState.h"
+#include "./A3_DEMO/_utilities/a3_DemoSceneObject.h"
 
 
 //-----------------------------------------------------------------------------
@@ -74,6 +75,20 @@ extern "C"
 
 	// forward kinematics solver starting at a specified joint
 	inline a3i32 a3kinematicsSolveForwardPartial(const a3_HierarchyState *hierarchyState, const a3ui32 firstIndex, const a3ui32 nodeCount);
+
+	//-----------------------------------------------------------------------------
+	// general forward kinematics: 
+	// given local transforms for hierarchy nodes, calculate object-space: 
+	//		if not root, 
+	//			object-space node = object-space parent * local-space node
+	//		else
+	//			object-space node = local-space node
+
+	// forward kinematics solver given an initialized hierarchy state
+	inline a3i32 a3kinematicsSolveForwardObjects(const a3_ObjectManager *hierarchyState);
+
+	// forward kinematics solver starting at a specified joint
+	inline a3i32 a3kinematicsSolveForwardPartialObjects(const a3_ObjectManager *hierarchyState, const a3ui32 firstIndex, const a3ui32 nodeCount);
 
 
 //-----------------------------------------------------------------------------

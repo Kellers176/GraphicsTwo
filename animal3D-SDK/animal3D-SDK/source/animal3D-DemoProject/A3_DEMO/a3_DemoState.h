@@ -272,6 +272,7 @@ extern "C"
 
 		//demo state
 		a3_DemoSceneHierarchy hierarchyDemoState_skel[1];
+		a3_ObjectManager objectManager[1]; //state of the hierarchy
 
 		// skeletal controls
 		a3ui32 skeletonNum;

@@ -37,6 +37,9 @@ extern inline void a3demo_initSceneObject(a3_DemoSceneObject *sceneObject)
 	a3real4x4SetIdentity(sceneObject->modelMatInv.m);
 	a3real3Set(sceneObject->euler.v, a3realZero, a3realZero, a3realZero);
 	a3real3Set(sceneObject->position.v, a3realZero, a3realZero, a3realZero);
+	a3real4x4SetIdentity(sceneObject->localModelMat.m);
+	a3real4x4SetIdentity(sceneObject->localModelMatInv.m);
+
 }
 
 extern inline void a3demo_updateSceneObject(a3_DemoSceneObject *sceneObject, const a3boolean useZYX)
@@ -47,6 +50,8 @@ extern inline void a3demo_updateSceneObject(a3_DemoSceneObject *sceneObject, con
 		a3real4x4SetRotateXYZ(sceneObject->modelMat.m, sceneObject->euler.x, sceneObject->euler.y, sceneObject->euler.z);
 	sceneObject->modelMat.v3.xyz = sceneObject->position;
 	a3real4x4TransformInverseIgnoreScale(sceneObject->modelMatInv.m, sceneObject->modelMat.m);
+
+
 }
 
 extern inline a3i32 a3demo_rotateSceneObject(a3_DemoSceneObject *sceneObject, const a3real speed, const a3real deltaX, const a3real deltaY, const a3real deltaZ)

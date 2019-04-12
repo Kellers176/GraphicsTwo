@@ -33,6 +33,11 @@ extern inline a3i32 a3kinematicsSolveForward(const a3_HierarchyState *hierarchyS
 	return a3kinematicsSolveForwardPartial(hierarchyState, 0, hierarchyState->poseGroup->hierarchy->numNodes);
 }
 
+extern inline a3i32 a3kinematicsSolveForwardObjects(const a3_ObjectManager *hierarchyState)
+{
+	return a3kinematicsSolveForwardPartialObjects(hierarchyState, 0, hierarchyState->nodeGroup->numNodes);
+}
+
 // partial FK solver
 extern inline a3i32 a3kinematicsSolveForwardPartial(const a3_HierarchyState *hierarchyState, const a3ui32 firstIndex, const a3ui32 nodeCount)
 {
@@ -59,6 +64,36 @@ extern inline a3i32 a3kinematicsSolveForwardPartial(const a3_HierarchyState *hie
 				hierarchyState->objectSpace->transform[i] = hierarchyState->localSpace->transform[i];
 		}
 	}
+	return -1;
+}
+
+inline a3i32 a3kinematicsSolveForwardPartialObjects(const a3_ObjectManager *hierarchyState, const a3ui32 firstIndex, const a3ui32 nodeCount)
+{/*
+	if (hierarchyState && hierarchyState->poseGroup &&
+		firstIndex < hierarchyState->poseGroup->hierarchy->numNodes && nodeCount)
+	{*/
+		// ****TO-DO: implement forward kinematics algorithm
+		a3ui32 i, end = firstIndex + nodeCount;
+		for (i = firstIndex; i < end; i++)
+		{
+			//blah blah
+			//else
+			// general forward kinematics: 
+			// given local transforms for hierarchy nodes, calculate object-space: 
+			//		if not root, 
+			//			object-space node = object-space parent * local-space node
+			//		else
+			//			object-space node = local-space node
+			a3i32 parent = hierarchyState->nodeGroup->nodes[i].parentIndex;
+			if (a3hierarchyDemoStateIsParentNode(hierarchyState->nodeGroup, parent, i))
+			{
+				a3real4x4Product(hierarchyState->objectInfo[i].modelMat.m, hierarchyState->objectInfo[parent].modelMat.m, hierarchyState->objectInfo[i].localModelMat.m);
+			}
+			else
+				a3real4x4SetReal4x4(hierarchyState->objectInfo[i].modelMat.m, hierarchyState->objectInfo[i].localModelMat.m);
+				//hierarchyState->objectInfo[i].modelMat = hierarchyState->objectInfo[i].localModelMat;
+		}
+	//}
 	return -1;
 }
 

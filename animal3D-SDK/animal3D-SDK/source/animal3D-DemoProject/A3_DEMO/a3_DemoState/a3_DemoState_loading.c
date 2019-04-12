@@ -267,9 +267,7 @@ void a3demo_loadGeometry(a3_DemoState *demoState)
 		
 		// done
 		a3fileStreamClose(fileStream);
-		//****To-Do
-		//need to do some stuff with a3_DemoSceneObject
-		//then forward kinematics
+		
 	}
 
 
