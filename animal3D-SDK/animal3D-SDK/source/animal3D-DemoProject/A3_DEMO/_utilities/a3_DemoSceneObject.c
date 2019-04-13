@@ -42,6 +42,18 @@ extern inline void a3demo_initSceneObject(a3_DemoSceneObject *sceneObject)
 
 }
 
+//extern inline void a3demo_updateSceneObject(a3_DemoSceneObject *sceneObject, const a3boolean useZYX)
+//{
+//	if (useZYX)
+//		a3real4x4SetRotateZYX(sceneObject->localModelMat.m, sceneObject->euler.x, sceneObject->euler.y, sceneObject->euler.z);
+//	else
+//		a3real4x4SetRotateXYZ(sceneObject->localModelMat.m, sceneObject->euler.x, sceneObject->euler.y, sceneObject->euler.z);
+//	sceneObject->localModelMat.v3.xyz = sceneObject->position;
+//	a3real4x4TransformInverseIgnoreScale(sceneObject->localModelMatInv.m, sceneObject->localModelMat.m);
+//
+//
+//}
+
 extern inline void a3demo_updateSceneObject(a3_DemoSceneObject *sceneObject, const a3boolean useZYX)
 {
 	if (useZYX)
@@ -134,7 +146,9 @@ inline a3ret a3hierarchyDemoStateInternalGetIndex(const a3_DemoSceneHierarchy *h
 	return -1;
 }
 
-inline void a3hierarchyDemoStateInternalSetNode(a3_DemoSceneHierarchyNode *node, const a3ui32 index, const a3i32 parentIndex, const a3byte name[a3DemoScenenode_nameSize])
+
+
+extern inline void a3hierarchyDemoStateInternalSetNode(a3_DemoSceneHierarchyNode *node, const a3ui32 index, const a3i32 parentIndex, const a3byte name[a3DemoScenenode_nameSize])
 {
 	strncpy(node->name, name, a3DemoScenenode_nameSize);
 	node->name[a3DemoScenenode_nameSize - 1] = 0;

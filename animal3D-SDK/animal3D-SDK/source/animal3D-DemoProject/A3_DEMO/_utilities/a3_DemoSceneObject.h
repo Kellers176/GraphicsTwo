@@ -123,7 +123,7 @@ extern "C"
 
 	struct a3_ObjectManager
 	{
-		a3_DemoSceneHierarchy* nodeGroup;
+		a3_DemoSceneHierarchy* hierarchy;
 		a3_DemoSceneObject*  objectInfo;
 	};
 //-----------------------------------------------------------------------------

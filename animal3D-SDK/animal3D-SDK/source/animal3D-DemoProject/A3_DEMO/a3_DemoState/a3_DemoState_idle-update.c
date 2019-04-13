@@ -148,7 +148,7 @@ void a3demo_update_main(a3_DemoState *demoState, a3f64 dt)
 	//****To-Do
 	//need to do some stuff with a3_DemoSceneObject
 	//then forward kinematics
-	a3kinematicsSolveForwardObjects(demoState->objectManager);
+	a3kinematicsSolveForwardObjects(demoState->hierarchyDemoState_skel, demoState->sceneObject);
 
 
 	// update cameras/projectors

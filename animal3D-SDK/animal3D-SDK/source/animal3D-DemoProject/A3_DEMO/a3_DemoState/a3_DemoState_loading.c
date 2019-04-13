@@ -155,6 +155,9 @@ void a3demo_loadGeometry(a3_DemoState *demoState)
 	a3_VertexAttributeDataDescriptor morphVertexAttribData[a3attrib_nameMax] = { 0 };
 
 
+	a3hierarchyDemoStateCreate(demoState->hierarchyDemoState_skel, demoStateMaxCount_sceneObject, 0);
+
+
 	// procedural scene objects
 	// attempt to load stream if requested
 
@@ -162,31 +165,37 @@ void a3demo_loadGeometry(a3_DemoState *demoState)
 	{
 		// read from stream
 		hierarchy = demoState->hierarchyDemoState_skel;
+		//objectManager->hierarchy = hierarchy;
 
 		// static display objects
 		for (i = 0; i < displayShapesCount; ++i)
 			a3fileStreamReadObject(fileStream, displayShapesData + i, (a3_FileStreamReadFunc)a3geometryLoadDataBinary);
 			a3hierarchyDemoStateLoadBinary(hierarchy, fileStream);
+			//a3hierarchyDemoStateLoadBinary(objectManager->hierarchy, fileStream);
 
 		// hidden volume objects
 		for (i = 0; i < hiddenShapesCount; ++i)
 		    a3fileStreamReadObject(fileStream, hiddenShapesData + i, (a3_FileStreamReadFunc)a3geometryLoadDataBinary);
 			a3hierarchyDemoStateLoadBinary(hierarchy, fileStream);
+			//a3hierarchyDemoStateLoadBinary(objectManager->hierarchy, fileStream);
 
 		// procedurally-generated objects
 		for (i = 0; i < proceduralShapesCount; ++i)
 			a3fileStreamReadObject(fileStream, proceduralShapesData + i, (a3_FileStreamReadFunc)a3geometryLoadDataBinary);
 			a3hierarchyDemoStateLoadBinary(hierarchy, fileStream);
+			//a3hierarchyDemoStateLoadBinary(objectManager->hierarchy, fileStream);
 
 		// loaded model objects
 		for (i = 0; i < loadedModelsCount; ++i)
 			a3fileStreamReadObject(fileStream, loadedModelsData + i, (a3_FileStreamReadFunc)a3geometryLoadDataBinary);
 			a3hierarchyDemoStateLoadBinary(hierarchy, fileStream);
+			//a3hierarchyDemoStateLoadBinary(objectManager->hierarchy, fileStream);
 
 		// morphing model objects
 		for (i = 0; i < morphTargetCount; ++i)
 			a3fileStreamReadObject(fileStream, morphTargetData + i, (a3_FileStreamReadFunc)a3geometryLoadDataBinary);
 			a3hierarchyDemoStateLoadBinary(hierarchy, fileStream);
+			//a3hierarchyDemoStateLoadBinary(objectManager->hierarchy, fileStream);
 
 		// done
 		a3fileStreamClose(fileStream);
@@ -194,6 +203,9 @@ void a3demo_loadGeometry(a3_DemoState *demoState)
 	// not streaming or stream doesn't exist
 	else if (!demoState->streaming || a3fileStreamOpenWrite(fileStream, geometryStream))
 	{
+
+		hierarchy = demoState->hierarchyDemoState_skel;
+
 		// create new data
 		a3_ProceduralGeometryDescriptor displayShapes[6] = { a3geomShape_none };
 		a3_ProceduralGeometryDescriptor hiddenShapes[1] = { a3geomShape_none };
@@ -226,6 +238,7 @@ void a3demo_loadGeometry(a3_DemoState *demoState)
 		{
 			a3proceduralGenerateGeometryData(displayShapesData + i, displayShapes + i, 0);
 			a3fileStreamWriteObject(fileStream, displayShapesData + i, (a3_FileStreamWriteFunc)a3geometrySaveDataBinary);
+			a3hierarchyDemoStateLoadBinary(hierarchy, fileStream);
 		}
 
 		// hidden volumes and shapes
@@ -237,24 +250,35 @@ void a3demo_loadGeometry(a3_DemoState *demoState)
 		{
 			a3proceduralGenerateGeometryData(hiddenShapesData + i, hiddenShapes + i, 0);
 			a3fileStreamWriteObject(fileStream, hiddenShapesData + i, (a3_FileStreamWriteFunc)a3geometrySaveDataBinary);
+			a3hierarchyDemoStateLoadBinary(hierarchy, fileStream);
 		}
 
 		// other procedurally-generated objects
 		a3proceduralCreateDescriptorPlane(proceduralShapes + 0, a3geomFlag_tangents, a3geomAxis_default, 24.0f, 24.0f, 12, 12);
+
+		a3hierarchyDemoStateSetNode(hierarchy, 0, 0, "Plane");
+
 		a3proceduralCreateDescriptorSphere(proceduralShapes + 1, a3geomFlag_tangents, a3geomAxis_default, 1.0f, 32, 24);
+		a3hierarchyDemoStateSetNode(hierarchy, 1, 0, "Sphere");
+
 		a3proceduralCreateDescriptorCylinder(proceduralShapes + 2, a3geomFlag_tangents, a3geomAxis_x, 1.0f, 2.0f, 32, 1, 1);
+		a3hierarchyDemoStateSetNode(hierarchy, 2, 0, "Cyliner");
 		a3proceduralCreateDescriptorTorus(proceduralShapes + 3, a3geomFlag_tangents, a3geomAxis_x, 1.0f, 0.25f, 32, 24);
+		a3hierarchyDemoStateSetNode(hierarchy, 3, 1, "Torus");
 		for (i = 0; i < proceduralShapesCount; ++i)
 		{
 			a3proceduralGenerateGeometryData(proceduralShapesData + i, proceduralShapes + i, 0);
 			a3fileStreamWriteObject(fileStream, proceduralShapesData + i, (a3_FileStreamWriteFunc)a3geometrySaveDataBinary);
+			a3hierarchyDemoStateLoadBinary(hierarchy, fileStream);
 		}
+		a3hierarchyDemoStateSetNode(hierarchy, 4, 1, "Teapot");
 
 		// objects loaded from mesh files
 		for (i = 0; i < loadedModelsCount; ++i)
 		{
 			a3modelLoadOBJ(loadedModelsData + i, loadedShapes[i].filePath, loadedShapes[i].flag, loadedShapes[i].transform);
 			a3fileStreamWriteObject(fileStream, loadedModelsData + i, (a3_FileStreamWriteFunc)a3geometrySaveDataBinary);
+			a3hierarchyDemoStateLoadBinary(hierarchy, fileStream);
 		}
 
 		// morphing objects loaded from mesh files
@@ -263,13 +287,16 @@ void a3demo_loadGeometry(a3_DemoState *demoState)
 			{
 				a3modelLoadOBJ(morphTargetData[i] + j, morphShapes[i][j].filePath, morphShapes[i][j].flag, morphShapes[i][j].transform);
 				a3fileStreamWriteObject(fileStream, morphTargetData[i] + j, (a3_FileStreamWriteFunc)a3geometrySaveDataBinary);
+				a3hierarchyDemoStateLoadBinary(hierarchy, fileStream);
 			}
 		
 		// done
 		a3fileStreamClose(fileStream);
 		
 	}
-
+	//set hierarchy
+//	objectManager->nodeGroup = demoState->hierarchyDemoState_skel;
+//	a3hierarchyDemoStatePoseGroupCreate
 
 	// manually set up additional vertex formats (e.g. morphing models)
 	// manually set up vertex format data (e.g. pull data from morphing models)

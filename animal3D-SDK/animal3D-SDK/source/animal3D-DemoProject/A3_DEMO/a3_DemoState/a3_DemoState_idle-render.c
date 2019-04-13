@@ -1660,6 +1660,9 @@ void a3demo_render_skeletal(const a3_DemoState *demoState)
 	const a3_Hierarchy *currentHierarchy;
 
 
+//	const a3_DemoSceneHierarchy *currentDemoSceneHierarchyState;
+//	const a3_ObjectManager *currentObjectManager;
+
 	// activate scene fbo
 	writeFBO = demoState->fbo_scene;
 	a3framebufferActivate(writeFBO);

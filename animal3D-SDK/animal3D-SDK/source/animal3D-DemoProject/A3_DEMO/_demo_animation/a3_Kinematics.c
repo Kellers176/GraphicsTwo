@@ -33,9 +33,9 @@ extern inline a3i32 a3kinematicsSolveForward(const a3_HierarchyState *hierarchyS
 	return a3kinematicsSolveForwardPartial(hierarchyState, 0, hierarchyState->poseGroup->hierarchy->numNodes);
 }
 
-extern inline a3i32 a3kinematicsSolveForwardObjects(const a3_ObjectManager *hierarchyState)
+extern inline a3i32 a3kinematicsSolveForwardObjects(const a3_DemoSceneHierarchy *hierarchyState,  a3_DemoSceneObject *objectInfo)
 {
-	return a3kinematicsSolveForwardPartialObjects(hierarchyState, 0, hierarchyState->nodeGroup->numNodes);
+	return a3kinematicsSolveForwardPartialObjects(hierarchyState, objectInfo, 0, hierarchyState->numNodes);
 }
 
 // partial FK solver
@@ -67,7 +67,7 @@ extern inline a3i32 a3kinematicsSolveForwardPartial(const a3_HierarchyState *hie
 	return -1;
 }
 
-inline a3i32 a3kinematicsSolveForwardPartialObjects(const a3_ObjectManager *hierarchyState, const a3ui32 firstIndex, const a3ui32 nodeCount)
+inline a3i32 a3kinematicsSolveForwardPartialObjects(const a3_DemoSceneHierarchy *hierarchyState,  a3_DemoSceneObject *objectInfo, const a3ui32 firstIndex, const a3ui32 nodeCount)
 {/*
 	if (hierarchyState && hierarchyState->poseGroup &&
 		firstIndex < hierarchyState->poseGroup->hierarchy->numNodes && nodeCount)
@@ -84,13 +84,13 @@ inline a3i32 a3kinematicsSolveForwardPartialObjects(const a3_ObjectManager *hier
 			//			object-space node = object-space parent * local-space node
 			//		else
 			//			object-space node = local-space node
-			a3i32 parent = hierarchyState->nodeGroup->nodes[i].parentIndex;
-			if (a3hierarchyDemoStateIsParentNode(hierarchyState->nodeGroup, parent, i))
+			a3i32 parent = hierarchyState->nodes[i].parentIndex;
+			if (a3hierarchyDemoStateIsParentNode(hierarchyState, parent, i))
 			{
-				a3real4x4Product(hierarchyState->objectInfo[i].modelMat.m, hierarchyState->objectInfo[parent].modelMat.m, hierarchyState->objectInfo[i].localModelMat.m);
+				a3real4x4Product(objectInfo[i].modelMat.m, objectInfo[parent].modelMat.m, objectInfo[i].localModelMat.m);
 			}
 			else
-				a3real4x4SetReal4x4(hierarchyState->objectInfo[i].modelMat.m, hierarchyState->objectInfo[i].localModelMat.m);
+				a3real4x4SetReal4x4(objectInfo[i].modelMat.m, objectInfo[i].localModelMat.m);
 				//hierarchyState->objectInfo[i].modelMat = hierarchyState->objectInfo[i].localModelMat;
 		}
 	//}
