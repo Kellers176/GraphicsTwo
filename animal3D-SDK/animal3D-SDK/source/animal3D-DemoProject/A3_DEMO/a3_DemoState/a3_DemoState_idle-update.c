@@ -112,8 +112,8 @@ void a3demo_update_main(a3_DemoState *demoState, a3f64 dt)
 
 	// light pointers
 	a3_DemoPointLight *pointLight;
-	a3mat4 *lightMVPptr, *lightMVPBptr;
-	a3ui32 tmpLightCount, tmpBlockLightCount;
+//	a3mat4 *lightMVPptr, *lightMVPBptr;
+//	a3ui32 tmpLightCount, tmpBlockLightCount;
 
 
 	// do simple animation
@@ -144,12 +144,6 @@ void a3demo_update_main(a3_DemoState *demoState, a3f64 dt)
 		a3demo_updateSceneObject(demoState->cameraObject + i, 1);
 	for (i = 0; i < demoStateMaxCount_lightObject; ++i)
 		a3demo_updateSceneObject(demoState->lightObject + i, 1);
-
-	//****To-Do
-	//need to do some stuff with a3_DemoSceneObject
-	//then forward kinematics
-	a3kinematicsSolveForwardObjects(demoState->hierarchyDemoState_skel, demoState->sceneObject);
-
 
 	// update cameras/projectors
 	for (i = 0; i < demoStateMaxCount_projector; ++i)
@@ -183,6 +177,12 @@ void a3demo_update_main(a3_DemoState *demoState, a3f64 dt)
 		a3real4Real4x4Product(pointLight->viewPos.v, cameraObject->modelMatInv.m, pointLight->worldPos.v);
 	}
 
+	// send point light data
+	pointLight = demoState->forwardPointLight;
+	a3bufferFill(demoState->ubo_pointLight, 0, demoState->forwardLightCount * sizeof(a3_DemoPointLight), pointLight, 0);
+	demoState->ubo_pointLight->used[0] = 0;
+
+/*
 	for (i = 0, pointLight = demoState->deferredPointLight + i,
 		lightMVPptr = demoState->deferredLightMVP + i,
 		lightMVPBptr = demoState->deferredLightMVPB + i;
@@ -232,7 +232,7 @@ void a3demo_update_main(a3_DemoState *demoState, a3f64 dt)
 	{
 		demoState->deferredLightBlockCount = 0;
 	}
-
+*/
 
 	// correct rotations as needed
 	if (useVerticalY)
@@ -259,7 +259,7 @@ void a3demo_update_main(a3_DemoState *demoState, a3f64 dt)
 	a3demo_applyScale_internal(demoState->torusObject, scaleMat.m);
 	a3demo_applyScale_internal(demoState->teapotObject, scaleMat.m);
 
-
+/*
 	// simple animation controller
 	if (demoState->targetCount && demoState->updateAnimation)
 	{
@@ -278,14 +278,11 @@ void a3demo_update_main(a3_DemoState *demoState, a3f64 dt)
 
 		// in any case calculate interpolation param
 		demoState->targetParam = demoState->targetTime * demoState->targetDurationInv;
-		demoState->skeletonParam = demoState->targetTime * demoState->targetDurationInv;
 	}
-
-	a3kinematicsSolveForward(demoState->hierarchyState_skel + demoState->editSkeletonIndex);
-
+*/
 }
 
-
+/*
 // update for curve drawing
 void a3demo_update_curve(a3_DemoState *demoState, a3f64 dt)
 {
@@ -330,21 +327,21 @@ void a3demo_update_curve(a3_DemoState *demoState, a3f64 dt)
 		// interpolate object position
 		// ****TO-DO: choose interpolation algorithm from below
 		currentSceneObject = demoState->curveFollowObject;
-	/*
+	
 		// lerp
-		a3real3Lerp(currentSceneObject->position.v,
-			demoState->curveWaypoint[demoState->curveSegmentIndex + 0].v,
-			demoState->curveWaypoint[demoState->curveSegmentIndex + 1].v,
-			demoState->curveSegmentParam);
+	//	a3real3Lerp(currentSceneObject->position.v,
+	//		demoState->curveWaypoint[demoState->curveSegmentIndex + 0].v,
+	//		demoState->curveWaypoint[demoState->curveSegmentIndex + 1].v,
+	//		demoState->curveSegmentParam);
 		
 		// Catmull-Rom
-		a3real3CatmullRom(currentSceneObject->position.v,
-			demoState->curveWaypoint[a3maximum(0, (a3i32)demoState->curveSegmentIndex - 1)].v,
-			demoState->curveWaypoint[demoState->curveSegmentIndex + 0].v,
-			demoState->curveWaypoint[demoState->curveSegmentIndex + 1].v,
-			demoState->curveWaypoint[a3minimum(demoState->curveSegmentIndex + 2, demoState->curveWaypointCount - 1)].v,
-			demoState->curveSegmentParam);
-	*/	
+	//	a3real3CatmullRom(currentSceneObject->position.v,
+	//		demoState->curveWaypoint[a3maximum(0, (a3i32)demoState->curveSegmentIndex - 1)].v,
+	//		demoState->curveWaypoint[demoState->curveSegmentIndex + 0].v,
+	//		demoState->curveWaypoint[demoState->curveSegmentIndex + 1].v,
+	//		demoState->curveWaypoint[a3minimum(demoState->curveSegmentIndex + 2, demoState->curveWaypointCount - 1)].v,
+	//		demoState->curveSegmentParam);
+		
 		// cubic Hermite
 		a3real3HermiteControl(currentSceneObject->position.v,
 			demoState->curveWaypoint[demoState->curveSegmentIndex + 0].v,
@@ -361,8 +358,8 @@ void a3demo_update_curve(a3_DemoState *demoState, a3f64 dt)
 	demoState->ubo_curveWaypoint->used[0] = 0;
 	demoState->ubo_curveHandle->used[0] = 0;
 }
-
-
+*/
+/*
 // update for skeletal animation
 void a3demo_update_skeletal(a3_DemoState *demoState, a3f64 dt)
 {
@@ -413,11 +410,8 @@ void a3demo_update_skeletal(a3_DemoState *demoState, a3f64 dt)
 
 	// other objects
 	a3_HierarchyState *currentHierarchyState;
-	//a3_HierarchyState currentHierarchyStateAnimate;
 	const a3_HierarchyPoseGroup *currentHierarchyPoseGroup;
-	a3_HierarchyPoseGroup currentHierarchyPoseGroupAnimate;
 	const a3_Hierarchy *currentHierarchy;
-//	a3_Hierarchy currentHierarchyAnimate;
 
 
 	// update scene objects
@@ -450,85 +444,23 @@ void a3demo_update_skeletal(a3_DemoState *demoState, a3f64 dt)
 	else
 		demoState->gridColor.b = 0.25f;
 
-	if (demoState->animationControl)
-	{
-		// time step for controller
-		demoState->skeletonTime += (a3real)dt;
 
-		// if we surpass the time for one segment
-		if (demoState->skeletonTime >= demoState->skeletonDuration)
-		{
-			demoState->skeletonTime -= demoState->skeletonDuration;
-			demoState->editSkeletonIndex = (demoState->editSkeletonIndex + 1) % (demoState->skeletonNum - 1);
-		}
+	// update animation: 
+	//	-> copy pose from set to state (pro tip: seems pointless but it is not)
+	//	-> convert the current pose to transforms
+	//	-> forward kinematics
+	//	-> skinning matrices
+	currentHierarchyState = demoState->hierarchyState_skel + demoState->editSkeletonIndex;
+	currentHierarchyPoseGroup = currentHierarchyState->poseGroup;
+	currentHierarchy = currentHierarchyPoseGroup->hierarchy;
 
-		// in any case calculate interpolation param
-		demoState->skeletonParam = demoState->skeletonTime * demoState->skeletonDurationInv;
-	
+	a3hierarchyPoseCopy(currentHierarchyState->localPose,
+		currentHierarchyPoseGroup->pose + 0, currentHierarchy->numNodes);
+	a3hierarchyPoseConvert(currentHierarchyState->localSpace,
+		currentHierarchyState->localPose, currentHierarchy->numNodes, 0);
+	a3kinematicsSolveForward(demoState->hierarchyState_skel);
+//	a3hierarchyStateUpdateObjectBindToCurrent(currentHierarchyState, ???);
 
-		// update animation: 
-		//	-> copy pose from set to state (pro tip: seems pointless but it is not)
-		//	-> convert the current pose to transforms
-		//	-> forward kinematics
-		//	-> skinning matrices
-		currentHierarchyState = demoState->hierarchyState_skel + demoState->editSkeletonIndex;
-		currentHierarchyPoseGroup = currentHierarchyState->poseGroup;
-		currentHierarchyPoseGroupAnimate = currentHierarchyState->poseGroup[0];
-		currentHierarchy = currentHierarchyPoseGroup->hierarchy;
-		
-		// lerp
-		//for (a3ui32 i = 0; i < currentHierarchyPoseGroup->hierarchy->numNodes; i++)
-		//{
-		//	a3real3Lerp(currentHierarchyPoseGroup->pose[0].nodePose[i].translation.v,
-		//		demoState->hierarchyState_skel[demoState->editSkeletonIndex + 0].poseGroup->pose[0].nodePose[i].translation.v,
-		//		demoState->hierarchyState_skel[demoState->editSkeletonIndex + 1 % (demoState->skeletonNum-1)].poseGroup->pose[0].nodePose[i].translation.v,
-		//		.1f);
-		//
-		//	a3real3Lerp(currentHierarchyPoseGroup->pose[0].nodePose[i].orientation.v,
-		//		demoState->hierarchyState_skel[demoState->editSkeletonIndex + 0].poseGroup->pose[0].nodePose[i].orientation.v,
-		//		demoState->hierarchyState_skel[demoState->editSkeletonIndex + 1 % (demoState->skeletonNum-1)].poseGroup->pose[0].nodePose[i].orientation.v,
-		//		.1f);
-		//}
-
-		for (a3ui32 i = 0; i < currentHierarchyPoseGroupAnimate.hierarchy->numNodes; i++)
-		{
-			a3real3Lerp(currentHierarchyPoseGroupAnimate.pose[0].nodePose[i].translation.v,
-				demoState->hierarchyState_skel[demoState->editSkeletonIndex + 0].poseGroup->pose[0].nodePose[i].translation.v,
-				demoState->hierarchyState_skel[demoState->editSkeletonIndex + 1 % (demoState->skeletonNum-1)].poseGroup->pose[0].nodePose[i].translation.v,
-				.1f);
-
-			a3real3Lerp(currentHierarchyPoseGroupAnimate.pose[0].nodePose[i].orientation.v,
-				demoState->hierarchyState_skel[demoState->editSkeletonIndex + 0].poseGroup->pose[0].nodePose[i].orientation.v,
-				demoState->hierarchyState_skel[demoState->editSkeletonIndex + 1 % (demoState->skeletonNum-1)].poseGroup->pose[0].nodePose[i].orientation.v,
-				.1f);
-		}
-		
-
-		a3hierarchyPoseCopy(currentHierarchyState->localPose,
-			currentHierarchyPoseGroupAnimate.pose + 0, currentHierarchy->numNodes);
-		a3hierarchyPoseConvert(currentHierarchyState->localSpace,
-			currentHierarchyState->localPose, currentHierarchy->numNodes, 0);
-		a3kinematicsSolveForward(demoState->hierarchyState_skel + demoState->editSkeletonIndex);		
-	}
-	else
-	{
-		// update animation: 
-		//	-> copy pose from set to state (pro tip: seems pointless but it is not)
-		//	-> convert the current pose to transforms
-		//	-> forward kinematics
-		//	-> skinning matrices
-		currentHierarchyState = demoState->hierarchyState_skel + demoState->editSkeletonIndex;
-		currentHierarchyPoseGroup = currentHierarchyState->poseGroup;
-		currentHierarchy = currentHierarchyPoseGroup->hierarchy;
-
-		a3hierarchyPoseCopy(currentHierarchyState->localPose,
-			currentHierarchyPoseGroup->pose + 0, currentHierarchy->numNodes);
-		a3hierarchyPoseConvert(currentHierarchyState->localSpace,
-			currentHierarchyState->localPose, currentHierarchy->numNodes, 0);
-		a3kinematicsSolveForward(demoState->hierarchyState_skel + demoState->editSkeletonIndex);
-		//	a3hierarchyStateUpdateObjectBindToCurrent(currentHierarchyState, ???);
-	}
-	
 
 	// update buffers: 
 	//	-> calculate and store bone transforms
@@ -584,7 +516,155 @@ void a3demo_update_skeletal(a3_DemoState *demoState, a3f64 dt)
 		demoState->ubo_transformBindPoseToCurrentPose_joint->used[0] = 0;
 	}
 }
+*/
 
+// update for ray-tracing
+void a3demo_update_raytrace(a3_DemoState *demoState, a3f64 dt)
+{
+	a3ui32 i;
+
+	const a3f32 dr = demoState->updateAnimation ? (a3f32)dt * 15.0f : 0.0f;
+
+	const a3i32 useVerticalY = demoState->verticalAxis;
+
+	// model transformations (if needed)
+	const a3mat4 convertY2Z = {
+		+1.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, +1.0f, 0.0f,
+		0.0f, -1.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, 0.0f, +1.0f,
+	};
+	const a3mat4 convertZ2Y = {
+		+1.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, -1.0f, 0.0f,
+		0.0f, +1.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, 0.0f, +1.0f,
+	};
+	const a3mat4 convertZ2X = {
+		0.0f, 0.0f, -1.0f, 0.0f,
+		0.0f, +1.0f, 0.0f, 0.0f,
+		+1.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, 0.0f, +1.0f,
+	};
+
+
+	// bias matrix
+	const a3mat4 bias = {
+		0.5f, 0.0f, 0.0f, 0.0f,
+		0.0f, 0.5f, 0.0f, 0.0f,
+		0.0f, 0.0f, 0.5f, 0.0f,
+		0.5f, 0.5f, 0.5f, 1.0f,
+	};
+
+
+	// tmp matrix for scale
+	a3mat4 scaleMat = a3identityMat4;
+
+	// active camera
+	a3_DemoCamera *camera = demoState->camera + demoState->activeCamera;
+	a3_DemoSceneObject *cameraObject = camera->sceneObject;
+	a3_DemoSceneObject *currentSceneObject;
+
+	// light pointers
+	a3_DemoPointLight *pointLight;
+//	a3mat4 *lightMVPptr, *lightMVPBptr;
+//	a3ui32 tmpLightCount, tmpBlockLightCount;
+
+
+	// do simple animation
+	if (useVerticalY)
+	{
+		for (i = 0, currentSceneObject = demoState->sphereObject;
+			i < 4; ++i, ++currentSceneObject)
+		{
+			currentSceneObject->euler.y += dr;
+			currentSceneObject->euler.y = a3trigValid_sind(currentSceneObject->euler.y);
+		}
+	}
+	else
+	{
+		for (i = 0, currentSceneObject = demoState->sphereObject;
+			i < 4; ++i, ++currentSceneObject)
+		{
+			currentSceneObject->euler.z += dr;
+			currentSceneObject->euler.z = a3trigValid_sind(currentSceneObject->euler.z);
+		}
+	}
+
+
+	// update scene objects
+	for (i = 0; i < demoStateMaxCount_sceneObject; ++i)
+		a3demo_updateSceneObject(demoState->sceneObject + i, 0);
+	for (i = 0; i < demoStateMaxCount_cameraObject; ++i)
+		a3demo_updateSceneObject(demoState->cameraObject + i, 1);
+	for (i = 0; i < demoStateMaxCount_lightObject; ++i)
+		a3demo_updateSceneObject(demoState->lightObject + i, 1);
+
+	// update cameras/projectors
+	for (i = 0; i < demoStateMaxCount_projector; ++i)
+		a3demo_updateCameraViewProjection(demoState->camera + i);
+
+
+	// apply corrections if required
+	// grid
+	demoState->gridTransform = useVerticalY ? convertZ2Y : a3identityMat4;
+
+	// skybox position
+	demoState->skyboxObject->modelMat.v3 = camera->sceneObject->modelMat.v3;
+
+
+	// grid lines highlight
+	// if Y axis is up, give it a greenish hue
+	// if Z axis is up, a bit of blue
+	demoState->gridColor = a3wVec4;
+	if (useVerticalY)
+		demoState->gridColor.g = 0.25f;
+	else
+		demoState->gridColor.b = 0.25f;
+
+
+	// update lights
+	for (i = 0, pointLight = demoState->forwardPointLight + i;
+		i < demoState->forwardLightCount;
+		++i, ++pointLight)
+	{
+		// convert to view space and retrieve view position
+		a3real4Real4x4Product(pointLight->viewPos.v, cameraObject->modelMatInv.m, pointLight->worldPos.v);
+	}
+
+	// send point light data
+	pointLight = demoState->forwardPointLight;
+	a3bufferFill(demoState->ubo_pointLight, 0, demoState->forwardLightCount * sizeof(a3_DemoPointLight), pointLight, 0);
+	demoState->ubo_pointLight->used[0] = 0;
+
+
+	// correct rotations as needed
+	if (useVerticalY)
+	{
+		// plane's axis is Z
+		a3real4x4ConcatL(demoState->planeObject->modelMat.m, convertZ2Y.m);
+
+		// sphere's axis is Z
+		a3real4x4ConcatL(demoState->sphereObject->modelMat.m, convertZ2Y.m);
+	}
+	else
+	{
+		// need to rotate skybox if Z-up
+		a3real4x4ConcatL(demoState->skyboxObject->modelMat.m, convertY2Z.m);
+
+		// teapot's axis is Y
+		a3real4x4ConcatL(demoState->teapotObject->modelMat.m, convertY2Z.m);
+	}
+
+
+	// apply scales
+	a3demo_applyScale_internal(demoState->raytraceBoxObject, scaleMat.m);
+
+
+	// ****TO-DO: 
+	// upload ray-trace shape data to UBO
+
+}
 
 //-----------------------------------------------------------------------------
 // UPDATE
@@ -599,13 +679,22 @@ void a3demo_update(a3_DemoState *demoState, a3f64 dt)
 		break;
 
 		// curve drawing
-	case demoStateMode_curves:
-		a3demo_update_curve(demoState, dt);
-		break;
+//	case demoStateMode_curves:
+//		a3demo_update_curve(demoState, dt);
+//		break;
 
 		// skeletal
-	case demoStateMode_skeletal:
-		a3demo_update_skeletal(demoState, dt);
+//	case demoStateMode_skeletal:
+//		a3demo_update_skeletal(demoState, dt);
+//		break;
+
+		// planets
+	case demoStateMode_planet:
+		break;
+
+		// raytrace
+	case demoStateMode_raytrace:
+		a3demo_update_raytrace(demoState, dt);
 		break;
 	}
 }
