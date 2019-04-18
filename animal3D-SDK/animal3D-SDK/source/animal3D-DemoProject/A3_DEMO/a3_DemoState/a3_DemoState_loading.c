@@ -412,6 +412,11 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 			a3_DemoStateShader
 				passJuliaFractal_vs[1];
 
+			//Geometry Shaders
+			//Final 
+			a3_DemoStateShader
+				manipTriangle_Julia_gs[1];
+
 			// fragment shaders
 			// base
 			a3_DemoStateShader
@@ -473,6 +478,9 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 			//Mid-term
 			{ { { 0 },	"shdr-fs:pass-Julia",			a3shader_vertex  ,	1,{ "../../../../resource/glsl/4x/fs/Mid-Fractal/passJuliaFractal_vs4x.glsl" } } },
 
+			// gs
+			{ { { 0 },	"shdr-fs:manip-triangle-Julia",	a3shader_vertex  ,	1,{ "../../../../resource/glsl/4x/gs/Final-Fractal/manipTriangle_Julia_gs4x.glsl" } } },
+			
 			// fs
 			// base
 			{ { { 0 },	"shdr-fs:draw-col-unif",		a3shader_fragment,	1,{ "../../../../resource/glsl/4x/fs/drawColorUnif_fs4x.glsl" } } },

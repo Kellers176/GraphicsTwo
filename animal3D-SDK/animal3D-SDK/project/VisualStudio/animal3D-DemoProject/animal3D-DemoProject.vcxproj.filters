@@ -88,6 +88,12 @@
     <Filter Include="Resource Files\A3_DEMO\glsl\4x\vs\Mid-Fractal">
       <UniqueIdentifier>{537a33e1-1dbf-48bc-9204-d11ab3c11595}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\A3_DEMO\glsl\4x\gs\07-geometry">
+      <UniqueIdentifier>{a8b428f6-1389-4872-af7b-5652ca191f05}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\A3_DEMO\glsl\4x\gs\Final-Fractal">
+      <UniqueIdentifier>{4629b490-76eb-411c-a516-aaaffc5bb05c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="_src_win\main_dll.c">
@@ -231,6 +237,21 @@
     </None>
     <None Include="..\..\..\resource\glsl\4x\vs\Mid-Fractal\passJuliaFractal_vs4x.glsl">
       <Filter>Resource Files\A3_DEMO\glsl\4x\vs\Mid-Fractal</Filter>
+    </None>
+    <None Include="..\..\..\resource\glsl\4x\gs\07-curves\drawCurveHandles_gs4x.glsl">
+      <Filter>Resource Files\A3_DEMO\glsl\4x\gs\07-geometry</Filter>
+    </None>
+    <None Include="..\..\..\resource\glsl\4x\gs\07-curves\drawCurveSegment_gs4x.glsl">
+      <Filter>Resource Files\A3_DEMO\glsl\4x\gs\07-geometry</Filter>
+    </None>
+    <None Include="..\..\..\resource\glsl\4x\gs\07-curves\drawTangentBasis_gs4x.glsl">
+      <Filter>Resource Files\A3_DEMO\glsl\4x\gs\07-geometry</Filter>
+    </None>
+    <None Include="..\..\..\resource\glsl\4x\gs\07-curves\manipTriangle_gs4x.glsl">
+      <Filter>Resource Files\A3_DEMO\glsl\4x\gs\07-geometry</Filter>
+    </None>
+    <None Include="..\..\..\resource\glsl\4x\gs\Final-Fractal\manipTriangle_Julia_gs4x.glsl">
+      <Filter>Resource Files\A3_DEMO\glsl\4x\gs\Final-Fractal</Filter>
     </None>
   </ItemGroup>
 </Project>

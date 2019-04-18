@@ -230,6 +230,11 @@
     <None Include="..\..\..\resource\glsl\4x\fs\Mid-Fractal\drawCel_fs4x.glsl" />
     <None Include="..\..\..\resource\glsl\4x\fs\Mid-Fractal\drawJuliaFractal_fs4x.glsl" />
     <None Include="..\..\..\resource\glsl\4x\fs\Mid-Fractal\drawJuliaPostProcessing_fs4x.glsl" />
+    <None Include="..\..\..\resource\glsl\4x\gs\07-curves\drawCurveHandles_gs4x.glsl" />
+    <None Include="..\..\..\resource\glsl\4x\gs\07-curves\drawCurveSegment_gs4x.glsl" />
+    <None Include="..\..\..\resource\glsl\4x\gs\07-curves\drawTangentBasis_gs4x.glsl" />
+    <None Include="..\..\..\resource\glsl\4x\gs\07-curves\manipTriangle_gs4x.glsl" />
+    <None Include="..\..\..\resource\glsl\4x\gs\Final-Fractal\manipTriangle_Julia_gs4x.glsl" />
     <None Include="..\..\..\resource\glsl\4x\vs\02-shading\passPhongAttribs_transform_vs4x.glsl" />
     <None Include="..\..\..\resource\glsl\4x\vs\02-shading\passTexcoord_transform_vs4x.glsl" />
     <None Include="..\..\..\resource\glsl\4x\vs\04-shadow\passPhongAttribs_passShadowCoord_transform_vs4x.glsl" />
