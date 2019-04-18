@@ -454,6 +454,11 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 				drawCel_fs[1],
 				drawJuliaFractal_fs[1],
 				drawJuliaPostProcessing_fs[1];
+
+			//Final-Fractal
+			a3_DemoStateShader
+				drawMandleBulb_fs[1],
+				drawFinalPostProcessing_fs[1];
 		};
 	} shaderList = {
 		{
@@ -479,7 +484,7 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 			{ { { 0 },	"shdr-fs:pass-Julia",			a3shader_vertex  ,	1,{ "../../../../resource/glsl/4x/fs/Mid-Fractal/passJuliaFractal_vs4x.glsl" } } },
 
 			// gs
-			{ { { 0 },	"shdr-fs:manip-triangle-Julia",	a3shader_vertex  ,	1,{ "../../../../resource/glsl/4x/gs/Final-Fractal/manipTriangle_Julia_gs4x.glsl" } } },
+			//{ { { 0 },	"shdr-fs:manip-triangle-Julia",	a3shader_vertex  ,	1,{ "../../../../resource/glsl/4x/gs/Final-Fractal/manipTriangle_Julia_gs4x.glsl" } } },
 			
 			// fs
 			// base
@@ -510,6 +515,10 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 			{ { { 0 },	"shdr-fs:drawCel",				a3shader_fragment,	1,{ "../../../../resource/glsl/4x/fs/Mid-Fractal/drawCel_fs4x.glsl" } } },
 			{ { { 0 },	"shdr-fs:drawJuliaFractal",		a3shader_fragment,	1,{ "../../../../resource/glsl/4x/fs/Mid-Fractal/drawJuliaFractal_fs4x.glsl" } } },
 			{ { { 0 },	"shdr-fs:drawJuliaPostProcessing",a3shader_fragment,1,{ "../../../../resource/glsl/4x/fs/Mid-Fractal/drawJuliaPostProcessing_fs4x.glsl" } } },
+
+			//Final-Fractal
+			{ { { 0 },	"shdr-fs:drawJuliaFractal",		a3shader_fragment,	1,{ "../../../../resource/glsl/4x/fs/Final-Fractal/drawMandleBulb_fs4x.glsl" } } },
+			{ { { 0 },	"shdr-fs:drawJuliaPostProcessing",a3shader_fragment,1,{ "../../../../resource/glsl/4x/fs/Final-Fractal/drawFinalPostProcessing_fs4x.glsl" } } },
 		}
 	};
 	a3_DemoStateShader *const shaderListPtr = (a3_DemoStateShader *)(&shaderList), *shaderPtr;

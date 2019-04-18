@@ -227,6 +227,8 @@
     <None Include="..\..\..\resource\glsl\4x\fs\06-deferred\drawPhong_volume_fs4x.glsl" />
     <None Include="..\..\..\resource\glsl\4x\fs\drawColorAttrib_fs4x.glsl" />
     <None Include="..\..\..\resource\glsl\4x\fs\drawColorUnif_fs4x.glsl" />
+    <None Include="..\..\..\resource\glsl\4x\fs\Final-Fractal\drawFinalPostProcessing_fs4x.glsl" />
+    <None Include="..\..\..\resource\glsl\4x\fs\Final-Fractal\drawMandleBulb_fs4x.glsl" />
     <None Include="..\..\..\resource\glsl\4x\fs\Mid-Fractal\drawCel_fs4x.glsl" />
     <None Include="..\..\..\resource\glsl\4x\fs\Mid-Fractal\drawJuliaFractal_fs4x.glsl" />
     <None Include="..\..\..\resource\glsl\4x\fs\Mid-Fractal\drawJuliaPostProcessing_fs4x.glsl" />

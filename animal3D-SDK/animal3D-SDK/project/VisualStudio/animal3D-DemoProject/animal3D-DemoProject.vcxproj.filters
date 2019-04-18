@@ -94,6 +94,9 @@
     <Filter Include="Resource Files\A3_DEMO\glsl\4x\gs\Final-Fractal">
       <UniqueIdentifier>{4629b490-76eb-411c-a516-aaaffc5bb05c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\A3_DEMO\glsl\4x\fs\Final-Fractal">
+      <UniqueIdentifier>{b6fa29e5-5dd3-46e8-a2eb-839855dbd140}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="_src_win\main_dll.c">
@@ -252,6 +255,12 @@
     </None>
     <None Include="..\..\..\resource\glsl\4x\gs\Final-Fractal\manipTriangle_Julia_gs4x.glsl">
       <Filter>Resource Files\A3_DEMO\glsl\4x\gs\Final-Fractal</Filter>
+    </None>
+    <None Include="..\..\..\resource\glsl\4x\fs\Final-Fractal\drawFinalPostProcessing_fs4x.glsl">
+      <Filter>Resource Files\A3_DEMO\glsl\4x\fs\Final-Fractal</Filter>
+    </None>
+    <None Include="..\..\..\resource\glsl\4x\fs\Final-Fractal\drawMandleBulb_fs4x.glsl">
+      <Filter>Resource Files\A3_DEMO\glsl\4x\fs\Final-Fractal</Filter>
     </None>
   </ItemGroup>
 </Project>
