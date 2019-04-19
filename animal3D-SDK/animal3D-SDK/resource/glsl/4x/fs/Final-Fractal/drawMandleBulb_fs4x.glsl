@@ -1,3 +1,4 @@
+
 /*
 ***************************************************
 
@@ -26,6 +27,9 @@ plagiarism-checking service, which may retain a copy of the project on its datab
 //	1) declare varyings (attribute data) to receive from vertex shader
 //	2) declare g-buffer render targets
 //	3) pack attribute data into outputs
+
+//https://github.com/niavok/glsl-factory/tree/master/shaders/mandelbulb
+//https://softologyblog.wordpress.com/category/mandelbulbs/
 
 layout(location = 0) out vec4 rtFragColor; //position // (2)
 
