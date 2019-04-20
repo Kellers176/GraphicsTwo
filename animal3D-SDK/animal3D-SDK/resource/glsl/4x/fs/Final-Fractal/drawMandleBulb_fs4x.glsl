@@ -60,13 +60,18 @@ in vPassDataBlock
 //https://lodev.org/cgtutor/juliamandelbrot.html
 //http://nuclear.mutantstargoat.com/articles/sdr_fract/
 //http://blog.hvidtfeldts.net/index.php/2011/09/distance-estimated-3d-fractals-v-the-mandelbulb-different-de-approximations/
-float DE(vec3 pos)
+//https://www.shadertoy.com/view/XsfGR8
+// Distance Estimator
+// returns 0 if the test point is inside the MB, and the distance 0.5*r*logr/rD otherwise
+float DistanceEstimator(vec3 pos)
 {
 	vec3 z = pos;
-	float bail = 3;
+	float bail = 4;
+	float iterations = 6;
 	float dr = 1.0;
 	float r = 0.0;
-	for (int i = 0; i < 200; i++)
+	float power = 2;
+	for (int i = 0; i < iterations; i++)
 	{
 		r = length(z);
 		if (r > bail)
@@ -77,10 +82,22 @@ float DE(vec3 pos)
 		//polar coordinates
 		float theta = acos(z.z / r);
 		float phi = atan(z.y, z.x);
-		dr = pow
+		dr = pow(r, power -1.0) * power * dr + 1.0;
+
+		//scale and roation
+		float zr = pow(r, power);
+		theta = theta * power;
+		phi = phi * power;
+
+
+		//convert back to cartesian coord
+		z = zr * vec3(sin(theta) * cos(phi), sin(phi) * sin(theta), cos(theta));
+		z += pos;
 
 
 	}
+
+	return 0.5 * log(r) *  r / dr;
 }
 void main()
 {
@@ -119,6 +136,37 @@ void main()
 	//{
 	//	rtFragColor = texture2D(uTex_julia_ramp, vec2(float(iter) / float(max_iter)));
 	//}	
-	rtFragColor = vec4(0.0f, 0.0f, 1.0f, 1.0f);
+
+	//rtFragColor = vec4(1.0f, 0.5f, 0.0f, 1.0f);
+
+
+	float t = 0.0;
+	float d = 200.0;
+
+	vec3 ro = vPassData.vPassPosition.xyz;
+	vec3 la = vec3(0.0, 0.0, 1.0);
+
+	vec3 cameraDir = normalize(la - ro);
+
+	vec3 rd = normalize(cameraDir + vec3(vPassData.vPassPosition.xy, 0.0));
+
+	vec3 r;
+	for (int i = 0; i < 100; i++)
+	{
+		if (d > .001)
+		{
+			r = ro  + t;
+			//r = ro + rd * t;
+			//float distanceToLight = length(uLightPos[i] - vPassData.vPassPosition); //vec4(vPassData.vPassNormal, 1.0f));
+			d = DistanceEstimator(r);
+			t += d;
+		}
+	}
+
+	//r -= vec3(1.0, 1.0, 1.0);
+	//float r = DistanceEstimator(vPassData.vPassPosition.xyz);
+	//rtFragColor = vPassData.vPassPosition;
+	rtFragColor = vec4(r, 1.0f);
+	//rtFragColor = vec4(t,t,t, 1.0f);
 
 }
