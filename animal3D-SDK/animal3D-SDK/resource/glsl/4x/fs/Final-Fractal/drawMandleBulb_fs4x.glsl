@@ -33,6 +33,18 @@ plagiarism-checking service, which may retain a copy of the project on its datab
 
 layout(location = 0) out vec4 rtFragColor; //position // (2)
 
+uniform mat4 uMV; //(1)
+uniform mat4 uP;
+
+in vPassDataBlock
+{
+	vec4 vPassPosition;
+	vec4 vPassNormal;
+
+	vec4 vPassTexcoord;
+
+} vPassData;
+
 //const int max_iter = 400;
 //
 //uniform vec2 uComplexNumber;
@@ -47,6 +59,29 @@ layout(location = 0) out vec4 rtFragColor; //position // (2)
 
 //https://lodev.org/cgtutor/juliamandelbrot.html
 //http://nuclear.mutantstargoat.com/articles/sdr_fract/
+//http://blog.hvidtfeldts.net/index.php/2011/09/distance-estimated-3d-fractals-v-the-mandelbulb-different-de-approximations/
+float DE(vec3 pos)
+{
+	vec3 z = pos;
+	float bail = 3;
+	float dr = 1.0;
+	float r = 0.0;
+	for (int i = 0; i < 200; i++)
+	{
+		r = length(z);
+		if (r > bail)
+		{
+			break;
+		}
+
+		//polar coordinates
+		float theta = acos(z.z / r);
+		float phi = atan(z.y, z.x);
+		dr = pow
+
+
+	}
+}
 void main()
 {
 	
