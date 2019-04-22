@@ -675,15 +675,17 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 	currentDemoProg = demoState->prog_drawCel;
 	a3shaderProgramCreate(currentDemoProg->program, "prog:draw-cel");
 	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.passPhongAttribs_transform_vs->shader);
-	//a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawCel_fs->shader);
-	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawMandleBulb_fs->shader);
+	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawCel_fs->shader);
+	//a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawMandleBulb_fs->shader);
 	//a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawFinalPostProcessing_fs->shader);
 
 	// julia fractal
 	currentDemoProg = demoState->prog_drawJuliaFractal;
 	a3shaderProgramCreate(currentDemoProg->program, "prog:draw-julia");
 	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.passTexcoord_transform_vs->shader);
-	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawJuliaFractal_fs->shader);
+	//a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawJuliaFractal_fs->shader);
+	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawMandleBulb_fs->shader);
+
 
 	// julia post process
 	currentDemoProg = demoState->prog_drawJuliaPostProcess;

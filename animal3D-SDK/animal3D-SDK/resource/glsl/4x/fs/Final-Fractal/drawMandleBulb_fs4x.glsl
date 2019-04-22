@@ -33,29 +33,11 @@ plagiarism-checking service, which may retain a copy of the project on its datab
 
 layout(location = 0) out vec4 rtFragColor; //position // (2)
 
-uniform mat4 uMV; //(1)
-uniform mat4 uP;
+vec3 col;
 
-in vPassDataBlock
-{
-	vec4 vPassPosition;
-	vec4 vPassNormal;
-
-	vec4 vPassTexcoord;
-
-} vPassData;
-
-//const int max_iter = 400;
-//
-//uniform vec2 uComplexNumber;
-//uniform vec2 uCenter;
-//uniform double uScale;
-//uniform double uTime;
-
-//uniform sampler2D uTex_julia_ramp;
-
-
-//in vec2 vPassTexCoord;
+in vec2 vPassTexCoord; //(4)
+//need mvp matrix to mess around with the 3d coord
+uniform vec4 uCenter;
 
 //https://lodev.org/cgtutor/juliamandelbrot.html
 //http://nuclear.mutantstargoat.com/articles/sdr_fract/
@@ -66,11 +48,12 @@ in vPassDataBlock
 float DistanceEstimator(vec3 pos)
 {
 	vec3 z = pos;
-	float bail = 4;
-	float iterations = 6;
+	float bail = 2;
+	float iterations = 10;
 	float dr = 1.0;
 	float r = 0.0;
-	float power = 2;
+	float returnVal = 0.0;
+	float power = 7;
 	for (int i = 0; i < iterations; i++)
 	{
 		r = length(z);
@@ -78,95 +61,71 @@ float DistanceEstimator(vec3 pos)
 		{
 			break;
 		}
-
-		//polar coordinates
-		float theta = acos(z.z / r);
-		float phi = atan(z.y, z.x);
-		dr = pow(r, power -1.0) * power * dr + 1.0;
-
-		//scale and roation
-		float zr = pow(r, power);
-		theta = theta * power;
-		phi = phi * power;
-
-
-		//convert back to cartesian coord
-		z = zr * vec3(sin(theta) * cos(phi), sin(phi) * sin(theta), cos(theta));
-		z += pos;
-
-
+		else
+		{
+			//polar coordinates
+			float theta = acos(z.z / r);
+			float phi = atan(z.y, z.x);
+			dr = pow(r, power -1.0) * power * dr + 1.0;
+			
+			//scale and roation
+			float zr = pow(r, power);
+			theta = theta * power;
+			phi = phi * power;
+						
+			//convert back to cartesian coord
+			z = zr * vec3(sin(theta) * cos(phi), sin(phi) * sin(theta), cos(theta));
+			z += pos;
+		}			   
 	}
 
 	return 0.5 * log(r) *  r / dr;
+	//return returnVal;
 }
+
+
 void main()
 {
-	
-	//vec2 center = uCenter;
-	//double scale = 1.0;
-	//
-	////get the complex number from the uniform
-	//vec2 complexNumber = uComplexNumber;
-	//
-	//vec2 c = (complexNumber * float(scale)) + center;
-	//
-	//int iter = 0;
-	//const float threshold_squared = 8.0f;
-	//vec2 z;
-	//z = vPassTexCoord.xy  + vec2(-0.500, -0.500);
-	//
-	////used the books algorithm to help with this
-	////iterate through and assign different values for the square of the z
-	//while(iter < max_iter && dot(z,z) < threshold_squared)
-	//{
-	//	vec2 z_squared;
-	//	z_squared.x = (z.x * z.x - z.y * z.y);//+ scale;
-	//	z_squared.y = (2.0 * z.x *z.y);// + scale;
-	//	z = z_squared + c;
-	//	iter++;
-	//		
-	//}
-	////if we are at the max, output a color
-	//if(iter == max_iter)
-	//{
-	//	rtFragColor = vec4(0.0, 0.5, 0.5, 1.0);	
-	//}
-	////output the ramp that we have
-	//else
-	//{
-	//	rtFragColor = texture2D(uTex_julia_ramp, vec2(float(iter) / float(max_iter)));
-	//}	
-
-	//rtFragColor = vec4(1.0f, 0.5f, 0.0f, 1.0f);
-
-
+	vec3 offset = vec3(-1.0, -1.0, -0.5);
 	float t = 0.0;
 	float d = 200.0;
 
-	vec3 ro = vPassData.vPassPosition.xyz;
+	vec3 ro = vec3(vPassTexCoord, -1.5);
 	vec3 la = vec3(0.0, 0.0, 1.0);
 
 	vec3 cameraDir = normalize(la - ro);
+	//vec3 cameraDir = uCenter;
 
-	vec3 rd = normalize(cameraDir + vec3(vPassData.vPassPosition.xy, 0.0));
+	vec3 rd = normalize(cameraDir + vec3(vPassTexCoord, 0.0));
 
 	vec3 r;
 	for (int i = 0; i < 100; i++)
 	{
-		if (d > .001)
+		if (d > 0.0001)
 		{
-			r = ro  + t;
-			//r = ro + rd * t;
+			//r = ro  + t;
+			r = ro + rd * t;
 			//float distanceToLight = length(uLightPos[i] - vPassData.vPassPosition); //vec4(vPassData.vPassNormal, 1.0f));
-			d = DistanceEstimator(r);
+			d = DistanceEstimator(r + offset);
 			t += d;
 		}
 	}
 
+
+	//vec3 n = vec3(DistanceEstimator(r + offset) - DistanceEstimator(r - offset),
+	//	DistanceEstimator(r + offset.yxz) - DistanceEstimator(r - offset.yxz),
+	//	DistanceEstimator(r + offset.zyx) - DistanceEstimator(r - offset.zyx));
+	
+	col = vec3(0.5, 0.4, 0.5);
+	
+	//vec3 ldir = normalize(col - r);
+	//vec3 diff = dot(ldir, n) * vec3(1.0,1.0,1.0) * 60.0;
 	//r -= vec3(1.0, 1.0, 1.0);
 	//float r = DistanceEstimator(vPassData.vPassPosition.xyz);
 	//rtFragColor = vPassData.vPassPosition;
+
 	rtFragColor = vec4(r, 1.0f);
+	//rtFragColor = uCenter;
 	//rtFragColor = vec4(t,t,t, 1.0f);
 
 }

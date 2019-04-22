@@ -71,7 +71,7 @@ out vPassDataBlock
 
 void main()
 {
-	vPassData.vPassPosition = aPosition; // eye space //(2)
+	vPassData.vPassPosition = uMV* aPosition; // eye space //(2)
 	//normalMV = mat3(uMV);
 	normalMV = mat3(uMV_nrm);
 
