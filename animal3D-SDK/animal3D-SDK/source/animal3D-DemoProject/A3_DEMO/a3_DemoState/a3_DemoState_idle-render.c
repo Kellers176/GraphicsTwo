@@ -334,7 +334,7 @@ void a3demo_render(const a3_DemoState *demoState)
 	a3shaderUniformSendFloatMat(a3unif_mat4, 0, currentDemoProgram->uMVP, 1, a3identityMat4.mm);
 	a3shaderUniformSendFloatMat(a3unif_mat4, 0, currentDemoProgram->uMV, 1, testMat.mm);
 
-	a3shaderUniformSendFloat(a3unif_vec4, currentDemoProgram->uCenter, 1, demoState->camera->sceneObject->position.v);
+	//a3shaderUniformSendFloat(a3unif_vec4, currentDemoProgram->uCenter, 1, demoState->camera->sceneObject->position.v);
 	//a3shaderUniformSendFloat(a3unif_vec4, currentDemoProgram->uColor, 1, skyblue);	// for ambient
 
 	//a3textureActivate(demoState->tex_ramp_dm, a3tex_unit04);

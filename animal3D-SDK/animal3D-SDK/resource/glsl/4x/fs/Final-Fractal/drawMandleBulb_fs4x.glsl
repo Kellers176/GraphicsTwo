@@ -36,8 +36,9 @@ layout(location = 0) out vec4 rtFragColor; //position // (2)
 in vec2 vPassTexCoord; //(4)
 //need mvp matrix to mess around with the 3d coord
 uniform vec4 uCenter;
+uniform vec2 uComplexNumber;
 uniform double uTime;
-//uniform mat4 uMV;
+uniform mat3 uMV;
 
 
 //https://lodev.org/cgtutor/juliamandelbrot.html
@@ -54,11 +55,17 @@ vec3 rotateMatrix(vec3 pos, float x, float y, float z)
 	mat3 rotZ = mat3( cos(z), -sin(z), 0.0, sin(z), cos(z), 0.0, 0.0, 0.0, 1.0 );
 	return rotX * rotY * rotZ * pos;
 }
-
+vec3 rotate(vec3 pos, float x, float y)
+{
+	mat3 rotX = mat3( 1.0, 0.0, 0.0, 0.0, cos(x), sin(x), 0.0, -sin(x), cos(x) );
+	mat3 rotY = mat3( cos(y), 0.0, -sin(y), 0.0, 1.0, 0.0, sin(y), 0.0, cos(y) );
+	//mat3 rotZ = mat3( cos(z), sin(z), 0.0, -sin(z), cos(z), 0.0, 0.0, 0.0, 1.0 );
+	return rotX * rotY * pos;
+}
 
 float DistanceEstimator(vec3 pos)
 {
-	pos = rotateMatrix(pos, sin(float(uTime)), cos(float(uTime)), 0.0);
+	pos = rotate(pos, float(uComplexNumber.y * 200), float(uComplexNumber.x * 200));
 	//pos = uMV * pos;
 	vec3 z = pos;
 	float bail = 2;
@@ -108,7 +115,7 @@ void main()
 	   
 	vec3 cameraDir = normalize(la - ro);
 	   
-	vec3 rd = normalize(cameraDir + vec3(vPassTexCoord, 0.0));
+	vec3 rd = normalize(cameraDir + vec3(vPassTexCoord.xy, 0.0));
 	   
 	vec3 r;
 	for (int i = 0; i < 100; i++)
@@ -121,5 +128,17 @@ void main()
 		}
 	}
 
-	rtFragColor = vec4(r, 1.0f);
+
+
+	vec3 color = vec3(0.25, 0.5, 0.25);
+
+	if(r.x >= 1.0 && r.y >= 1.0 && r.z >= 1.0 )
+	{
+		r = vec3(0.0);
+	}
+
+	color *= r;
+
+	//rtFragColor = vec4(r, 1.0f);
+	rtFragColor = vec4(color, 1.0f);
 }
