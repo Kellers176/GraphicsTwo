@@ -33,11 +33,12 @@ plagiarism-checking service, which may retain a copy of the project on its datab
 
 layout(location = 0) out vec4 rtFragColor; //position // (2)
 
-vec3 col;
-
 in vec2 vPassTexCoord; //(4)
 //need mvp matrix to mess around with the 3d coord
 uniform vec4 uCenter;
+uniform double uTime;
+//uniform mat4 uMV;
+
 
 //https://lodev.org/cgtutor/juliamandelbrot.html
 //http://nuclear.mutantstargoat.com/articles/sdr_fract/
@@ -45,8 +46,20 @@ uniform vec4 uCenter;
 //https://www.shadertoy.com/view/XsfGR8
 // Distance Estimator
 // returns 0 if the test point is inside the MB, and the distance 0.5*r*logr/rD otherwise
+
+vec3 rotateMatrix(vec3 pos, float x, float y, float z)
+{
+	mat3 rotX = mat3( 1.0, 0.0, 0.0, 0.0, cos(x), -sin(x), 0.0, sin(x), cos(x) );
+	mat3 rotY = mat3( cos(y), 0.0, sin(y), 0.0, 1.0, 0.0, -sin(y), 0.0, cos(y) );
+	mat3 rotZ = mat3( cos(z), -sin(z), 0.0, sin(z), cos(z), 0.0, 0.0, 0.0, 1.0 );
+	return rotX * rotY * rotZ * pos;
+}
+
+
 float DistanceEstimator(vec3 pos)
 {
+	pos = rotateMatrix(pos, sin(float(uTime)), cos(float(uTime)), 0.0);
+	//pos = uMV * pos;
 	vec3 z = pos;
 	float bail = 2;
 	float iterations = 10;
@@ -92,40 +105,21 @@ void main()
 
 	vec3 ro = vec3(vPassTexCoord, -1.5);
 	vec3 la = vec3(0.0, 0.0, 1.0);
-
+	   
 	vec3 cameraDir = normalize(la - ro);
-	//vec3 cameraDir = uCenter;
-
+	   
 	vec3 rd = normalize(cameraDir + vec3(vPassTexCoord, 0.0));
-
+	   
 	vec3 r;
 	for (int i = 0; i < 100; i++)
 	{
 		if (d > 0.0001)
 		{
-			//r = ro  + t;
 			r = ro + rd * t;
-			//float distanceToLight = length(uLightPos[i] - vPassData.vPassPosition); //vec4(vPassData.vPassNormal, 1.0f));
 			d = DistanceEstimator(r + offset);
 			t += d;
 		}
 	}
 
-
-	//vec3 n = vec3(DistanceEstimator(r + offset) - DistanceEstimator(r - offset),
-	//	DistanceEstimator(r + offset.yxz) - DistanceEstimator(r - offset.yxz),
-	//	DistanceEstimator(r + offset.zyx) - DistanceEstimator(r - offset.zyx));
-	
-	col = vec3(0.5, 0.4, 0.5);
-	
-	//vec3 ldir = normalize(col - r);
-	//vec3 diff = dot(ldir, n) * vec3(1.0,1.0,1.0) * 60.0;
-	//r -= vec3(1.0, 1.0, 1.0);
-	//float r = DistanceEstimator(vPassData.vPassPosition.xyz);
-	//rtFragColor = vPassData.vPassPosition;
-
 	rtFragColor = vec4(r, 1.0f);
-	//rtFragColor = uCenter;
-	//rtFragColor = vec4(t,t,t, 1.0f);
-
 }

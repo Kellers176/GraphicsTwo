@@ -305,6 +305,16 @@ void a3demo_render(const a3_DemoState *demoState)
 	currentDemoProgram = demoState->prog_drawJuliaFractal;
 	a3shaderProgramActivate(currentDemoProgram->program);
 
+	a3mat4 testMat = {
+		4.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, 4.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, 4.0f, 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f
+	};
+	a3real4x4ConcatR(demoState->camera->viewProjectionMat.m, testMat.m);
+
+
+
 	//glCullFace(GL_FRONT);
 	//for (k = 0, currentDrawable = demoState->draw_plane,
 	//	currentSceneObject = demoState->planeObject, endSceneObject = demoState->teapotObject;
@@ -322,7 +332,8 @@ void a3demo_render(const a3_DemoState *demoState)
 	a3shaderUniformSendDouble(a3unif_single, currentDemoProgram->uTime, 1, &demoState->renderTimer->totalTime);
 	//a3shaderUniformSendFloat(a3unif_vec2, currentDemoProgram->uCenter, 1, demoState->centerNumber.v);
 	a3shaderUniformSendFloatMat(a3unif_mat4, 0, currentDemoProgram->uMVP, 1, a3identityMat4.mm);
-	//Pass in camera position
+	a3shaderUniformSendFloatMat(a3unif_mat4, 0, currentDemoProgram->uMV, 1, testMat.mm);
+
 	a3shaderUniformSendFloat(a3unif_vec4, currentDemoProgram->uCenter, 1, demoState->camera->sceneObject->position.v);
 	//a3shaderUniformSendFloat(a3unif_vec4, currentDemoProgram->uColor, 1, skyblue);	// for ambient
 
