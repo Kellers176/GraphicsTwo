@@ -327,6 +327,7 @@ void a3demo_loadGeometry(a3_DemoState *demoState)
 // utility to load shaders
 void a3demo_loadShaders(a3_DemoState *demoState)
 {
+	
 	// direct to demo programs
 	a3_DemoStateShaderProgram *currentDemoProg;
 	a3i32 *currentUnif, uLocation, flag;
@@ -365,7 +366,7 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 		"uTime",
 
 		//Julia fractal
-		"uCenter", "uScale", "uComplexNumber",
+		"uCenter", "uScale", "uComplexNumber", "uWidth", "uHeight",
 	};
 
 	// list of uniform block names: align with uniform block list in demo struct!
@@ -814,7 +815,12 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 			a3shaderUniformSendDouble(a3unif_single, uLocation, 1, defaultDouble);
 
 		if ((uLocation = currentDemoProg->uScale) >= 0)
-			a3shaderUniformSendDouble(a3unif_single, uLocation, 1, defaultDouble + 1);
+			a3shaderUniformSendFloat(a3unif_single, uLocation, 1, defaultFloat);
+
+		if ((uLocation = currentDemoProg->uWidth) >= 0)
+			a3shaderUniformSendInt(a3unif_single, uLocation, 1, defaultInt);
+		if ((uLocation = currentDemoProg->uHeight) >= 0)
+			a3shaderUniformSendInt(a3unif_single, uLocation, 1, defaultInt + 1);
 
 		// lighting uniform blocks
 		if ((uLocation = currentDemoProg->ubTransformMVP) >= 0)

@@ -328,11 +328,14 @@ void a3demo_render(const a3_DemoState *demoState)
 	//}
 	a3shaderUniformSendFloat(a3unif_vec2, currentDemoProgram->uComplexNumber, 1, demoState->complexNumber.v);
 	//a3shaderUniformSendFloat(a3unif_single, currentDemoProgram->uScale, 1, &demoState->scaleNumber);
-	a3shaderUniformSendDouble(a3unif_single, currentDemoProgram->uScale, 1, &demoState->scaleNumber);
+	a3shaderUniformSendFloat(a3unif_single, currentDemoProgram->uScale, 1, &demoState->zoom);
 	a3shaderUniformSendDouble(a3unif_single, currentDemoProgram->uTime, 1, &demoState->renderTimer->totalTime);
 	//a3shaderUniformSendFloat(a3unif_vec2, currentDemoProgram->uCenter, 1, demoState->centerNumber.v);
 	a3shaderUniformSendFloatMat(a3unif_mat4, 0, currentDemoProgram->uMVP, 1, a3identityMat4.mm);
-	a3shaderUniformSendFloatMat(a3unif_mat4, 0, currentDemoProgram->uMV, 1, testMat.mm);
+	a3shaderUniformSendInt(a3unif_single, currentDemoProgram->uWidth, 1, &demoState->windowWidth);
+	a3shaderUniformSendInt(a3unif_single, currentDemoProgram->uHeight, 1, &demoState->windowHeight);
+
+	//a3shaderUniformSendFloatMat(a3unif_mat4, 0, currentDemoProgram->uMV, 1, testMat.mm);
 
 	//a3shaderUniformSendFloat(a3unif_vec4, currentDemoProgram->uCenter, 1, demoState->camera->sceneObject->position.v);
 	//a3shaderUniformSendFloat(a3unif_vec4, currentDemoProgram->uColor, 1, skyblue);	// for ambient

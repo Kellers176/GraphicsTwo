@@ -48,7 +48,7 @@ extern "C"
 	// maximum number of uniforms in a program
 	enum a3_DemoShaderProgramMaxCounts
 	{
-		demoStateMaxCount_shaderProgramUniform = 35,
+		demoStateMaxCount_shaderProgramUniform = 37,
 		demoStateMaxCount_shaderProgramUniformBlock = 4,
 	};
 
@@ -117,7 +117,9 @@ extern "C"
 					// Julia Fractal uniforms
 					uScale,
 					uCenter,
-					uComplexNumber;
+					uComplexNumber,
+					uWidth,
+					uHeight;
 			};
 		};
 

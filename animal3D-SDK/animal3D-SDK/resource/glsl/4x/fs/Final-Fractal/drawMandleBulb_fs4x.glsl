@@ -39,7 +39,9 @@ uniform vec4 uCenter;
 uniform vec2 uComplexNumber;
 uniform double uTime;
 uniform mat3 uMV;
-
+uniform float uScale;
+uniform int uWidth;
+uniform int uHeight;
 
 //https://lodev.org/cgtutor/juliamandelbrot.html
 //http://nuclear.mutantstargoat.com/articles/sdr_fract/
@@ -55,25 +57,23 @@ vec3 rotateMatrix(vec3 pos, float x, float y, float z)
 	mat3 rotZ = mat3( cos(z), -sin(z), 0.0, sin(z), cos(z), 0.0, 0.0, 0.0, 1.0 );
 	return rotX * rotY * rotZ * pos;
 }
-vec3 rotate(vec3 pos, float x, float y)
+vec3 rotate(vec3 pos, float x, float y, float z)
 {
 	mat3 rotX = mat3( 1.0, 0.0, 0.0, 0.0, cos(x), sin(x), 0.0, -sin(x), cos(x) );
 	mat3 rotY = mat3( cos(y), 0.0, -sin(y), 0.0, 1.0, 0.0, sin(y), 0.0, cos(y) );
-	//mat3 rotZ = mat3( cos(z), sin(z), 0.0, -sin(z), cos(z), 0.0, 0.0, 0.0, 1.0 );
-	return rotX * rotY * pos;
+	mat3 rotZ = mat3( cos(z), sin(z), 0.0, -sin(z), cos(z), 0.0, 0.0, 0.0, 1.0 );
+	return rotX * rotY * rotZ * pos;
 }
 
 float DistanceEstimator(vec3 pos)
 {
-	pos = rotate(pos, float(uComplexNumber.y * 200), float(uComplexNumber.x * 200));
-	//pos = uMV * pos;
+	pos = rotate(pos, float(uComplexNumber.y * 200), float(uComplexNumber.x * 200),0.0);
 	vec3 z = pos;
 	float bail = 2;
 	float iterations = 10;
 	float dr = 1.0;
 	float r = 0.0;
-	float returnVal = 0.0;
-	float power = 7;
+	float power = 3;
 	for (int i = 0; i < iterations; i++)
 	{
 		r = length(z);
@@ -100,24 +100,37 @@ float DistanceEstimator(vec3 pos)
 	}
 
 	return 0.5 * log(r) *  r / dr;
-	//return returnVal;
 }
 
 
 void main()
 {
-	vec3 offset = vec3(-1.0, -1.0, -0.5);
+	float z = -2.5; //set to input
+	//float z = uScale; //set to input
+	float offX = z*0.5 - 0.25;
+	vec2 resolution = vec2(uWidth, uHeight);
+	//For every .5 in z, offset x and y need .25
+	//y = .5x-.25
+
+	vec3 offset = vec3(offX, offX, -0.5);
 	float t = 0.0;
 	float d = 200.0;
 
-	vec3 ro = vec3(vPassTexCoord, -1.5);
+	//vec2 pos =  vPassTexCoord.xy;
+
+	//vec3 ro = vec3(pos, z);
+	vec3 ro = vec3( vPassTexCoord.xy, z);
+	//ro += offset;
+	//ro.x *= uWidth/uHeight;
+
 	vec3 la = vec3(0.0, 0.0, 1.0);
 	   
 	vec3 cameraDir = normalize(la - ro);
 	   
-	vec3 rd = normalize(cameraDir + vec3(vPassTexCoord.xy, 0.0));
+	vec3 rd = normalize(cameraDir + vec3( vPassTexCoord.xy, 0.0));
 	   
 	vec3 r;
+	r += offset;
 	for (int i = 0; i < 100; i++)
 	{
 		if (d > 0.0001)
@@ -129,8 +142,8 @@ void main()
 	}
 
 
-
-	vec3 color = vec3(0.25, 0.5, 0.25);
+	vec3 color = vec3(0.25);
+	//vec3 color = vec3(1.0);
 
 	if(r.x >= 1.0 && r.y >= 1.0 && r.z >= 1.0 )
 	{
@@ -138,7 +151,11 @@ void main()
 	}
 
 	color *= r;
+	//color.z = 1.0f;
 
 	//rtFragColor = vec4(r, 1.0f);
 	rtFragColor = vec4(color, 1.0f);
+	//rtFragColor = vec4(vPassTexCoord, 1.0f, 1.0);
+
+	
 }
