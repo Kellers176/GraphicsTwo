@@ -105,53 +105,61 @@ void main()
 {
 
 	
-	float z = -2.5; //set to input
 	//float z = uScale; //set to input
-	float offX = z*0.5 - 0.25;
-	vec2 resolution = vec2(uWidth, uHeight);
 	//For every .5 in z, offset x and y need .25
 	//y = .5x-.25
-
+	float z = -2.5; //set to input
+	float offX = z*0.5 - 0.25;
 	vec3 offset = vec3(offX, offX, -0.5);
-	float t = 0.0;
-	float d = 200.0;
+	//vec3 offset = vec3(0.25, offX, -0.5);
+	
+	vec2 resolution = vec2(float(uWidth), float(uHeight));
 
-	//vec2 pos =  vPassTexCoord.xy;
+	float ratio = resolution.x / resolution.y;
 
-	//vec3 ro = vec3(pos, z);
-	vec3 ro = vec3( vPassTexCoord.xy, z);
-	//ro.x *= uWidth/uHeight;
+
+	offset.x *= ratio;
+	//offset.y *= ratio;
+
+
+	vec2 position =  vPassTexCoord.xy;
+	position.x = (position.x ) * ratio;
+
+	//position *= offset.xy;
+
+	vec3 ro = vec3(position, z);
+	//vec3 ro = vec3( vPassTexCoord.xy, z);
+
 
 	vec3 la = vec3(0.0, 0.0, 1.0);
 	   
 	vec3 cameraDir = normalize(la - ro);
 	   
-	vec3 rd = normalize(cameraDir + vec3( vPassTexCoord.xy, 0.0));
+	vec3 rd = normalize(cameraDir + vec3(position, 0.0));
 	   
 	vec3 r;
 	int iter;
+	float t = 0.0;
+	float d = 200.0;
 	for (int i = 0; i < 100; i++)
 	{
 		if (d > 0.0001)
 		{
 			r = ro + rd * t;
-			d = DistanceEstimator(r + offset, iter);
-			//r *= 1.0 / distance(r.xy, vPassTexCoord.xy);
+			d = DistanceEstimator(r + offset , iter);
 			t += d;
 		}
 	}
 
-	//float intensity = clamp(1.0 - vPassTexCoord.x / 200.0, 10.0, 1.0);
 
 	vec3 color = vec3(0.25);
 	//vec3 color = vec3(1.0);
 
-	if(r.x >= 1.0 && r.y >= 1.0 && r.z >= 1.0 )
+	if(r.x > 1.0 && r.y > 1.0 && r.z > 1.0 )
 	{
 		r = vec3(0.0);
 	}
 
-	//1.0 / distance(lightposition, worldposition);
 
 	color *= r;
 	//color.z = 1.0f;
@@ -159,7 +167,7 @@ void main()
 	vec4 ramp = texture2D(uTex_julia_ramp, vec2(float(iter) / float(maxIter)));
 
 	//rtFragColor = vec4(r, 1.0f);
-	rtFragColor = vec4(color, 1.0f);
+	//rtFragColor = vec4(color, 1.0f);
 	rtFragColor = vec4(ramp.xyz * r, 1.0f);
 	//rtFragColor = ramp;
 	//rtFragColor = vec4(vPassTexCoord, 1.0f, 1.0);
