@@ -45,7 +45,7 @@ uniform int uHeight;
 uniform sampler2D uTex_julia_ramp;
 
 
-int maxIter = 10;
+int maxIter = 15;
 
 //https://lodev.org/cgtutor/juliamandelbrot.html
 //http://nuclear.mutantstargoat.com/articles/sdr_fract/
@@ -67,7 +67,7 @@ float DistanceEstimator(vec3 pos, inout int i)
 {
 	pos = rotate(pos, float(uComplexNumber.y * 200), float(uComplexNumber.x * 200),0.0);
 	vec3 z = pos;
-	float bail = 2;
+	float bail = 100;
 	//float maxIterations = 15;
 	float dr = 1.0;
 	float r = 0.0;
