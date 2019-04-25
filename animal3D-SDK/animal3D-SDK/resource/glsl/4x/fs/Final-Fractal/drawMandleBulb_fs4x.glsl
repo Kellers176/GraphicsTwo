@@ -42,21 +42,17 @@ uniform mat3 uMV;
 uniform float uScale;
 uniform int uWidth;
 uniform int uHeight;
+uniform sampler2D uTex_julia_ramp;
+
+
+int maxIter = 10;
 
 //https://lodev.org/cgtutor/juliamandelbrot.html
 //http://nuclear.mutantstargoat.com/articles/sdr_fract/
 //http://blog.hvidtfeldts.net/index.php/2011/09/distance-estimated-3d-fractals-v-the-mandelbulb-different-de-approximations/
 //https://www.shadertoy.com/view/XsfGR8
-// Distance Estimator
-// returns 0 if the test point is inside the MB, and the distance 0.5*r*logr/rD otherwise
 
-vec3 rotateMatrix(vec3 pos, float x, float y, float z)
-{
-	mat3 rotX = mat3( 1.0, 0.0, 0.0, 0.0, cos(x), -sin(x), 0.0, sin(x), cos(x) );
-	mat3 rotY = mat3( cos(y), 0.0, sin(y), 0.0, 1.0, 0.0, -sin(y), 0.0, cos(y) );
-	mat3 rotZ = mat3( cos(z), -sin(z), 0.0, sin(z), cos(z), 0.0, 0.0, 0.0, 1.0 );
-	return rotX * rotY * rotZ * pos;
-}
+
 vec3 rotate(vec3 pos, float x, float y, float z)
 {
 	mat3 rotX = mat3( 1.0, 0.0, 0.0, 0.0, cos(x), sin(x), 0.0, -sin(x), cos(x) );
@@ -65,16 +61,18 @@ vec3 rotate(vec3 pos, float x, float y, float z)
 	return rotX * rotY * rotZ * pos;
 }
 
-float DistanceEstimator(vec3 pos)
+// Distance Estimator
+// returns 0 if the test point is inside the MB, and the distance 0.5*r*logr/rD otherwise
+float DistanceEstimator(vec3 pos, inout int i)
 {
 	pos = rotate(pos, float(uComplexNumber.y * 200), float(uComplexNumber.x * 200),0.0);
 	vec3 z = pos;
 	float bail = 2;
-	float iterations = 10;
+	//float maxIterations = 15;
 	float dr = 1.0;
 	float r = 0.0;
-	float power = 3;
-	for (int i = 0; i < iterations; i++)
+	float power = 7;
+	for (i = 0; i < maxIter; i++)
 	{
 		r = length(z);
 		if (r > bail)
@@ -105,6 +103,8 @@ float DistanceEstimator(vec3 pos)
 
 void main()
 {
+
+	
 	float z = -2.5; //set to input
 	//float z = uScale; //set to input
 	float offX = z*0.5 - 0.25;
@@ -120,7 +120,6 @@ void main()
 
 	//vec3 ro = vec3(pos, z);
 	vec3 ro = vec3( vPassTexCoord.xy, z);
-	//ro += offset;
 	//ro.x *= uWidth/uHeight;
 
 	vec3 la = vec3(0.0, 0.0, 1.0);
@@ -130,17 +129,19 @@ void main()
 	vec3 rd = normalize(cameraDir + vec3( vPassTexCoord.xy, 0.0));
 	   
 	vec3 r;
-	r += offset;
+	int iter;
 	for (int i = 0; i < 100; i++)
 	{
 		if (d > 0.0001)
 		{
 			r = ro + rd * t;
-			d = DistanceEstimator(r + offset);
+			d = DistanceEstimator(r + offset, iter);
+			//r *= 1.0 / distance(r.xy, vPassTexCoord.xy);
 			t += d;
 		}
 	}
 
+	//float intensity = clamp(1.0 - vPassTexCoord.x / 200.0, 10.0, 1.0);
 
 	vec3 color = vec3(0.25);
 	//vec3 color = vec3(1.0);
@@ -150,11 +151,17 @@ void main()
 		r = vec3(0.0);
 	}
 
+	//1.0 / distance(lightposition, worldposition);
+
 	color *= r;
 	//color.z = 1.0f;
 
+	vec4 ramp = texture2D(uTex_julia_ramp, vec2(float(iter) / float(maxIter)));
+
 	//rtFragColor = vec4(r, 1.0f);
 	rtFragColor = vec4(color, 1.0f);
+	rtFragColor = vec4(ramp.xyz * r, 1.0f);
+	//rtFragColor = ramp;
 	//rtFragColor = vec4(vPassTexCoord, 1.0f, 1.0);
 
 	

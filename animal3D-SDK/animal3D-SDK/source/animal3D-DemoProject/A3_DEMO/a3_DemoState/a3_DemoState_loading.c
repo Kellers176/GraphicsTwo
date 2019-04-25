@@ -895,7 +895,7 @@ void a3demo_loadTextures(a3_DemoState *demoState)
 			{ demoState->tex_mars_dm,		"tex:mars-dm",		"../../../../resource/tex/mars/1k/mars_1k_dm.png" },
 			{ demoState->tex_mars_sm,		"tex:mars-sm",		"../../../../resource/tex/mars/1k/mars_1k_sm.png" },
 			{ demoState->tex_ramp_dm,		"tex:ramp-dm",		"../../../../resource/tex/sprite/celRamp_dm.png" },
-			{ demoState->tex_ramp_julia,	"tex:ramp-dm",		"../../../../resource/tex/sprite/juliaRamp.png" },
+			{ demoState->tex_ramp_julia,	"tex:ramp-julia",	"../../../../resource/tex/sprite/juliaRamp.png" },
 			{ demoState->tex_ramp_sm,		"tex:ramp-sm",		"../../../../resource/tex/sprite/celRamp_sm.png" },
 			{ demoState->tex_checker,		"tex:checker",		"../../../../resource/tex/sprite/checker.png" },
 		}
