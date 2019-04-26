@@ -115,8 +115,8 @@ extern "C"
 					uTime;						// time
 				a3i32
 					// Julia Fractal uniforms
-					uScale,
-					uCenter,
+					uPower,
+					uIter,
 					uComplexNumber,
 					uWidth,
 					uHeight;

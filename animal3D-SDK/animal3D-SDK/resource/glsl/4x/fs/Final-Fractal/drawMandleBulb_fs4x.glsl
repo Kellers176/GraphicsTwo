@@ -35,16 +35,18 @@ layout(location = 0) out vec4 rtFragColor; //position // (2)
 
 in vec2 vPassTexCoord; //(4)
 //need mvp matrix to mess around with the 3d coord
-uniform vec4 uCenter;
+uniform float uIter; //iterations
 uniform vec2 uComplexNumber;
+uniform vec2 uInformation;
 uniform double uTime;
 uniform mat3 uMV;
-uniform float uScale;
+uniform float uPower; //power
 uniform int uWidth;
 uniform int uHeight;
 uniform sampler2D uTex_julia_ramp;
 
 
+//float maxIter = uIter; //uncomment this when ready
 int maxIter = 15;
 
 //https://lodev.org/cgtutor/juliamandelbrot.html
@@ -71,6 +73,7 @@ float DistanceEstimator(vec3 pos, inout int i)
 	//float maxIterations = 15;
 	float dr = 1.0;
 	float r = 0.0;
+	//float power = uPower; //uncomment this when ready
 	float power = 7;
 	for (i = 0; i < maxIter; i++)
 	{
@@ -109,20 +112,16 @@ void main()
 	//For every .5 in z, offset x and y need .25
 	//y = .5x-.25
 	float z = -2.5; //set to input
-	float offX = z*0.5 - 0.25;
+	float offX = z * 0.5 - 0.25;
 	vec3 offset = vec3(offX, offX, -0.5);
 	//vec3 offset = vec3(0.25, offX, -0.5);
 	
 	vec2 resolution = vec2(float(uWidth), float(uHeight));
 
 	float ratio = resolution.x / resolution.y;
+	
 
-
-	offset.x *= ratio;
-	//offset.y *= ratio;
-
-
-	vec2 position =  vPassTexCoord.xy;
+	vec2 position = vPassTexCoord.xy;
 	position.x = (position.x ) * ratio;
 
 	//position *= offset.xy;

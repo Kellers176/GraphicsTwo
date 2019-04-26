@@ -206,7 +206,9 @@ extern "C"
 		a3ui32 deferredLightCount, deferredLightBlockCount, deferredLightCountPerBlock[demoStateMaxCount_lightVolumeBlock];
 
 		a3vec2 complexNumber;
-		a3f32 zoom;
+		a3vec2 information;
+		a3f32 power;
+		a3f32 maxIterations;
 		a3vec2 centerNumber;
 		a3f64 scaleNumber;
 

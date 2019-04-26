@@ -106,34 +106,37 @@ void a3demo_input(a3_DemoState *demoState, a3f64 dt)
 		
 		float complexNumX = (a3real)a3keyboardGetDifference(demoState->keyboard, a3key_rightArrow, a3key_leftArrow);
 		float complexNumY = (a3real)a3keyboardGetDifference(demoState->keyboard, a3key_downArrow, a3key_upArrow);
-		float zoom = (a3real)a3keyboardGetDifference(demoState->keyboard, a3key_numpad1, a3key_numpad2);
+		//float power = (a3real)a3keyboardGetDifference(demoState->keyboard, a3key_B, a3key_K);
+		//float iterations = (a3real)a3keyboardGetDifference(demoState->keyboard, a3key_C, a3key_V);
 
 
 
 		complexNumX *= 0.0001f;
 		complexNumY *= 0.0001f;
-		zoom *= 0.25f;
+		//power += 1.0f;
+		//iterations += 1.0f;
 
 		complexNumX += demoState->complexNumber.x;
 		complexNumY += demoState->complexNumber.y;
-		demoState->zoom += zoom;
+		//power += demoState->power;
+		//iterations += demoState->maxIterations;
 
 
 		a3real2Set(demoState->complexNumber.v, complexNumX, complexNumY);
 
-		//vec2(-1.4793,0.002);
 		if (a3keyboardIsHeld(demoState->keyboard, a3key_1))
 		{
-			demoState->zoom = -2.5;
+			demoState->power = 7.0f;
+			demoState->maxIterations = 15.0f;
 			a3real2Set(demoState->complexNumber.v, 0.365f, 0.36f);
 		}
 		else if (a3keyboardIsHeld(demoState->keyboard, a3key_2))
 		{
-			demoState->zoom = -2.5;
+			demoState->power = 5.0f;
+			demoState->maxIterations = 10.0f;
 			a3real2Set(demoState->complexNumber.v, -1.4793f, 0.002f);
 		}
-		
-		demoState->scaleNumber = 1.0f;
+		//demoState->scaleNumber = 1.0f;
 		a3real2Set(demoState->centerNumber.v, 0.0f, 0.0f);
 	}
 }
