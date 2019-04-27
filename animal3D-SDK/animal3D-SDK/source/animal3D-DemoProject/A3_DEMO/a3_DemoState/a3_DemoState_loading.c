@@ -365,8 +365,8 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 		// common global
 		"uTime",
 
-		//Julia fractal
-		"uCenter", "uScale", "uComplexNumber", "uWidth", "uHeight",
+		//MandelBulb fractal
+		"uCenter", "uScale", "uComplexNumber", "uWidth", "uHeight", "uPower", "uIter",
 	};
 
 	// list of uniform block names: align with uniform block list in demo struct!
@@ -814,15 +814,17 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 		if ((uLocation = currentDemoProg->uTime) >= 0)
 			a3shaderUniformSendDouble(a3unif_single, uLocation, 1, defaultDouble);
 
-		if ((uLocation = currentDemoProg->uPower) >= 0)
-			a3shaderUniformSendFloat(a3unif_single, uLocation, 1, defaultFloat + 1);
-		if ((uLocation = currentDemoProg->uIter) >= 0)
-			a3shaderUniformSendFloat(a3unif_single, uLocation, 1, defaultFloat + 2);
+		
 
 		if ((uLocation = currentDemoProg->uWidth) >= 0)
 			a3shaderUniformSendInt(a3unif_single, uLocation, 1, defaultInt);
 		if ((uLocation = currentDemoProg->uHeight) >= 0)
 			a3shaderUniformSendInt(a3unif_single, uLocation, 1, defaultInt + 1);
+
+		if ((uLocation = currentDemoProg->uPower) >= 0)
+			a3shaderUniformSendDouble(a3unif_single, uLocation, 1, defaultDouble + 0);
+		if ((uLocation = currentDemoProg->uIter) >= 0)
+			a3shaderUniformSendDouble(a3unif_single, uLocation, 1, defaultDouble + 1);
 
 		// lighting uniform blocks
 		if ((uLocation = currentDemoProg->ubTransformMVP) >= 0)

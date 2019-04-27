@@ -106,8 +106,8 @@ void a3demo_input(a3_DemoState *demoState, a3f64 dt)
 		
 		float complexNumX = (a3real)a3keyboardGetDifference(demoState->keyboard, a3key_rightArrow, a3key_leftArrow);
 		float complexNumY = (a3real)a3keyboardGetDifference(demoState->keyboard, a3key_downArrow, a3key_upArrow);
-		//float power = (a3real)a3keyboardGetDifference(demoState->keyboard, a3key_B, a3key_K);
-		//float iterations = (a3real)a3keyboardGetDifference(demoState->keyboard, a3key_C, a3key_V);
+		float power = (a3real)a3keyboardGetDifference(demoState->keyboard, a3key_numpad4, a3key_numpad5);
+		float iterations = (a3real)a3keyboardGetDifference(demoState->keyboard, a3key_C, a3key_V);
 
 
 
@@ -118,9 +118,11 @@ void a3demo_input(a3_DemoState *demoState, a3f64 dt)
 
 		complexNumX += demoState->complexNumber.x;
 		complexNumY += demoState->complexNumber.y;
-		//power += demoState->power;
-		//iterations += demoState->maxIterations;
+		demoState->power += power;
+		demoState->maxIterations += iterations;
 
+
+		demoState->power = 2;
 
 		a3real2Set(demoState->complexNumber.v, complexNumX, complexNumY);
 

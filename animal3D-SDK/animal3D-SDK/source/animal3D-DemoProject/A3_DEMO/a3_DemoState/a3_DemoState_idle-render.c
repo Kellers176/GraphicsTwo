@@ -329,8 +329,8 @@ void a3demo_render(const a3_DemoState *demoState)
 	a3shaderUniformSendFloat(a3unif_vec2, currentDemoProgram->uComplexNumber, 1, demoState->complexNumber.v);
 	//a3shaderUniformSendFloat(a3unif_single, currentDemoProgram->uScale, 1, &demoState->scaleNumber);
 
-	a3shaderUniformSendFloat(a3unif_single, currentDemoProgram->uPower, 1, &demoState->power); //power //this is always -1 for some reason
-	a3shaderUniformSendFloat(a3unif_single, currentDemoProgram->uIter, 1, &demoState->maxIterations); //iterations //this is always -1 for some reason
+	a3shaderUniformSendDouble(a3unif_single, currentDemoProgram->uPower, 1, &demoState->power); //power //this is always -1 for some reason
+	a3shaderUniformSendDouble(a3unif_single, currentDemoProgram->uIter, 1, &demoState->maxIterations); //iterations //this is always -1 for some reason
 
 
 	a3shaderUniformSendDouble(a3unif_single, currentDemoProgram->uTime, 1, &demoState->renderTimer->totalTime);

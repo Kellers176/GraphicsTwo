@@ -48,7 +48,7 @@ extern "C"
 	// maximum number of uniforms in a program
 	enum a3_DemoShaderProgramMaxCounts
 	{
-		demoStateMaxCount_shaderProgramUniform = 37,
+		demoStateMaxCount_shaderProgramUniform = 40,
 		demoStateMaxCount_shaderProgramUniformBlock = 4,
 	};
 

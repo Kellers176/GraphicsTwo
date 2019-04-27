@@ -40,7 +40,7 @@ uniform vec2 uComplexNumber;
 uniform vec2 uInformation;
 uniform double uTime;
 uniform mat3 uMV;
-uniform float uPower; //power
+uniform double uPower; //power
 uniform int uWidth;
 uniform int uHeight;
 uniform sampler2D uTex_julia_ramp;
@@ -73,7 +73,7 @@ float DistanceEstimator(vec3 pos, inout int i)
 	//float maxIterations = 15;
 	float dr = 1.0;
 	float r = 0.0;
-	//float power = uPower; //uncomment this when ready
+	//float power = float(uPower); //uncomment this when ready
 	float power = 7;
 	for (i = 0; i < maxIter; i++)
 	{
@@ -168,6 +168,16 @@ void main()
 	//rtFragColor = vec4(r, 1.0f);
 	//rtFragColor = vec4(color, 1.0f);
 	rtFragColor = vec4(ramp.xyz * r, 1.0f);
+
+	//if(float(uPower) == 0)
+	//{
+	//	rtFragColor = vec4(0.0, 1.0, 0.0, 1.0);
+	//}
+	//else
+	//{
+	//	rtFragColor = vec4(1.0, 0.0, 0.0, 1.0);
+	//}
+
 	//rtFragColor = ramp;
 	//rtFragColor = vec4(vPassTexCoord, 1.0f, 1.0);
 
