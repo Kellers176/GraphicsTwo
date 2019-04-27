@@ -55,6 +55,11 @@ int maxIter = 15;
 //https://www.shadertoy.com/view/XsfGR8
 
 
+float lerp(float p0, float p1, float t)
+{
+	return p0 + (p1 - p0) * t;
+}
+
 vec3 rotate(vec3 pos, float x, float y, float z)
 {
 	mat3 rotX = mat3( 1.0, 0.0, 0.0, 0.0, cos(x), sin(x), 0.0, -sin(x), cos(x) );
@@ -69,12 +74,14 @@ float DistanceEstimator(vec3 pos, inout int i)
 {
 	pos = rotate(pos, float(uComplexNumber.y * 200), float(uComplexNumber.x * 200),0.0);
 	vec3 z = pos;
-	float bail = 100;
+	float bail = 50;
 	//float maxIterations = 15;
 	float dr = 1.0;
 	float r = 0.0;
 	//float power = float(uPower); //uncomment this when ready
-	float power = 7;
+	float power = lerp(2.0f, 10.0f, 0.5f + 0.5f * sin(float(uTime) * 0.2f));
+	//float power = 3.0f;
+
 	for (i = 0; i < maxIter; i++)
 	{
 		r = length(z);
@@ -169,7 +176,7 @@ void main()
 	//rtFragColor = vec4(color, 1.0f);
 	rtFragColor = vec4(ramp.xyz * r, 1.0f);
 
-	//if(float(uPower) == 0)
+	//if(float(uTime) >= 10)
 	//{
 	//	rtFragColor = vec4(0.0, 1.0, 0.0, 1.0);
 	//}
@@ -180,6 +187,6 @@ void main()
 
 	//rtFragColor = ramp;
 	//rtFragColor = vec4(vPassTexCoord, 1.0f, 1.0);
-
+	//rtFragColor = vec4(lerp(0.0, 1.0, 0.5 + sin(float(uTime))), 0.0, 0.0, 1.0f);
 	
 }
