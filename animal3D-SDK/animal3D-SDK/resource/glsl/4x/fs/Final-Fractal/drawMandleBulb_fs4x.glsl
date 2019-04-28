@@ -57,11 +57,13 @@ int maxIter = 15;
 
 float lerp(float p0, float p1, float t)
 {
+	//lerps through the values
 	return p0 + (p1 - p0) * t;
 }
 
 vec3 rotate(vec3 pos, float x, float y, float z)
 {
+	//rotation matrix
 	mat3 rotX = mat3( 1.0, 0.0, 0.0, 0.0, cos(x), sin(x), 0.0, -sin(x), cos(x) );
 	mat3 rotY = mat3( cos(y), 0.0, -sin(y), 0.0, 1.0, 0.0, sin(y), 0.0, cos(y) );
 	mat3 rotZ = mat3( cos(z), sin(z), 0.0, -sin(z), cos(z), 0.0, 0.0, 0.0, 1.0 );
@@ -75,12 +77,9 @@ float DistanceEstimator(vec3 pos, inout int i)
 	pos = rotate(pos, float(uComplexNumber.y * 200), float(uComplexNumber.x * 200),0.0);
 	vec3 z = pos;
 	float bail = 50;
-	//float maxIterations = 15;
 	float dr = 1.0;
 	float r = 0.0;
-	//float power = float(uPower); //uncomment this when ready
-	float power = lerp(2.0f, 10.0f, 0.5f + 0.5f * sin(float(uTime) * 0.2f));
-	//float power = 3.0f;
+	float power = lerp(2.0f, 10.0f, 0.5f + 0.5f * sin(float(uTime) * 0.2f)); //3.0f
 
 	for (i = 0; i < maxIter; i++)
 	{
@@ -94,6 +93,7 @@ float DistanceEstimator(vec3 pos, inout int i)
 			//polar coordinates
 			float theta = acos(z.z / r);
 			float phi = atan(z.y, z.x);
+			//taking derivative of the f'(z)
 			dr = pow(r, power -1.0) * power * dr + 1.0;
 			
 			//scale and roation
@@ -106,87 +106,67 @@ float DistanceEstimator(vec3 pos, inout int i)
 			z += pos;
 		}			   
 	}
-
+	//
 	return 0.5 * log(r) *  r / dr;
 }
 
 
 void main()
 {
-
-	
-	//float z = uScale; //set to input
-	//For every .5 in z, offset x and y need .25
-	//y = .5x-.25
 	float z = -2.5; //set to input
 	float offX = z * 0.5 - 0.25;
 	vec3 offset = vec3(offX, offX, -0.5);
-	//vec3 offset = vec3(0.25, offX, -0.5);
 	
 	vec2 resolution = vec2(float(uWidth), float(uHeight));
 
+	//calulate the resolution ratio
 	float ratio = resolution.x / resolution.y;
 	
-
+	//make the object resolution the same as the screens
 	vec2 position = vPassTexCoord.xy;
 	position.x = (position.x ) * ratio;
-
-	//position *= offset.xy;
-
+	
+	//get position of the object and use that as a variable
 	vec3 ro = vec3(position, z);
-	//vec3 ro = vec3( vPassTexCoord.xy, z);
-
-
+	
+	//variable to start with
 	vec3 la = vec3(0.0, 0.0, 1.0);
-	   
+	
+	//camera direction of where the position of the object is and where we are viewing
 	vec3 cameraDir = normalize(la - ro);
 	   
+	//get the normal of the direction
 	vec3 rd = normalize(cameraDir + vec3(position, 0.0));
-	   
+	
+	//variables for calculation
 	vec3 r;
 	int iter;
 	float t = 0.0;
 	float d = 200.0;
+	//iterate 100 times in the objects
 	for (int i = 0; i < 100; i++)
 	{
 		if (d > 0.0001)
 		{
+			//get the position of the object and add the normal
 			r = ro + rd * t;
+			//calculate the distance estimator
 			d = DistanceEstimator(r + offset , iter);
+			//increase the variable t
 			t += d;
 		}
 	}
 
-
-	vec3 color = vec3(0.25);
-	//vec3 color = vec3(1.0);
-
+	//ifthe output is white, make it black so that its not so straining on the eyes
 	if(r.x > 1.0 && r.y > 1.0 && r.z > 1.0 )
 	{
 		r = vec3(0.0);
 	}
 
-
-	color *= r;
-	//color.z = 1.0f;
-
+	//use a ramp texture to make it pop out more
 	vec4 ramp = texture2D(uTex_julia_ramp, vec2(float(iter) / float(maxIter)));
 
-	//rtFragColor = vec4(r, 1.0f);
-	//rtFragColor = vec4(color, 1.0f);
+	//output the ramp texture with the variable
 	rtFragColor = vec4(ramp.xyz * r, 1.0f);
-
-	//if(float(uTime) >= 10)
-	//{
-	//	rtFragColor = vec4(0.0, 1.0, 0.0, 1.0);
-	//}
-	//else
-	//{
-	//	rtFragColor = vec4(1.0, 0.0, 0.0, 1.0);
-	//}
-
-	//rtFragColor = ramp;
-	//rtFragColor = vec4(vPassTexCoord, 1.0f, 1.0);
-	//rtFragColor = vec4(lerp(0.0, 1.0, 0.5 + sin(float(uTime))), 0.0, 0.0, 1.0f);
 	
 }
